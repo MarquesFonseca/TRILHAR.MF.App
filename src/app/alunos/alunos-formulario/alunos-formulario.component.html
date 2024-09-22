@@ -61,36 +61,38 @@
                 </div>
 
                 <!-- Idade da criança -->
-                <div class="col-sm-8">
-                    <mat-form-field class="mb-25">
-                        <mat-label>Idade da criança</mat-label>
-                        <input matInput formControlName="IdadeCrianca">
-                    </mat-form-field>
+                <div class="col-sm-8" *ngIf="formulario.get('IdadeCrianca')?.value">
+                  <!-- <mat-card>
+                    <mat-card-content class="fw-medium">{{formulario.get('IdadeCrianca')?.value}}</mat-card-content>
+                  </mat-card> -->
+
+                  <mat-card class="mb-25">
+                    <mat-card-header class="mb-15">
+                        <mat-card-title-group>
+                            <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('IdadeCrianca')?.value}}</mat-card-title>
+                            <mat-card-subtitle style="margin-left: 10px;">Turma sugerida:</mat-card-subtitle>
+                        </mat-card-title-group>
+                    </mat-card-header>
+                    <mat-card-content style="margin-left: 10px;">
+                      <span>
+                        <h3 style="color: red;">Lilás 1</h3>
+                    </span>
+                    </mat-card-content>
+                </mat-card>
                 </div>
 
                 <!-- Matriculado na Turma -->
                 <div class="col-sm-12">
-                    <!-- <mat-form-field class="mb-25">
-                        <mat-label>Turma matrícula</mat-label>
-                        <input matInput formControlName="TurmaMatricula">
-                    </mat-form-field> -->
-
-                    <!-- Filter Autocomplete -->
-
-                    <!-- <app-filter-options-matriculas /> -->
-
                     <!-- novo -->
                     <mat-form-field class="mb-25">
-                        <mat-label>Matrícula</mat-label>
+                        <mat-label>Turma atual</mat-label>
                         <input
                             type="text"
                             placeholder="Selecione..."
                             aria-label="Turma"
                             matInput
                             formControlName="TurmaMatricula"
-                            [matAutocomplete]="auto"
-
-                        >
+                            [matAutocomplete]="auto">
                         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn"
                         (optionSelected)="opcaoSelecionada($event)" >
                             <mat-option *ngFor="let item of listaMatriculasFiltradas | async" [value]="item">
@@ -148,60 +150,57 @@
                 </div>
 
                 <!-- Alergia -->
-                <div class="col-sm-4">
-                    <mat-checkbox formControlName="Alergia">Alergia?</mat-checkbox>
+
+                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('Alergia')?.value, 'col-sm-12': !formulario.get('Alergia')?.value}">
+                  <mat-checkbox formControlName="Alergia">Alergia?</mat-checkbox>
+                </div>
+                <!-- Descrição da Alergia -->
+                <div class="col-sm-8" *ngIf="formulario.get('Alergia')?.value">
+                    <mat-form-field class="textarea">
+                        <mat-label>Descrição da Alergia</mat-label>
+                        <input matInput formControlName="DescricaoAlergia" placeholder="Descrição da alergia">
+                        <!-- <textarea matInput formControlName="DescricaoAlergia"
+                            placeholder="Descrição da alergia"></textarea> -->
+                    </mat-form-field>
                 </div>
 
                 <!-- Restrição Alimentar -->
-                <div class="col-sm-4">
+                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('RestricaoAlimentar')?.value, 'col-sm-12': !formulario.get('RestricaoAlimentar')?.value}">
                     <mat-checkbox formControlName="RestricaoAlimentar">Restrição Alimentar?</mat-checkbox>
+                </div>
+                <!-- Descrição da Restrição Alimentar -->
+                <div class="col-sm-8" *ngIf="formulario.get('RestricaoAlimentar')?.value">
+                    <mat-form-field class="textarea">
+                        <mat-label>Descrição da Restrição Alimentar</mat-label>
+                        <input matInput formControlName="DescricaoRestricaoAlimentar"
+                            placeholder="Descrição da restrição alimentar">
+                        <!-- <textarea matInput formControlName="DescricaoRestricaoAlimentar"
+                            placeholder="Descrição da restrição alimentar"></textarea> -->
+                    </mat-form-field>
                 </div>
 
                 <!-- Deficiência ou Situação Atípica -->
-                <div class="col-sm-4">
-                    <mat-checkbox formControlName="DeficienciaOuSituacaoAtipica">Deficiência ou Situação
-                        Atípica?</mat-checkbox>
+                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('DeficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('DeficienciaOuSituacaoAtipica')?.value}">
+                    <mat-checkbox formControlName="DeficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-checkbox>
                 </div>
-
-                <!-- Descrição da Alergia -->
-                <div class="col-sm-4">
-                    <mat-form-field class="textarea">
-                        <mat-label>Descrição da Alergia</mat-label>
-                        <!-- <input matInput formControlName="DescricaoAlergia" placeholder="Descrição da alergia"> -->
-                        <textarea matInput formControlName="DescricaoAlergia"
-                            placeholder="Descrição da alergia"></textarea>
-                    </mat-form-field>
-                </div>
-
-                <!-- Descrição da Restrição Alimentar -->
-                <div class="col-sm-4">
-                    <mat-form-field class="textarea">
-                        <mat-label>Descrição da Restrição Alimentar</mat-label>
-                        <!-- <input matInput formControlName="DescricaoRestricaoAlimentar"
-                            placeholder="Descrição da restrição alimentar"> -->
-                        <textarea matInput formControlName="DescricaoRestricaoAlimentar"
-                            placeholder="Descrição da restrição alimentar"></textarea>
-                    </mat-form-field>
-                </div>
-
                 <!-- Descrição da Deficiência -->
-                <div class="col-sm-4">
+                <div class="col-sm-8" *ngIf="formulario.get('DeficienciaOuSituacaoAtipica')?.value">
                     <mat-form-field class="textarea">
                         <mat-label>Descrição da Deficiência</mat-label>
-                        <!-- <input matInput formControlName="DescricaoDeficiencia"
-                            placeholder="Descrição da deficiência"> -->
-                        <textarea matInput formControlName="DescricaoDeficiencia"
-                            placeholder="Descrição da deficiência"></textarea>
+                        <input matInput formControlName="DescricaoDeficiencia"
+                            placeholder="Descrição da deficiência">
+                        <!-- <textarea matInput formControlName="DescricaoDeficiencia"
+                            placeholder="Descrição da deficiência"></textarea> -->
                     </mat-form-field>
                 </div>
 
                 <!-- Batizado -->
-                <div class="col-sm-12" style="margin-top: 15px;">
+                <div class="col-sm-12">
                     <mat-checkbox formControlName="Batizado">já batizado por imersão ou aspersão?</mat-checkbox>
                 </div>
 
                 <!-- Data do Batizado -->
-                <div class="col-sm-4">
+                <div class="col-sm-4" *ngIf="formulario.get('Batizado')?.value">
                     <mat-form-field class="mb-25">
                         <mat-label>Data do Batizado</mat-label>
                         <input matInput [matDatepicker]="batizadoPicker" formControlName="DataBatizado">
@@ -211,7 +210,7 @@
                 </div>
 
                 <!-- Igreja do Batizado -->
-                <div class="col-sm-8">
+                <div class="col-sm-8" *ngIf="formulario.get('Batizado')?.value">
                     <mat-form-field class="mb-25">
                         <mat-label>Igreja do Batizado</mat-label>
                         <input matInput formControlName="IgrejaBatizado" placeholder="Igreja do batizado">
