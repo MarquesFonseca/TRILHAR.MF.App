@@ -1,0 +1,361 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Listar alunos
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
+        <!-- <li class="breadcrumb-item position-relative">
+            <a routerLink="/" class="d-inline-block position-relative">
+                <i class="ri-home-8-line"></i>
+                Dashboard
+            </a>
+        </li> -->
+        <li class="breadcrumb-item position-relative">
+            <a routerLink="/alunos" class="d-inline-block position-relative">
+                <!-- <i class="ri-arrow-left-line"></i> -->
+                Listar alunos
+            </a>
+        </li>
+        <li class="breadcrumb-item position-relative">
+            Novo aluno
+        </li>
+    </ol>
+</div>
+
+<mat-card
+    class="daxa-card events-card mb-25 border-radius bg-white border-none d-block"
+    [class.rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <form class="search-box position-relative">
+                <i class="material-symbols-outlined">
+                    search
+                </i>
+                <input type="text" class="input-search d-block w-100 border-none outline-0" placeholder="Pesquisar criança..." (keyup)="applyFilter($event)" #input>
+            </form>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <a mat-button class="add-new-btn" routerLink="/alunos/novo">
+                + Add Novo Aluno
+            </a>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="events-table">
+            <div class="table-responsive">
+                <table mat-table [dataSource]="dataSource">
+
+                    <!-- Checkbox Column -->
+                    <!-- <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox
+                                (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()"
+                            >
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox
+                                (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)"
+                            >
+                            </mat-checkbox>
+                        </td>
+                    </ng-container> -->
+
+                    <!-- Codigo -->
+                    <!-- <ng-container matColumnDef="Codigo">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Código
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.Codigo}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- CodigoCadastro -->
+                    <ng-container matColumnDef="CodigoCadastro">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Código Cadastro
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            # {{element.CodigoCadastro}}
+                        </td>
+                    </ng-container>
+
+                    <!-- NomeCrianca -->
+                    <ng-container matColumnDef="NomeCrianca">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Nome da Criança
+                        </th>
+                        <!-- <td mat-cell *matCellDef="let element">
+                            {{element.NomeCrianca}}
+                        </td> -->
+                        <td mat-cell *matCellDef="let element">
+                            <a routerLink="/alunos/detalhar" class="fw-medium">
+                                {{element.NomeCrianca}}
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <!-- DataNascimento -->
+                    <ng-container matColumnDef="DataNascimento">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Data de Nascimento
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DataNascimento}}
+                        </td>
+                    </ng-container>
+
+                    <!-- NomeMae -->
+                    <ng-container matColumnDef="NomeMae">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Nome da Mãe
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.NomeMae}}
+                        </td>
+                    </ng-container>
+
+
+                    <!-- NomePai -->
+                    <ng-container matColumnDef="NomePai">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Nome do Pai
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.NomePai}}
+                        </td>
+                    </ng-container>
+
+                    <!-- OutroResponsavel -->
+                    <ng-container matColumnDef="OutroResponsavel">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Outro Responsável
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.OutroResponsavel}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Telefone -->
+                    <ng-container matColumnDef="Telefone">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Telefone
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.Telefone}}
+                        </td>
+                    </ng-container>
+
+                    <!-- EnderecoEmail -->
+                    <!-- <ng-container matColumnDef="EnderecoEmail">
+                        <th mat-header-cell *matHeaderCellDef>
+                            EnderecoEmail
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.EnderecoEmail}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- Alergia -->
+                    <ng-container matColumnDef="Alergia">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Alergia
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Alergia">
+                                SIM
+                            </span>
+                            <span class="d-inline-block" *ngIf="!element.Alergia">
+
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- DescricaoAlergia -->
+                    <!-- <ng-container matColumnDef="DescricaoAlergia">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Descrição da Alergia
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DescricaoAlergia}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- RestricaoAlimentar -->
+                    <ng-container matColumnDef="RestricaoAlimentar">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Restrição Alimentar
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.RestricaoAlimentar">
+                                SIM
+                            </span>
+                            <span class="d-inline-block" *ngIf="!element.RestricaoAlimentar">
+
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- DescricaoRestricaoAlimentar -->
+                    <!-- <ng-container matColumnDef="DescricaoRestricaoAlimentar">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Descrição da Restrição Alimentar
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DescricaoRestricaoAlimentar}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- DeficienciaOuSituacaoAtipica -->
+                    <ng-container matColumnDef="DeficienciaOuSituacaoAtipica">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Deficiência ou Situação Atípica
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.DeficienciaOuSituacaoAtipica">
+                                SIM
+                            </span>
+                            <span class="d-inline-block" *ngIf="!element.DeficienciaOuSituacaoAtipica">
+
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- DescricaoDeficiencia -->
+                    <!-- <ng-container matColumnDef="DescricaoDeficiencia">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Descrição de Deficiência ou Situação Atípica
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DescricaoDeficiencia}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- Batizado -->
+                    <!-- <ng-container matColumnDef="Batizado">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Batizado
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Batizado">
+                                SIM
+                            </span>
+                            <span class="d-inline-block" *ngIf="!element.Batizado">
+
+                            </span>
+                        </td>
+                    </ng-container> -->
+
+                    <!-- DataBatizado -->
+                    <!-- <ng-container matColumnDef="DataBatizado">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Data do Batizado
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DataBatizado}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- IgrejaBatizado -->
+                    <!-- <ng-container matColumnDef="IgrejaBatizado">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Igreja do Batizado
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.IgrejaBatizado}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- Ativo -->
+                    <ng-container matColumnDef="Ativo">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Situação
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Ativo">
+                                ATIVO
+                            </span>
+                            <span class="daxa-badge past d-inline-block" *ngIf="!element.Ativo">
+                                INATIVO
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- CodigoUsuarioLogado -->
+                    <!-- <ng-container matColumnDef="CodigoUsuarioLogado">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Usuário
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.CodigoUsuarioLogado}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- DataAtualizacao -->
+                    <ng-container matColumnDef="DataAtualizacao">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Data Atualização
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DataAtualizacao}}
+                        </td>
+                    </ng-container>
+
+                    <!-- DataCadastro -->
+                    <ng-container matColumnDef="DataCadastro">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Data Cadastro
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.DataCadastro}}
+                        </td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Ações
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="action-info">
+                                <a mat-button [routerLink]="['/alunos/detalhar', element.Codigo]" matTooltip="Ver Aluno" matTooltipPosition="above">
+                                    <i class="material-symbols-outlined">
+                                        {{element.Action.view}}
+                                    </i>
+                                </a>
+                                <a mat-button [routerLink]="['/alunos/alterar', element.Codigo]" matTooltip="Editar Aluno" matTooltipPosition="above">
+                                    <i class="material-symbols-outlined">
+                                        {{element.Action.edit}}
+                                    </i>
+                                </a>
+                                <button type="button" mat-button matTooltip="Remover Aluno" matTooltipPosition="above">
+                                    <i class="material-symbols-outlined">
+                                        {{element.Action.delete}}
+                                    </i>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">Nenhum dado corresponde ao filtro "{{input.value}}"</td>
+                    </tr>
+
+                </table>
+            </div>
+            <mat-paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+        </div>
+    </mat-card-content>
+</mat-card>
