@@ -27,6 +27,9 @@
         <div class="sidebar-inner">
             <div class="sidebar-menu">
                 <mat-accordion>
+
+                  <div *ngIf="!isProducao">
+
                     <span class="sub-title text-body">
                         MAIN
                     </span>
@@ -67,6 +70,7 @@
                         </ul>
                     </mat-expansion-panel>
 
+                  </div>
 
 
 
@@ -100,11 +104,11 @@
                                     Novo
                                 </a>
                             </li>
-                            <li class="sidemenu-item">
+                            <!-- <li class="sidemenu-item">
                                 <a routerLink="/alunos/alterar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     Alterar
                                 </a>
-                            </li>
+                            </li> -->
                         </ul>
                     </mat-expansion-panel>
 
@@ -124,7 +128,7 @@
 
 
 
-
+                    <div *ngIf="!isProducao">
 
                     <span class="sub-title text-body">
                         APPS
@@ -1336,12 +1340,16 @@
                             </ul>
                         </mat-accordion>
                     </mat-expansion-panel>
-                    <a routerLink="/authentication/logout" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+
+
+                    </div>
+
+                      <a routerLink="/authentication/logout" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                         <i class="material-symbols-outlined">
-                            logout
+                          logout
                         </i>
                         <span class="title">Logout</span>
-                    </a>
+                      </a>
                 </mat-accordion>
             </div>
         </div>

@@ -14,7 +14,7 @@ export class FooterComponent {
     // isToggled
     isToggled = false;
 
-    email = 'marques-fonseca@hotmail.com'
+    email = 'marques-fonseca@hotmail.com';
 
     constructor(
         public themeService: CustomizerSettingsService

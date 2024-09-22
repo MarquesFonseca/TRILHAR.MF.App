@@ -15,6 +15,8 @@ export class LogoutComponent {
     // isToggled
     isToggled = false;
 
+    email = 'marques-fonseca@hotmail.com';
+
     constructor(
         public themeService: CustomizerSettingsService
     ) {
