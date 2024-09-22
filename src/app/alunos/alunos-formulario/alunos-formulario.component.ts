@@ -99,8 +99,6 @@ export class AlunosFormularioComponent implements OnInit {
             map(value => typeof value === 'string' ? value : value?.descricao),
             map(descricao => descricao ? this.filtrarAutoComplete(descricao) : this.listaMatriculas.slice())  // Usar slice no array original
         );
-
-        this.getAlunos();
     }
 
     //auto complete
@@ -125,20 +123,6 @@ export class AlunosFormularioComponent implements OnInit {
 
     get f() {
         return this.formulario.controls;
-    }
-
-    getAlunos() {
-        this.alunoService.listarTodos().subscribe(res => {
-            // if(res.length > 0)  {
-            //     this.listaTipoEspecie.push({ id: null, name: "Selecione..."});
-            //     res.map(e => {
-            //         this.listaTipoEspecie.push({ id: e.idEspecie, name: e.descricao});
-            //     })
-            // }
-            if(res.length > 0)  {
-                var lista = res;
-            }
-        });
     }
 
     handleConditionalFields(): void {
