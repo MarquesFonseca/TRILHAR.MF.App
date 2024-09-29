@@ -69,55 +69,64 @@ export class AlunosListarComponent implements OnInit {
     });
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.carregarAlunos();
+  ngOnInit() {
+    this.carregarAlunos();
   }
+
+  // async ngOnInit(): Promise<void> {
+  //   await this.carregarAlunosPromise();
+  // }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    //this.dataSource = new MatTableDataSource<types.AlunoView>([]);
-    //this.selection = new SelectionModel<types.AlunoView>(true, []);
+    this.dataSource = new MatTableDataSource<types.AlunoView>([]);
+    this.selection = new SelectionModel<types.AlunoView>(true, []);
   }
 
-  async carregarAlunos(): Promise<void> {
-    // this.alunoService.listarTodos().subscribe((alunos: any[]) => {
-    //   // Mapeando AlunoModel para AlunoView
-    // const alunosView: types.AlunoView[] = alunos.map((aluno) => ({
-    //     Codigo: aluno.codigo.toString(),
-    //     CodigoCadastro: aluno.codigoCadastro,
-    //     NomeCrianca: aluno.nomeCrianca,
-    //     DataNascimento: aluno.dataNascimento,
-    //     NomeMae: aluno.nomeMae,
-    //     NomePai: aluno.nomePai,
-    //     OutroResponsavel: aluno.outroResponsavel,
-    //     Telefone: aluno.telefone,
-    //     EnderecoEmail: aluno.enderecoEmail,
-    //     Alergia: aluno.alergia,
-    //     DescricaoAlergia: aluno.descricaoAlergia,
-    //     RestricaoAlimentar: aluno.restricaoAlimentar,
-    //     DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-    //     DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-    //     DescricaoDeficiencia: aluno.descricaoDeficiencia,
-    //     Batizado: aluno.batizado,
-    //     DataBatizado: aluno.dataBatizado,
-    //     IgrejaBatizado: aluno.igrejaBatizado,
-    //     Ativo: aluno.ativo,
-    //     CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-    //     DataAtualizacao: aluno.dataAtualizacao,
-    //     DataCadastro: aluno.dataCadastro,
-    //     // Adicionando a propriedade 'Action' para que o AlunoView fique completo
-    //     Action: {
-    //         view: 'visibility',
-    //         edit: 'edit',
-    //         delete: 'delete',
-    //     },
-    // }));
+  carregarAlunos() {
+    this.alunoService.listarTodos().subscribe((alunos: any[]) => {
+      // Mapeando AlunoModel para AlunoView
+    const alunosView: types.AlunoView[] = alunos.map((aluno) => ({
+        Codigo: aluno.codigo.toString(),
+        CodigoCadastro: aluno.codigoCadastro,
+        NomeCrianca: aluno.nomeCrianca,
+        DataNascimento: aluno.dataNascimento,
+        NomeMae: aluno.nomeMae,
+        NomePai: aluno.nomePai,
+        OutroResponsavel: aluno.outroResponsavel,
+        Telefone: aluno.telefone,
+        EnderecoEmail: aluno.enderecoEmail,
+        Alergia: aluno.alergia,
+        DescricaoAlergia: aluno.descricaoAlergia,
+        RestricaoAlimentar: aluno.restricaoAlimentar,
+        DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
+        DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
+        DescricaoDeficiencia: aluno.descricaoDeficiencia,
+        Batizado: aluno.batizado,
+        DataBatizado: aluno.dataBatizado,
+        IgrejaBatizado: aluno.igrejaBatizado,
+        Ativo: aluno.ativo,
+        CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
+        DataAtualizacao: aluno.dataAtualizacao,
+        DataCadastro: aluno.dataCadastro,
+        // Adicionando a propriedade 'Action' para que o AlunoView fique completo
+        Action: {
+            view: 'visibility',
+            edit: 'edit',
+            delete: 'delete',
+        },
+    }));
 
-    // this.dataSource.data = alunosView; // Definindo os dados mapeados
-    // });
+    var ll = alunosView.filter(option => option.CodigoCadastro.includes('2239'))
 
-    var alunos = await this.alunoService.listarTodos();
+    this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView);
+    //this.dataSource.data = alunosView; // Definindo os dados mapeados
+    });
+  }
+
+  async carregarAlunosPromise(): Promise<void> {
+    var alunos = await this.alunoService.listarTodosPromise();
 
     if(alunos.length > 0)  {
       // Mapeando AlunoModel para AlunoView
@@ -151,6 +160,8 @@ export class AlunosListarComponent implements OnInit {
           delete: 'delete',
         },
       }));
+
+      var ll = alunosView.filter(x => x.CodigoCadastro.toString() == '2239')
 
       this.dataSource.data = alunosView; // Definindo os dados mapeados
     }

@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 import * as types from './aluno.types';
+import { LoadingService } from '../services/loading.service';
 
 @Injectable({
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
@@ -11,13 +12,16 @@ import * as types from './aluno.types';
 export class AlunoService {
   private apiUrl = `${environment.API_TRILHAR}/Aluno`; // URL da API
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private loadingService: LoadingService) {}
 
-  // listarTodos(): Observable<any[]> {
-  //   return this.http.get<any[]>(this.apiUrl);
-  // }
+  listarTodos(): Observable<any[]> {
+    this.loadingService.show();
+    return this.http.get<any[]>(this.apiUrl).pipe(
+      finalize(() => this.loadingService.hide())
+    );
+  }
 
-  async listarTodos(): Promise<any> {
+  async listarTodosPromise(): Promise<any> {
     return this.http.get<any>(`${this.apiUrl}`).toPromise();
   }
 
