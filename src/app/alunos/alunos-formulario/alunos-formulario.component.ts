@@ -47,11 +47,7 @@ export class AlunosFormularioComponent implements OnInit {
     formulario!: FormGroup;
 
     // Filter Autocomplete
-    listaMatriculas: MatriculaAutoComplete[] = [
-        { id: 1, descricao: 'Branco/Rosa' },
-        { id: 2, descricao: 'Lilas 2' },
-        { id: 3, descricao: 'Lilas 3' },
-      ];
+    listaMatriculas!: MatriculaAutoComplete[];
     listaMatriculasFiltradas!: Observable<MatriculaAutoComplete[]>;
 
     constructor(
@@ -99,6 +95,12 @@ export class AlunosFormularioComponent implements OnInit {
             map(value => typeof value === 'string' ? value : value?.descricao),
             map(descricao => descricao ? this.filtrarAutoComplete(descricao) : this.listaMatriculas.slice())  // Usar slice no array original
         );
+
+        this.listaMatriculas = [
+          { id: 1, descricao: 'Branco/Rosa' },
+          { id: 2, descricao: 'Lilas 2' },
+          { id: 3, descricao: 'Lilas 3' },
+        ];
     }
 
     //auto complete
