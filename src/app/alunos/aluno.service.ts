@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -12,13 +12,22 @@ import { LoadingService } from '../services/loading.service';
 export class AlunoService {
   private apiUrl = `${environment.API_TRILHAR}/Aluno`; // URL da API
 
-  constructor(private http: HttpClient, private loadingService: LoadingService) {}
+  constructor(
+    private http: HttpClient,
+    private loadingService: LoadingService
+  ) {}
 
   listarTodos(): Observable<any[]> {
     this.loadingService.show();
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      finalize(() => this.loadingService.hide())
-    );
+    return this.http
+      .get<any[]>(this.apiUrl)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  listarPorFiltro(filtro: any, callback?: any) {
+    this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe((resp: any) => {
+      callback(resp);
+    });
   }
 
   async listarTodosPromise(): Promise<any> {
@@ -26,37 +35,35 @@ export class AlunoService {
   }
 
   Incluir(Entity: any, callback?: any) {
-    this.http.post(`${this.apiUrl}`, Entity)
-      .subscribe((resp: any) => {
-        //this.tratarMensagemRetornoSucesso('Registro incluído com sucesso!');
-        callback(resp);
-      });
+    this.http.post(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
+      //this.tratarMensagemRetornoSucesso('Registro incluído com sucesso!');
+      callback(resp);
+    });
   }
 
   Alterar(Entity: types.AlunoModel, Id: any, callback?: any) {
-    this.http.put(`${this.apiUrl}/${Id}`, Entity)
-      .subscribe((resp: any) => {
-        //this.tratarMensagemRetornoSucesso("Registro alterado com sucesso!");
-        callback(resp);
-      });
+    this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
+      //this.tratarMensagemRetornoSucesso("Registro alterado com sucesso!");
+      callback(resp);
+    });
   }
 
-  //   listarPorFiltro(filtro: any, callback?) {
-  //     let params = new HttpParams()
-  //       .set("coug", filtro.coUg.toString())
-  //       .set("coGestao", filtro.coGestao.toString())
-  //       .set("periodoApuracao", filtro.periodoApuracaoString.toString())
-  //       .set("numeroInscricaoProdutor", filtro.numeroInscricaoProdutor.toString())
-  //       .set("pagina", filtro.page.toString())
-  //       .set("tamanhoPagina", filtro.pageSize.toString())
+  // listarPorFiltro(filtro: any, callback?: any) {
+  //   //this.loadingService.show();
+  //   let params = new HttpParams()
+  //     .set('coug', filtro.coUg.toString())
+  //     .set('coGestao', filtro.coGestao.toString())
+  //     .set('periodoApuracao', filtro.periodoApuracaoString.toString())
+  //     .set('numeroInscricaoProdutor', filtro.numeroInscricaoProdutor.toString())
+  //     .set('pagina', filtro.page.toString())
+  //     .set('tamanhoPagina', filtro.pageSize.toString());
 
-  //     this.http.get(`${this.url}/listarPorFiltro`, { params })
-  //       .subscribe({
-  //         next: (resp: any) => {
-  //           callback(resp);
-  //         }
-  //       });
-  //   }
+  //   this.http.get(`${this.apiUrl}/listarPorFiltro`, { params }).subscribe({
+  //     next: (resp: any) => {
+  //       callback(resp);
+  //     },
+  //   });
+  // }
 
   //   async listarPorFiltroPromise(filtro: any): Promise<any> {
   //     let params = new HttpParams()
@@ -82,8 +89,6 @@ export class AlunoService {
   //   async verificaSeExistePromise(Id: string): Promise<any> {
   //     return this.http.get<any>(`${this.url}/VerificaSeExiste/${Id}`).toPromise();
   //   }
-
-
 
   //   Excluir(Id: number, callback?) {
   //     this.http.delete(`${this.url}/excluirEvento/${Id}`)

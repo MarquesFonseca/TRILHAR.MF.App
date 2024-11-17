@@ -70,7 +70,58 @@ export class AlunosListarComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.carregarAlunos();
+    //this.carregarAlunos();
+
+    //teste paginacao
+    var filtro = {
+        condicao: "Ativo = @Ativo",
+        parametros: {
+          Ativo: true,
+          CodigoCadastro: "1484"
+        },
+        isPaginacao: true,
+        page: 1,
+        pageSize: 10
+    }
+
+    this.alunoService.listarPorFiltro(filtro, (res: any) => {
+      if (res) {
+        const alunosView: types.AlunoView[] = res.dados.map((aluno: any) => ({
+          Codigo: aluno.codigo.toString(),
+          CodigoCadastro: aluno.codigoCadastro,
+          NomeCrianca: aluno.nomeCrianca,
+          DataNascimento: aluno.dataNascimento,
+          NomeMae: aluno.nomeMae,
+          NomePai: aluno.nomePai,
+          OutroResponsavel: aluno.outroResponsavel,
+          Telefone: aluno.telefone,
+          EnderecoEmail: aluno.enderecoEmail,
+          Alergia: aluno.alergia,
+          DescricaoAlergia: aluno.descricaoAlergia,
+          RestricaoAlimentar: aluno.restricaoAlimentar,
+          DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
+          DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
+          DescricaoDeficiencia: aluno.descricaoDeficiencia,
+          Batizado: aluno.batizado,
+          DataBatizado: aluno.dataBatizado,
+          IgrejaBatizado: aluno.igrejaBatizado,
+          Ativo: aluno.ativo,
+          CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
+          DataAtualizacao: aluno.dataAtualizacao,
+          DataCadastro: aluno.dataCadastro,
+          // Adicionando a propriedade 'Action' para que o AlunoView fique completo
+          Action: {
+              view: 'visibility',
+              edit: 'edit',
+              delete: 'delete',
+          },
+      }));
+      this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView);
+      }
+    });
+
+
+
   }
 
   // async ngOnInit() {
