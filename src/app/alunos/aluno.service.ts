@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { finalize, Observable } from 'rxjs';
+import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 import * as types from './aluno.types';
@@ -23,6 +23,22 @@ export class AlunoService {
 
   async listarTodosPromise(): Promise<any> {
     return this.http.get<any>(`${this.apiUrl}`).toPromise();
+  }
+
+  Incluir(Entity: any, callback?: any) {
+    this.http.post(`${this.apiUrl}`, Entity)
+      .subscribe((resp: any) => {
+        //this.tratarMensagemRetornoSucesso('Registro incluído com sucesso!');
+        callback(resp);
+      });
+  }
+
+  Alterar(Entity: types.AlunoModel, Id: any, callback?: any) {
+    this.http.put(`${this.apiUrl}/${Id}`, Entity)
+      .subscribe((resp: any) => {
+        //this.tratarMensagemRetornoSucesso("Registro alterado com sucesso!");
+        callback(resp);
+      });
   }
 
   //   listarPorFiltro(filtro: any, callback?) {
@@ -67,21 +83,7 @@ export class AlunoService {
   //     return this.http.get<any>(`${this.url}/VerificaSeExiste/${Id}`).toPromise();
   //   }
 
-  //   Incluir(Entity: any, callback?) {
-  //     this.http.post(`${this.url}`, Entity)
-  //       .subscribe((resp: any) => {
-  //         this.tratarMensagemRetornoSucesso('Registro incluído com sucesso!');
-  //         callback(resp);
-  //       });
-  //   }
 
-  //   Alterar(Entity: any, Id: any, callback?) {
-  //     this.http.put(`${this.url}/${Id}`, Entity)
-  //       .subscribe((resp: any) => {
-  //         this.tratarMensagemRetornoSucesso("Registro alterado com sucesso!");
-  //         callback(resp);
-  //       });
-  //   }
 
   //   Excluir(Id: number, callback?) {
   //     this.http.delete(`${this.url}/excluirEvento/${Id}`)

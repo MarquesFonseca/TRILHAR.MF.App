@@ -73,7 +73,7 @@ export class AlunosListarComponent implements OnInit {
     this.carregarAlunos();
   }
 
-  // async ngOnInit(): Promise<void> {
+  // async ngOnInit() {
   //   await this.carregarAlunosPromise();
   // }
 
@@ -85,9 +85,10 @@ export class AlunosListarComponent implements OnInit {
   }
 
   carregarAlunos() {
-    this.alunoService.listarTodos().subscribe((alunos: any[]) => {
+    this.alunoService.listarTodos().subscribe((alunos: any) => {
+
       // Mapeando AlunoModel para AlunoView
-    const alunosView: types.AlunoView[] = alunos.map((aluno) => ({
+    const alunosView: types.AlunoView[] = alunos.dados.map((aluno: any) => ({
         Codigo: aluno.codigo.toString(),
         CodigoCadastro: aluno.codigoCadastro,
         NomeCrianca: aluno.nomeCrianca,
@@ -163,7 +164,7 @@ export class AlunosListarComponent implements OnInit {
 
       var ll = alunosView.filter(x => x.CodigoCadastro.toString() == '2239')
 
-      this.dataSource.data = alunosView; // Definindo os dados mapeados
+      this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView); // Definindo os dados mapeados
     }
   }
 

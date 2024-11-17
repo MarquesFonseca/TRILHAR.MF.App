@@ -18,6 +18,7 @@ import { AlunoService } from '../aluno.service';
 import { AutoCompleteComponent } from "../auto-complete/auto-complete.component";
 import * as utils from '../../funcoes-comuns/utils';
 import * as validar from '../../funcoes-comuns/validators/validator';
+import * as types from './../aluno.types';
 
 
 @Component({
@@ -270,11 +271,46 @@ export class AlunosFormularioComponent implements OnInit {
     }
 
     salvar(): void {
-        if (this.formulario.valid) {
+        if (!this.formulario.valid) {
             console.log(this.formulario.value);
-        } else {
             console.log('Formulário inválido');
+            return;
         }
+
+        const valoresForm = this.formulario.getRawValue();
+        var filtro = {
+          "codigo": 0,
+          "codigoCadastro": '',
+          "nomeCrianca": valoresForm.NomeCrianca,
+          "dataNascimento": valoresForm.DataNascimento,
+          "nomeMae": valoresForm.NomeMae,
+          "nomePai": valoresForm.NomePai,
+          "outroResponsavel": valoresForm.OutroResponsavel,
+          "telefone": valoresForm.Telefone,
+          "enderecoEmail": valoresForm.EnderecoEmail,
+          "alergia": valoresForm.Alergia,
+          "descricaoAlergia": valoresForm.DescricaoAlergia,
+          "restricaoAlimentar": valoresForm.RestricaoAlimentar,
+          "descricaoRestricaoAlimentar": valoresForm.DescricaoRestricaoAlimentar,
+          "deficienciaOuSituacaoAtipica": valoresForm.DeficienciaOuSituacaoAtipica,
+          "descricaoDeficiencia": valoresForm.DescricaoDeficiencia,
+          "batizado": valoresForm.Batizado,
+          "dataBatizado": valoresForm.DataBatizado,
+          "igrejaBatizado": valoresForm.IgrejaBatizado,
+          "ativo": valoresForm.Ativo,
+          "codigoUsuarioLogado": 0,
+          "dataAtualizacao": utils.obterDataHoraBrasileira(),
+          "dataCadastro": utils.obterDataHoraBrasileira(),
+        };
+
+
+        //if (this.isNovo) {
+          this.alunoService.Incluir(filtro, (res: any) => {
+            if (res) {
+              //this.finalizarAcao();
+            }
+          });
+        //}
     }
 
     limpar(): void {
