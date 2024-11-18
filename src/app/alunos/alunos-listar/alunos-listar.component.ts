@@ -57,6 +57,12 @@ export class AlunosListarComponent implements OnInit {
   dataSource = new MatTableDataSource<types.AlunoView>([]);
   selection = new SelectionModel<types.AlunoView>(true, []);
 
+  //dataSource = new MatTableDataSource<any>();
+  totalItems = 0;
+  pageSize = 10;
+  pageIndex = 0;
+
+
   // alternado
   isToggled = false;
 
@@ -70,58 +76,31 @@ export class AlunosListarComponent implements OnInit {
   }
 
   ngOnInit() {
-    //this.carregarAlunos();
+    var filtro = this.montaFiltro(1, 10);
+    this.carregarAlunos(filtro);
+  }
 
-    //teste paginacao
+  onPageChange(event: any): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+
+    var filtro = this.montaFiltro(this.pageIndex, this.pageSize);
+    this.carregarAlunos(filtro);
+  }
+
+  montaFiltro(pageIndex: number, pageSize: number) {
     var filtro = {
-        condicao: "Ativo = @Ativo",
-        parametros: {
-          Ativo: true,
-          CodigoCadastro: "1484"
-        },
-        isPaginacao: true,
-        page: 1,
-        pageSize: 10
+      //condicao: "Ativo = @Ativo",
+      // parametros: {
+      //   Ativo: true,
+      //   CodigoCadastro: "1484"
+      // },
+      isPaginacao: true,
+      page: pageIndex,
+      pageSize: pageSize
     }
 
-    this.alunoService.listarPorFiltro(filtro, (res: any) => {
-      if (res) {
-        const alunosView: types.AlunoView[] = res.dados.map((aluno: any) => ({
-          Codigo: aluno.codigo.toString(),
-          CodigoCadastro: aluno.codigoCadastro,
-          NomeCrianca: aluno.nomeCrianca,
-          DataNascimento: aluno.dataNascimento,
-          NomeMae: aluno.nomeMae,
-          NomePai: aluno.nomePai,
-          OutroResponsavel: aluno.outroResponsavel,
-          Telefone: aluno.telefone,
-          EnderecoEmail: aluno.enderecoEmail,
-          Alergia: aluno.alergia,
-          DescricaoAlergia: aluno.descricaoAlergia,
-          RestricaoAlimentar: aluno.restricaoAlimentar,
-          DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-          DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-          DescricaoDeficiencia: aluno.descricaoDeficiencia,
-          Batizado: aluno.batizado,
-          DataBatizado: aluno.dataBatizado,
-          IgrejaBatizado: aluno.igrejaBatizado,
-          Ativo: aluno.ativo,
-          CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-          DataAtualizacao: aluno.dataAtualizacao,
-          DataCadastro: aluno.dataCadastro,
-          // Adicionando a propriedade 'Action' para que o AlunoView fique completo
-          Action: {
-              view: 'visibility',
-              edit: 'edit',
-              delete: 'delete',
-          },
-      }));
-      this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView);
-      }
-    });
-
-
-
+    return filtro;
   }
 
   // async ngOnInit() {
@@ -135,11 +114,12 @@ export class AlunosListarComponent implements OnInit {
     this.selection = new SelectionModel<types.AlunoView>(true, []);
   }
 
-  carregarAlunos() {
-    this.alunoService.listarTodos().subscribe((alunos: any) => {
-
-      // Mapeando AlunoModel para AlunoView
-    const alunosView: types.AlunoView[] = alunos.dados.map((aluno: any) => ({
+  carregarAlunos(filtro: any) {
+  this.alunoService.listarPorFiltro(filtro, (res: any) => {
+    if (res) {
+      console.log(res);
+      //this.totalItems = res.
+      const alunosView: types.AlunoView[] = res.dados.map((aluno: any) => ({
         Codigo: aluno.codigo.toString(),
         CodigoCadastro: aluno.codigoCadastro,
         NomeCrianca: aluno.nomeCrianca,
@@ -168,12 +148,9 @@ export class AlunosListarComponent implements OnInit {
             edit: 'edit',
             delete: 'delete',
         },
-    }));
-
-    var ll = alunosView.filter(option => option.CodigoCadastro.includes('2239'))
-
-    this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView);
-    //this.dataSource.data = alunosView; // Definindo os dados mapeados
+      }));
+      this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView);
+      }
     });
   }
 
