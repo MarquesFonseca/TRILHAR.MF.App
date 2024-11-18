@@ -59,8 +59,8 @@ export class AlunosListarComponent implements OnInit {
 
   //dataSource = new MatTableDataSource<any>();
   totalItems = 0;
+  page = 0;
   pageSize = 10;
-  pageIndex = 0;
 
 
   // alternado
@@ -81,14 +81,14 @@ export class AlunosListarComponent implements OnInit {
   }
 
   onPageChange(event: any): void {
-    this.pageIndex = event.pageIndex;
+    this.page = event.pageIndex + 1;
     this.pageSize = event.pageSize;
 
-    var filtro = this.montaFiltro(this.pageIndex, this.pageSize);
+    var filtro = this.montaFiltro(this.page, this.pageSize);
     this.carregarAlunos(filtro);
   }
 
-  montaFiltro(pageIndex: number, pageSize: number) {
+  montaFiltro(page: number, pageSize: number) {
     var filtro = {
       //condicao: "Ativo = @Ativo",
       // parametros: {
@@ -96,7 +96,7 @@ export class AlunosListarComponent implements OnInit {
       //   CodigoCadastro: "1484"
       // },
       isPaginacao: true,
-      page: pageIndex,
+      page: page,
       pageSize: pageSize
     }
 
@@ -117,8 +117,8 @@ export class AlunosListarComponent implements OnInit {
   carregarAlunos(filtro: any) {
   this.alunoService.listarPorFiltro(filtro, (res: any) => {
     if (res) {
-      console.log(res);
-      //this.totalItems = res.
+      //console.log(res);
+      this.totalItems = res.totalItens;
       const alunosView: types.AlunoView[] = res.dados.map((aluno: any) => ({
         Codigo: aluno.codigo.toString(),
         CodigoCadastro: aluno.codigoCadastro,
