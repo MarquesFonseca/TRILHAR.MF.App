@@ -10,7 +10,7 @@ import { LoadingService } from '../services/loading.service';
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
 })
 export class AlunoService {
-  private apiUrl = `${environment.API_TRILHAR}/Aluno`; // URL da API
+  private apiUrl = `${environment.API_TRILHAR}/aluno`; // URL da API
 
   constructor(
     private http: HttpClient,
@@ -24,11 +24,35 @@ export class AlunoService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  listarPorFiltro(filtro: any, callback?: any) {
-    this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe((resp: any) => {
-      callback(resp);
+  //sem loading
+  // listarPorFiltro(filtro: any, callback?: any) {
+  //   this.loadingService.show();
+  //   this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe((resp: any) => {
+  //     this.loadingService.hide();
+
+  //     callback(resp);
+  //   });
+  // }
+
+  listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
+    this.loadingService.show();
+    this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
+        next: (resp: any) => {
+            this.loadingService.hide();
+            if (callback) {
+                callback(resp); // Invoca o callback com os dados da resposta
+            }
+        },
+        error: (err: any) => {
+            this.loadingService.hide();
+            console.error('Erro ao listar por filtro:', err);
+            // Aqui você pode adicionar lógica para mostrar mensagens de erro
+            if (callback) {
+                callback(null); // Invoca o callback com `null` para indicar erro
+            }
+        }
     });
-  }
+}
 
   async listarTodosPromise(): Promise<any> {
     return this.http.get<any>(`${this.apiUrl}`).toPromise();
