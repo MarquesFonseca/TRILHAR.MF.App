@@ -152,7 +152,10 @@
                 <!-- Alergia -->
 
                 <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('Alergia')?.value, 'col-sm-12': !formulario.get('Alergia')?.value}">
-                  <mat-checkbox formControlName="Alergia">Alergia?</mat-checkbox>
+                  <!-- <mat-checkbox formControlName="Alergia">Alergia?</mat-checkbox> -->
+                  <mat-slide-toggle formControlName="Alergia">Alergia?</mat-slide-toggle>
+                  <br />
+                  <br />
                 </div>
                 <!-- Descrição da Alergia -->
                 <div class="col-sm-8" *ngIf="formulario.get('Alergia')?.value">
@@ -162,11 +165,16 @@
                         <!-- <textarea matInput formControlName="DescricaoAlergia"
                             placeholder="Descrição da alergia"></textarea> -->
                     </mat-form-field>
+                    <br />
+                    <br />
                 </div>
 
                 <!-- Restrição Alimentar -->
                 <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('RestricaoAlimentar')?.value, 'col-sm-12': !formulario.get('RestricaoAlimentar')?.value}">
-                    <mat-checkbox formControlName="RestricaoAlimentar">Restrição Alimentar?</mat-checkbox>
+                    <!-- <mat-checkbox formControlName="RestricaoAlimentar">Restrição Alimentar?</mat-checkbox> -->
+                    <mat-slide-toggle formControlName="RestricaoAlimentar">Restrição Alimentar?</mat-slide-toggle>
+                    <br />
+                    <br />
                 </div>
                 <!-- Descrição da Restrição Alimentar -->
                 <div class="col-sm-8" *ngIf="formulario.get('RestricaoAlimentar')?.value">
@@ -177,12 +185,17 @@
                         <!-- <textarea matInput formControlName="DescricaoRestricaoAlimentar"
                             placeholder="Descrição da restrição alimentar"></textarea> -->
                     </mat-form-field>
+                    <br />
+                    <br />
                 </div>
 
                 <!-- Deficiência ou Situação Atípica -->
                 <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('DeficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('DeficienciaOuSituacaoAtipica')?.value}">
-                    <mat-checkbox formControlName="DeficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-checkbox>
-                </div>
+                    <!-- <mat-checkbox formControlName="DeficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-checkbox> -->
+                    <mat-slide-toggle formControlName="DeficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-slide-toggle>
+                    <br />
+                    <br />
+                  </div>
                 <!-- Descrição da Deficiência -->
                 <div class="col-sm-8" *ngIf="formulario.get('DeficienciaOuSituacaoAtipica')?.value">
                     <mat-form-field class="textarea">
@@ -192,11 +205,16 @@
                         <!-- <textarea matInput formControlName="DescricaoDeficiencia"
                             placeholder="Descrição da deficiência"></textarea> -->
                     </mat-form-field>
+                    <br />
+                    <br />
                 </div>
 
                 <!-- Batizado -->
                 <div class="col-sm-12">
-                    <mat-checkbox formControlName="Batizado">já batizado por imersão ou aspersão?</mat-checkbox>
+                    <!-- <mat-checkbox formControlName="Batizado">já batizado por imersão ou aspersão?</mat-checkbox> -->
+                    <mat-slide-toggle formControlName="Batizado">já batizado por imersão ou aspersão?</mat-slide-toggle>
+                    <br />
+                    <br />
                 </div>
 
                 <!-- Data do Batizado -->
@@ -215,11 +233,20 @@
                         <mat-label>Igreja do Batizado</mat-label>
                         <input matInput formControlName="IgrejaBatizado" placeholder="Igreja do batizado">
                     </mat-form-field>
+                    <br />
+                    <br />
                 </div>
 
                 <!-- Status Ativo -->
                 <div class="col-sm-12">
-                    <mat-checkbox formControlName="Ativo">Situação: Ativo/Inativo</mat-checkbox>
+                    <!-- <mat-checkbox formControlName="Ativo">Situação: Ativo/Inativo</mat-checkbox> -->
+                    <mat-slide-toggle formControlName="Ativo" [disabled]="true" >{{ formulario.get('Ativo')?.value == true ? 'Situação: Ativo' : 'Situação: Inativo'}}</mat-slide-toggle>
+
+                    <!-- <mat-slide-toggle [disabled]="true" [checked]="formulario.get('Ativo')?.value">
+                      Exemplo de Toggle
+                    </mat-slide-toggle> -->
+                    <br />
+                    <br />
                 </div>
 
                 <br />
