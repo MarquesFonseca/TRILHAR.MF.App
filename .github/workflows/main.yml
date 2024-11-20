@@ -48,6 +48,6 @@ jobs:
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/
-        server-dir: ${{ secrets.FTP_APP_DIR }}
+        server-dir: trilhar.IQUES.COM.BR/
         protocol: ftps
         dangerous-clean-slate: true # optional
