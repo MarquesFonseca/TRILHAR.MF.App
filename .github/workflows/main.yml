@@ -1,0 +1,52 @@
+name: Deploy to FTP On-Premise - Project ABC
+
+on:
+  push:
+    branches:
+      - main
+
+  # the follow line allow this script to be started manually.
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: 18.20.4
+    - name: Install packages with NPM
+      run: npm install
+    - name: Build for production
+      run: npm run build -- --prod
+    - name: Upload artifacts to be used in next job
+      if: success()
+      uses: actions/upload-artifact@v1
+      with:
+        name: deploy_dist
+        path: dist
+
+  ftp-deploy:
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+
+    - name: Download artifacts created at previous job
+      if: success()
+      uses: actions/download-artifact@v1
+      with:
+        name: deploy_dist
+        path: dist
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Actions@master
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: dist/trilhar/browser
+        server-dir: ${{ secrets.FTP_APP_DIR }}
+        dangerous-clean-slate: true # optional
