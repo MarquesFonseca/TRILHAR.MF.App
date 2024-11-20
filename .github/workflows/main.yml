@@ -3,38 +3,50 @@ name: Deploy via FTP
 on:
   push:
     branches:
-      - main # Define o branch que dispara o deploy (alterar para o branch do seu projeto)
+      - main
+
+  # the follow line allow this script to be started manually.
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
-    name: Build and Deploy to FTP
+  build:
+
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do código
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.20.4
+    - name: Install packages with NPM
+      run: npm install
+    - name: Build for production
+      run: npm run build
+    - name: Upload artifacts to be used in next job
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: deploy_dist
+        path: dist
 
-      # Configura o Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18.20.4 # Certifique-se de usar a versão correta para seu projeto Angular
+  ftp-deploy:
+    needs: build
+    runs-on: self-hosted
 
-      # Instalar dependências
-      - name: Install dependencies
-        run: npm install
+    steps:
 
-      # Construir o projeto Angular
-      - name: Build Angular project
-        run: npm run build
-
-      # Fazer o upload via FTP
-      - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USER }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: dist/ # Diretório local gerado pelo Angular
-          server-dir: /trilhar.IQUES.COM.BR # Diretório no servidor FTP
+    - name: Download artifacts created at previous job
+      if: success()
+      uses: actions/download-artifact@v3
+      with:
+        name: deploy_dist
+        path: dist
+    - name: Deploy to FTP
+      uses: SamKirkland/FTP-Deploy-Action@master
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USER }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: dist/
+        server-dir: ${{ secrets.FTP_APP_DIR }}
+        dangerous-clean-slate: true # optional
