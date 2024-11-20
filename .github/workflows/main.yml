@@ -47,7 +47,7 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: dist/
-        server-dir: trilhar.IQUES.COM.BR/
+        local-dir: dist/trilhar/browser
+        server-dir: trilhar.iques.com.br/
         protocol: ftps
         dangerous-clean-slate: true # optional
