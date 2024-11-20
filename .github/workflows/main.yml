@@ -36,5 +36,5 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: dist/trilhar/browser # Diretório local gerado pelo Angular
+          local-dir: /dist/trilhar/browser # Diretório local gerado pelo Angular
           server-dir: /trilhar.IQUES.COM.BR # Diretório no servidor FTP
