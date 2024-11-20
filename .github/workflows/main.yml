@@ -31,7 +31,7 @@ jobs:
 
   ftp-deploy:
     needs: build
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
 
