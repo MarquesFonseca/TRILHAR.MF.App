@@ -242,9 +242,9 @@
                     <!-- <mat-checkbox formControlName="Ativo">Situação: Ativo/Inativo</mat-checkbox> -->
                     <mat-slide-toggle formControlName="Ativo" [disabled]="true" >{{ formulario.get('Ativo')?.value == true ? 'Situação: Ativo' : 'Situação: Inativo'}}</mat-slide-toggle>
 
-                    <!-- <mat-slide-toggle [disabled]="true" [checked]="formulario.get('Ativo')?.value">
-                      Exemplo de Toggle
-                    </mat-slide-toggle> -->
+                    <mat-slide-toggle [disabled]="true" [checked]="formulario.get('Ativo')?.value">
+                      Teste marques
+                    </mat-slide-toggle>
                     <br />
                     <br />
                 </div>

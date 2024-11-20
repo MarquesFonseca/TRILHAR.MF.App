@@ -18,7 +18,7 @@ import { AlunoService } from '../aluno.service';
     CommonModule,
     RouterLink,
     ReactiveFormsModule,
-    BasicFormComponent,
+    //BasicFormComponent,
     MaterialModule,
     NgIf,
   ],

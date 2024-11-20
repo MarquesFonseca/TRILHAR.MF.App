@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import {
     FormBuilder,
@@ -12,10 +12,10 @@ import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { RouterLink } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { map, Observable, startWith } from 'rxjs';
-import { BasicFormComponent } from '../../forms/basic-elements/basic-form/basic-form.component';
+//import { BasicFormComponent } from '../../forms/basic-elements/basic-form/basic-form.component';
 import { MaterialModule } from '../../material.module';
 import { AlunoService } from '../aluno.service';
-import { AutoCompleteComponent } from "../auto-complete/auto-complete.component";
+//import { AutoCompleteComponent } from "../auto-complete/auto-complete.component";
 import * as utils from '../../funcoes-comuns/utils';
 import * as validar from '../../funcoes-comuns/validators/validator';
 import * as types from './../aluno.types';
@@ -25,16 +25,17 @@ import * as types from './../aluno.types';
     selector: 'app-alunos-formulario',
     standalone: true,
     imports: [
-        CommonModule,
-        RouterLink,
-        ReactiveFormsModule,
-        BasicFormComponent,
-        MaterialModule,
-        NgxMaskDirective,
-        AutoCompleteComponent,
+      CommonModule,
+      RouterLink,
+      ReactiveFormsModule,
+      MaterialModule,
+      NgIf,
+      NgxMaskDirective,
+      //AutoCompleteComponent,
+      // //BasicFormComponent,
     ],
     providers: [
-        provideNgxMask()
+      provideNgxMask()
     ],
 
     templateUrl: './alunos-formulario.component.html',
