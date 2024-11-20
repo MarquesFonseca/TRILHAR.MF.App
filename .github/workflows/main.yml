@@ -49,4 +49,5 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/
         server-dir: ${{ secrets.FTP_APP_DIR }}
+        protocol: ftps
         dangerous-clean-slate: true # optional
