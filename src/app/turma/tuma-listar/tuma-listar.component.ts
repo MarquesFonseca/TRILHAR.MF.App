@@ -49,6 +49,7 @@ export class TumaListarComponent implements OnInit {
 
   //dataSource = new MatTableDataSource<any>();
   totalItems = 0;
+  pageIndex = 0;
   page = 0;
   pageSize = 10;
 
@@ -66,9 +67,10 @@ export class TumaListarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageIndex = 0;
     this.page = 1;
     this.pageSize = 10;
-    var filtro = this.montaFiltro(this.page, 10);
+    var filtro = this.montaFiltro(this.page, this.pageSize);
     this.carregarTurmas(filtro);
   }
 
@@ -76,13 +78,15 @@ export class TumaListarComponent implements OnInit {
     this.pesquisarPorAtivosInativos = event.checked;
     console.log('Novo valor do toggle:', this.pesquisarPorAtivosInativos);
 
+    this.pageIndex = 0;
     this.page = 1;
-    //this.pageSize = 10;
+    this.pageSize = 10;
     var filtro = this.montaFiltro(this.page, this.pageSize);
     this.carregarTurmas(filtro);
   }
 
   onPageChange(event: any): void {
+    this.pageIndex = event.pageIndex;
     this.page = event.pageIndex + 1;
     this.pageSize = event.pageSize;
 
@@ -97,8 +101,8 @@ export class TumaListarComponent implements OnInit {
         Ativo: Boolean(this.pesquisarPorAtivosInativos)
       },
       isPaginacao: true,
-      page: page,
-      pageSize: pageSize
+      page: page == 0 ? 1 : page,
+      pageSize: pageSize == 0 ? 10 : pageSize
     }
 
     return filtro;
