@@ -97,7 +97,7 @@
                             {{element.NomeCrianca}}
                         </td> -->
                         <td mat-cell *matCellDef="let element">
-                            <a routerLink="/criancas/detalhar" class="fw-medium">
+                            <a [routerLink]="['/criancas/detalhar', element.Codigo]" class="fw-medium">
                                 {{element.NomeCrianca}}
                             </a>
                         </td>

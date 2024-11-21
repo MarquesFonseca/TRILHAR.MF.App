@@ -71,7 +71,7 @@
                           Nome da Turma
                       </th>
                       <td mat-cell *matCellDef="let element">
-                          <a routerLink="/turmas/detalhar" class="fw-medium">
+                          <a [routerLink]="['/turmas/detalhar', element.codigo]" class="fw-medium">
                               {{element.descricao}}
                           </a>
                       </td>
