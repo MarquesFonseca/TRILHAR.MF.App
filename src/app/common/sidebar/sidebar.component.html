@@ -81,36 +81,66 @@
 
 
                     <span class="sub-title text-body">
-                        Alunos
+                        Trilhar
                     </span>
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <i class="material-symbols-outlined">email</i>
-                                <span class="title">Alunos</span>
+                                <span class="title">Crianças</span>
                                 <span class="daxa-badge two">
-                                    3
+                                    2
                                 </span>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
                             <li class="sidemenu-item">
-                                <a routerLink="/alunos" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                <a routerLink="/criancas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     Listar
                                 </a>
                             </li>
                             <li class="sidemenu-item">
-                                <a routerLink="/alunos/novo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                <a routerLink="/criancas/novo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     Novo
                                 </a>
                             </li>
                             <!-- <li class="sidemenu-item">
-                                <a routerLink="/alunos/alterar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                <a routerLink="/criancas/alterar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     Alterar
                                 </a>
                             </li> -->
                         </ul>
                     </mat-expansion-panel>
+                    <!-- ---------------------------------------------------- -->
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                      <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              <i class="material-symbols-outlined">email</i>
+                              <span class="title">Turmas</span>
+                              <span class="daxa-badge two">
+                                  3
+                              </span>
+                          </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <ul class="sidebar-sub-menu">
+                          <li class="sidemenu-item">
+                              <a routerLink="/turmas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Listar
+                              </a>
+                          </li>
+                          <li class="sidemenu-item">
+                              <a routerLink="/turmas/novo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Novo
+                              </a>
+                          </li>
+                          <li class="sidemenu-item">
+                            <a routerLink="/turmas/limite" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                Ajustar limites
+                            </a>
+                        </li>
+                      </ul>
+                    </mat-expansion-panel>
+
 
 
 

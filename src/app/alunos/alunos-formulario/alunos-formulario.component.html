@@ -1,7 +1,7 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
     <h5 class="mb-0">
-        Novo aluno
+        Nova criança
     </h5>
     <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
         <!-- <li class="breadcrumb-item position-relative">
@@ -11,13 +11,13 @@
             </a>
         </li> -->
         <li class="breadcrumb-item position-relative">
-            <a routerLink="/alunos" class="d-inline-block position-relative">
+            <a routerLink="/criancas" class="d-inline-block position-relative">
                 <!-- <i class="ri-arrow-left-line"></i> -->
-                Listar alunos
+                Listar crianças
             </a>
         </li>
         <li class="breadcrumb-item position-relative">
-            Novo aluno
+            Nova criança
         </li>
     </ol>
 </div>
@@ -31,8 +31,8 @@
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
-            <a mat-button class="add-new-btn" routerLink="/alunos">
-              Listar Alunos
+            <a mat-button class="add-new-btn" routerLink="/criancas">
+              Listar Crianças
             </a>
           </mat-card-subtitle>
         </mat-card-header>
@@ -240,7 +240,7 @@
                 <!-- Status Ativo -->
                 <div class="col-sm-12">
                     <!-- <mat-checkbox formControlName="Ativo">Situação: Ativo/Inativo</mat-checkbox> -->
-                    <mat-slide-toggle formControlName="Ativo" [disabled]="true" >{{ formulario.get('Ativo')?.value == true ? 'Situação: Ativo' : 'Situação: Inativo'}}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="Ativo">{{ formulario.get('Ativo')?.value == true ? 'Situação: Ativo' : 'Situação: Inativo'}}</mat-slide-toggle>
 
                     <!-- <mat-slide-toggle [disabled]="true" [checked]="formulario.get('Ativo')?.value">
                       Teste marques

@@ -1,0 +1,210 @@
+<p>tuma-listar works!</p>
+
+
+
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0">
+      Listar turmas
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
+      <!-- <li class="breadcrumb-item position-relative">
+          <a routerLink="/" class="d-inline-block position-relative">
+              <i class="ri-home-8-line"></i>
+              Dashboard
+          </a>
+      </li> -->
+      <li class="breadcrumb-item position-relative">
+          <a routerLink="/turmas" class="d-inline-block position-relative">
+              <!-- <i class="ri-arrow-left-line"></i> -->
+              Listar Turmas
+          </a>
+      </li>
+      <li class="breadcrumb-item position-relative">
+          Nova turma
+      </li>
+  </ol>
+</div>
+
+<mat-card
+  class="daxa-card events-card mb-25 border-radius bg-white border-none d-block"
+  [class.rtl-enabled]="themeService.isRTLEnabled()"
+>
+  <mat-card-header>
+    <mat-card-title>
+      <form class="search-box position-relative">
+        <i class="material-symbols-outlined">
+          search
+        </i>
+        <input type="text" class="input-search d-block w-100 border-none outline-0" placeholder="Pesquisar turma..."
+          (keyup)="applyFilter($event)" #input>
+      </form>
+    </mat-card-title>
+    <mat-card-title-group>
+      <mat-slide-toggle [checked]="pesquisarPorAtivosInativos" (change)="onToggleChange($event)">
+        {{ pesquisarPorAtivosInativos ? 'Somente: Ativo' : 'Somente: Inativo'}}
+      </mat-slide-toggle>
+    </mat-card-title-group>
+    <mat-card-subtitle>
+      <a mat-button class="add-new-btn" routerLink="/turmas/novo">
+        + Add Novo Turma
+      </a>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+      <div class="events-table">
+          <div class="table-responsive">
+              <table mat-table [dataSource]="dataSource">
+                  <!-- codigo -->
+                  <ng-container matColumnDef="codigo">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Código
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          # {{element.codigo}}
+                      </td>
+                  </ng-container>
+
+                  <!-- descricao -->
+                  <ng-container matColumnDef="descricao">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Nome da Turma
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          <a routerLink="/turmas/detalhar" class="fw-medium">
+                              {{element.descricao}}
+                          </a>
+                      </td>
+                  </ng-container>
+
+                  <!-- idadeInicialAluno -->
+                  <ng-container matColumnDef="idadeInicialAluno">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Nascidos em
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          {{ element.idadeInicialAluno | date: 'dd/MM/yyyy' }}
+                      </td>
+                  </ng-container>
+
+                  <!-- idadeFinalAluno -->
+                  <ng-container matColumnDef="idadeFinalAluno">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Nascidos até
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.idadeFinalAluno | date: 'dd/MM/yyyy' }}
+                    </td>
+                  </ng-container>
+
+                  <!-- anoLetivo -->
+                  <ng-container matColumnDef="anoLetivo">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Ano
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          {{element.anoLetivo}}
+                      </td>
+                  </ng-container>
+
+                  <!-- semestreLetivo -->
+                  <ng-container matColumnDef="semestreLetivo">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Semestre
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.semestreLetivo}}
+                    </td>
+                  </ng-container>
+
+                  <!-- limiteMaximo -->
+                  <ng-container matColumnDef="limiteMaximo">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Limite máximo
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          {{element.limiteMaximo}}
+                      </td>
+                  </ng-container>
+
+                  <!-- ativo -->
+                  <ng-container matColumnDef="ativo">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Situação
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          <span class="daxa-badge upcoming d-inline-block" *ngIf="element.ativo">
+                              ATIVO
+                          </span>
+                          <span class="daxa-badge past d-inline-block" *ngIf="!element.ativo">
+                              INATIVO
+                          </span>
+                      </td>
+                  </ng-container>
+
+                  <!-- dataAtualizacao -->
+                  <ng-container matColumnDef="dataAtualizacao">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Data Atualização
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          {{ element.dataAtualizacao | date: 'dd/MM/yyyy HH:mm' }}
+                      </td>
+                  </ng-container>
+
+                  <!-- dataCadastro -->
+                  <ng-container matColumnDef="dataCadastro">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Data Cadastro
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          {{ element.dataCadastro | date: 'dd/MM/yyyy HH:mm' }}
+                      </td>
+                  </ng-container>
+
+                  <!-- Action Column -->
+                  <ng-container matColumnDef="Action">
+                      <th mat-header-cell *matHeaderCellDef>
+                          Ações
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          <div class="action-info">
+                              <a mat-button [routerLink]="['/turmas/detalhar', element.codigo]" matTooltip="Ver Turma" matTooltipPosition="above">
+                                  <i class="material-symbols-outlined">
+                                      {{element.Action.view}}
+                                  </i>
+                              </a>
+                              <a mat-button [routerLink]="['/turmas/alterar', element.codigo]" matTooltip="Editar Turma" matTooltipPosition="above">
+                                  <i class="material-symbols-outlined">
+                                      {{element.Action.edit}}
+                                  </i>
+                              </a>
+                              <button type="button" mat-button matTooltip="Remover Turma" matTooltipPosition="above">
+                                  <i class="material-symbols-outlined">
+                                      {{element.Action.delete}}
+                                  </i>
+                              </button>
+                          </div>
+                      </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                  <!-- Row shown when there is no matching data. -->
+                  <tr class="mat-row" *matNoDataRow>
+                      <td class="mat-cell" colspan="4">Nenhum dado corresponde ao filtro "{{input.value}}"</td>
+                  </tr>
+
+              </table>
+          </div>
+          <mat-paginator
+              [length]="totalItems"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[10, 20, 30, 40, 50, 100, 200, 500, 1000, 5000]"
+              (page)="onPageChange($event)"
+              [showFirstLastButtons]="true">
+          </mat-paginator>
+      </div>
+  </mat-card-content>
+</mat-card>

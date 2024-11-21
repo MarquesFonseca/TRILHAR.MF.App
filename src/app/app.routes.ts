@@ -196,6 +196,9 @@ import { EcommercePageComponent } from './pages/ecommerce-page/ecommerce-page.co
 import { TeamMembersComponent } from './pages/users-page/team-members/team-members.component';
 import { AlunosListarComponent } from './alunos/alunos-listar/alunos-listar.component';
 import { AlunosFormularioComponent } from './alunos/alunos-formulario/alunos-formulario.component';
+import { TumaListarComponent } from './turma/tuma-listar/tuma-listar.component';
+import { TurmaFormularioComponent } from './turma/turma-formulario/turma-formulario.component';
+import { TurmaAtualizarLimiteMaximoComponent } from './turma/turma-atualizar-limite-maximo/turma-atualizar-limite-maximo.component';
 
 export const routes: Routes = [
     {path: '', component: EcommerceComponent},
@@ -209,12 +212,25 @@ export const routes: Routes = [
     {path: 'chat', component: ChatComponent},
     {path: 'kanban-board', component: KanbanBoardComponent},
     {
-        path: 'alunos',
+        path: 'criancas',
         children: [
-            {path: '', component: AlunosListarComponent},
-            {path: 'novo', component: AlunosFormularioComponent},
-            {path: 'alterar', component: AlunosFormularioComponent}
+            {path: '', component: AlunosListarComponent, data: { titulo: "Listar Crianças", breadcrumb: "Listar", } },
+            {path: 'listar', component: AlunosListarComponent, data: { titulo: "Listar Crianças", breadcrumb: "Listar", } },
+            {path: 'novo', component: AlunosFormularioComponent, data: { titulo: "Novo Criança", breadcrumb: "Novo", } },
+            {path: 'alterar/:id', component: AlunosFormularioComponent, data: { titulo: "Alterar Criança", breadcrumb: "Alterar", } },
+            {path: 'detalhar/:id', component: AlunosFormularioComponent, data: { titulo: "Detalhar Criança", breadcrumb: "Detalhar", } },
         ]
+    },
+    {
+      path: 'turmas',
+      children: [
+          {path: '', component: TumaListarComponent, data: { titulo: "Listar Turma", breadcrumb: "Listar", },},
+          {path: 'listar', component: TumaListarComponent, data: { titulo: "Listar Turma", breadcrumb: "Listar", },},
+          {path: 'novo', component: TurmaFormularioComponent, data: { titulo: "Nova Turma", breadcrumb: "Novo", },},
+          {path: 'alterar/:id', component: TurmaFormularioComponent, data: { titulo: "Alterar Turma", breadcrumb: "Alterar", },},
+          {path: 'detalhar/:id', component: TurmaFormularioComponent, data: { titulo: "Detalhar Turma", breadcrumb: "Detalhar", },},
+          {path: 'limite', component: TurmaAtualizarLimiteMaximoComponent, data: { titulo: "Limitar Turma", breadcrumb: "Limitar", },},
+      ]
     },
     {
         path: 'file-manager',
