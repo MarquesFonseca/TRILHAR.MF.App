@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { finalize, firstValueFrom, Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 import * as types from './turma.types';
-import { LoadingService } from '../services/loading.service';
+import { LoadingService } from '../../services/loading.service';
 
 @Injectable({
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector

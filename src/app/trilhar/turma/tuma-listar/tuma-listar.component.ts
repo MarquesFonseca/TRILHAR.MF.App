@@ -1,15 +1,15 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { MaterialModule } from '../../material.module';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MaterialModule } from '../../../material.module';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
-import * as types from '../../turma/turma.types';
+import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
+import { BaseListComponent } from '../../../shared/baseList';
+import * as types from '../turma.types';
 import { TurmaService } from '../turma.service';
-//import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-tuma-listar',
@@ -24,7 +24,7 @@ import { TurmaService } from '../turma.service';
   templateUrl: './tuma-listar.component.html',
   styleUrl: './tuma-listar.component.scss'
 })
-export class TumaListarComponent implements OnInit {
+export class TumaListarComponent extends BaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   pesquisarPorAtivosInativos: boolean = true;
@@ -59,19 +59,26 @@ export class TumaListarComponent implements OnInit {
 
   constructor(
     public themeService: CustomizerSettingsService,
-    private turmaService: TurmaService // Injeção do serviço
+    private turmaService: TurmaService,
+    public override router: Router,
+    public override activatedRoute: ActivatedRoute
   ) {
+    super(router, activatedRoute);
     this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
     });
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     this.pageIndex = 0;
     this.page = 1;
     this.pageSize = 10;
     var filtro = this.montaFiltro(this.page, this.pageSize);
     this.carregarTurmas(filtro);
+  }
+
+  override preencheFiltro(): void {
+    throw new Error('Method not implemented.');
   }
 
   onToggleChange(event: any) {

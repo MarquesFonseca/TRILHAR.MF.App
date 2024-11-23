@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { Base } from '../shared/base';
 
 const ROTAREPLACE: string = '/afc/';
-
 
 @Component({
   template: ''
@@ -38,8 +36,8 @@ export abstract class BaseFormComponent extends Base implements OnInit {
     });
   }
 
-  // abstract save();
-  // abstract preencheFormulario();
+  //abstract save(): void;
+  abstract preencheFormulario(): void;;
 
   // onSubmit() {
   //   if (this.verificaFormulario()) {
@@ -166,15 +164,29 @@ export abstract class BaseFormComponent extends Base implements OnInit {
   }
 
   getTitle() {
-    return this.activatedRoute.routeConfig
+    var retorno = this.activatedRoute.routeConfig
       ? this.activatedRoute.routeConfig.data?.['titulo']
       : '';
+      return retorno;
   }
 
   getOperacao() {
-    return this.activatedRoute.routeConfig
+    var retorno = this.activatedRoute.routeConfig
       ? this.activatedRoute.routeConfig.data?.['breadcrumb']
       : '';
+    return retorno;
+  }
+
+  getRota() {
+    var retorno = this.activatedRoute.routeConfig
+      ? this.activatedRoute.routeConfig.data?.['rota']
+      : '';
+      return retorno;
+  }
+
+  getRotaOperacao() {
+    var retorno = `/${this.getRota()}/${this.getOperacao()}`;
+    return retorno.toLocaleLowerCase();
   }
 
   selecionarPeloTab(event: any, form: FormGroup, field: string, lista: any[]): void {

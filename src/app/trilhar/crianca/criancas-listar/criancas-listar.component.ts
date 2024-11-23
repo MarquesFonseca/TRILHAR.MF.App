@@ -1,31 +1,30 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-import { BasicFormComponent } from '../../forms/basic-elements/basic-form/basic-form.component';
-import { MaterialModule } from '../../material.module';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink, ActivatedRoute, Router } from '@angular/router';
+import { MaterialModule } from '../../../material.module';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
-import * as types from '../../alunos/aluno.types';
-import { AlunoService } from '../aluno.service';
+import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
+import { BaseListComponent } from '../../../shared/baseList';
+import { CriancasService } from '../criancas.service';
+import * as types from '../criancas.types';
 
 @Component({
-  selector: 'app-alunos-listar',
+  selector: 'app-criancas-listar',
   standalone: true,
   imports: [
     CommonModule,
     RouterLink,
     ReactiveFormsModule,
-    //BasicFormComponent,
     MaterialModule,
     NgIf,
   ],
-  templateUrl: './alunos-listar.component.html',
-  styleUrl: './alunos-listar.component.scss',
+  templateUrl: './criancas-listar.component.html',
+  styleUrl: './criancas-listar.component.scss',
 })
-export class AlunosListarComponent implements OnInit {
+export class CriancasListarComponent extends BaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [
@@ -54,8 +53,8 @@ export class AlunosListarComponent implements OnInit {
     'DataCadastro',
     'Action',
   ];
-  dataSource = new MatTableDataSource<types.AlunoView>([]);
-  selection = new SelectionModel<types.AlunoView>(true, []);
+  dataSource = new MatTableDataSource<types.CriancaView>([]);
+  selection = new SelectionModel<types.CriancaView>(true, []);
 
   //dataSource = new MatTableDataSource<any>();
   totalItems = 0;
@@ -68,16 +67,26 @@ export class AlunosListarComponent implements OnInit {
 
   constructor(
     public themeService: CustomizerSettingsService,
-    private alunoService: AlunoService // Injeção do serviço
+    private fb: FormBuilder,
+    private criancaService: CriancasService,
+    public override router: Router,
+    public override activatedRoute: ActivatedRoute,
   ) {
+    super(router, activatedRoute);
     this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
     });
+    var ljlj = this.getOperacao();
+    var lkjlll = this.getTitle();
   }
 
-  ngOnInit() {
+  override ngOnInit() {
     var filtro = this.montaFiltro(1, 10);
     this.carregarAlunos(filtro);
+  }
+
+  override preencheFiltro(): void {
+    throw new Error('Method not implemented.');
   }
 
   onPageChange(event: any): void {
@@ -110,16 +119,16 @@ export class AlunosListarComponent implements OnInit {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.dataSource = new MatTableDataSource<types.AlunoView>([]);
-    this.selection = new SelectionModel<types.AlunoView>(true, []);
+    this.dataSource = new MatTableDataSource<types.CriancaView>([]);
+    this.selection = new SelectionModel<types.CriancaView>(true, []);
   }
 
   carregarAlunos(filtro: any) {
-  this.alunoService.listarPorFiltro(filtro, (res: any) => {
+  this.criancaService.listarPorFiltro(filtro, (res: any) => {
     if (res) {
       //console.log(res);
       this.totalItems = res.totalItens;
-      const alunosView: types.AlunoView[] = res.dados.map((aluno: any) => ({
+      const alunosView: types.CriancaView[] = res.dados.map((aluno: any) => ({
         Codigo: aluno.codigo.toString(),
         CodigoCadastro: aluno.codigoCadastro,
         NomeCrianca: aluno.nomeCrianca,
@@ -149,17 +158,17 @@ export class AlunosListarComponent implements OnInit {
             delete: 'delete',
         },
       }));
-      this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView);
+      this.dataSource = new MatTableDataSource<types.CriancaView>(alunosView);
       }
     });
   }
 
   async carregarAlunosPromise(): Promise<void> {
-    var alunos = await this.alunoService.listarTodosPromise();
+    var alunos = await this.criancaService.listarTodosPromise();
 
     if(alunos.length > 0)  {
       // Mapeando AlunoModel para AlunoView
-      const alunosView: types.AlunoView[] = alunos.map((aluno: any) => ({
+      const alunosView: types.CriancaView[] = alunos.map((aluno: any) => ({
         Codigo: aluno.codigo.toString(),
         CodigoCadastro: aluno.codigoCadastro,
         NomeCrianca: aluno.nomeCrianca,
@@ -192,7 +201,7 @@ export class AlunosListarComponent implements OnInit {
 
       var ll = alunosView.filter(x => x.CodigoCadastro.toString() == '2239')
 
-      this.dataSource = new MatTableDataSource<types.AlunoView>(alunosView); // Definindo os dados mapeados
+      this.dataSource = new MatTableDataSource<types.CriancaView>(alunosView); // Definindo os dados mapeados
     }
   }
 
@@ -217,7 +226,7 @@ export class AlunosListarComponent implements OnInit {
   }
 
   /** O rótulo da caixa de seleção na linha passada */
-  checkboxLabel(row?: types.AlunoView): string {
+  checkboxLabel(row?: types.CriancaView): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
@@ -233,7 +242,7 @@ export class AlunosListarComponent implements OnInit {
   }
 }
 
-const ELEMENT_DATA: types.AlunoView[] = [
+const ELEMENT_DATA: types.CriancaView[] = [
   {
     Codigo: '1',
     CodigoCadastro: '11111',

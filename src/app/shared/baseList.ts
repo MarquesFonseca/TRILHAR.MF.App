@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Base } from '../shared/base';
-import { stringify } from 'querystring';
+import { FormGroup } from '@angular/forms';
 
 const KEY = 'filtroListar';
 
@@ -11,27 +10,27 @@ const KEY = 'filtroListar';
 })
 export abstract class BaseListComponent extends Base implements OnInit {
   filtro: any;
-  funcaoSCA: string;
+  funcao: string;
   isSearch = false;
   paginacao = [10, 20, 50, 100, 200];
 
-
   constructor(
     public router: Router,
-    public activatedRoute: ActivatedRoute
+    public activatedRoute: ActivatedRoute,
   ) {
     super();
-
-    this.funcaoSCA = this.activatedRoute.routeConfig?.data?.['funcaoSCA'];
+    this.funcao = this.activatedRoute.routeConfig?.data?.['funcao'];
     this.verificaFiltro();
   }
 
   override ngOnInit() {
   }
 
+  abstract preencheFiltro(): void;
+
   getFiltroListar(): any | null {
 
-    var fil = window.localStorage.getItem(`${KEY}${this.funcaoSCA}`)?.toString();
+    var fil = window.localStorage.getItem(`${KEY}${this.funcao}`)?.toString();
     const filtro = JSON.stringify(fil);
 
     if (filtro) {
@@ -41,11 +40,18 @@ export abstract class BaseListComponent extends Base implements OnInit {
   }
 
   setFiltroListar(filtro: any): void {
-    window.localStorage.setItem(`${KEY}${this.funcaoSCA}`, JSON.stringify(filtro));
+    //window.localStorage.setItem(`${KEY}${this.funcao}`, JSON.stringify(filtro));
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.setItem(`${KEY}${this.funcao}`, JSON.stringify(filtro));
+    }
   }
 
   limparFiltroListar(): void {
-    window.localStorage.removeItem(`${KEY}${this.funcaoSCA}`);
+    //window.localStorage?.removeItem(`${KEY}${this.funcao}`);
+
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(`${KEY}${this.funcao}`);
+    }
   }
 
   verificaFiltro(): void {
@@ -59,23 +65,24 @@ export abstract class BaseListComponent extends Base implements OnInit {
     }
   }
 
-  // selecionarPeloTab(event: any, form: FormGroup, field: string, lista: any[]): void {
-  //   if (event.keyCode === 9) {
-  //     if (form && field && lista) {
-  //       form?.get(field).setValue(lista[0])
-  //     }
-  //   }
-  // }
-  // selecionarPeloTabAsync (event: any, form: FormGroup, field: string, listaPromise: Promise<any[]>): void {
-  //       if (event.key === 'Tab') {
-  //           listaPromise.then(function (lista: any[]): void {
-  //               const firstItem = lista[0];
-  //               form.get(field).setValue(firstItem);
-  //           })
-  //       }
-  //   }
+  selecionarPeloTab(event: any, form: FormGroup, field: string, lista: any[]): void {
+    if (event.keyCode === 9) {
+      if (form && field && lista) {
+        form?.get(field)?.setValue(lista[0])
+      }
+    }
+  }
 
-  // selecionarPeloTabModel(event, field: any, lista: any[]): void {
+  selecionarPeloTabAsync (event: any, form: FormGroup, field: string, listaPromise: Promise<any[]>): void {
+        if (event.key === 'Tab') {
+            listaPromise.then(function (lista: any[]): void {
+                const firstItem = lista[0];
+                form?.get(field)?.setValue(firstItem);
+            })
+        }
+    }
+
+  // selecionarPeloTabModel(event: any, field: any, lista: any[]): void {
   //   if (event.keyCode === 9) {
   //     this[field] = lista[0];
   //   }
@@ -107,11 +114,31 @@ export abstract class BaseListComponent extends Base implements OnInit {
       .replace(new RegExp('[Ç]', 'gi'), 'C');
   }
 
-  getTituloPaginaAtual() {
-    return this.activatedRoute.routeConfig
+  getTitle() {
+    var retorno = this.activatedRoute.routeConfig
       ? this.activatedRoute.routeConfig.data?.['titulo']
       : '';
+      return retorno;
   }
 
-  abstract preencheFiltro(): void;
+  getOperacao() {
+    var retorno = this.activatedRoute.routeConfig
+      ? this.activatedRoute.routeConfig.data?.['breadcrumb']
+      : '';
+    return retorno;
+  }
+
+  getRota() {
+    var retorno = this.activatedRoute.routeConfig
+      ? this.activatedRoute.routeConfig.data?.['rota']
+      : '';
+      return retorno;
+  }
+
+  getRotaOperacao() {
+    var retorno = `/${this.getRota()}/${this.getOperacao()}`;
+    return retorno.toLocaleLowerCase();
+  }
+
+
 }

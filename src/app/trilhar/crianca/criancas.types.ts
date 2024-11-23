@@ -1,4 +1,4 @@
-export interface AlunoModel {
+export interface CriancaModel {
     codigo: number;
     codigoCadastro: string;
     nomeCrianca: string;
@@ -23,7 +23,7 @@ export interface AlunoModel {
     dataCadastro: Date | null; // Pode ser string ou Date
   }
 
-  export interface AlunoView {
+  export interface CriancaView {
     Codigo: string;
     CodigoCadastro: string;
     NomeCrianca: string;
