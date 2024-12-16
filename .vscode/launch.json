@@ -8,7 +8,7 @@
             "name": "Angular: Chrome",
             "type": "chrome",
             "request": "launch",
-            "url": "http://localhost:4200/turmas",
+            "url": "http://localhost:4200/criancas",
             "webRoot": "${workspaceFolder}",
             "sourceMapPathOverrides": {
             "webpack:///./*": "${webRoot}/*"
@@ -16,10 +16,6 @@
             "sourceMaps": true,
             "skipFiles": ["node_modules/**/*.js"],
             "runtimeArgs": ["--incognito"]
-            //,
-            //"userDataDir": "${workspaceFolder}/.vscode/chrome",
-            //"preLaunchTask": "start-server-and-test"
-
         }
     ]
 }
