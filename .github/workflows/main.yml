@@ -8,7 +8,7 @@ on:
     branches:
       - main
 
-  # the follow line allow this script to be started manually.
+  # Permite que você execute este fluxo de trabalho manualmente na guia Ações
   workflow_dispatch:
 
 jobs:
@@ -16,21 +16,21 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: checkout Action
+    - name: Checagem do GitHub Action
       uses: actions/checkout@v3
 
-    - name: Setup nodejs
+    - name: Configura o NodeJS
       uses: actions/setup-node@v3
       with:
         node-version: 18.20.4
     
-    - name: Install packages with NPM
+    - name: Instalando pacotes com npm install
       run: npm install
     
-    - name: Build for production
+    - name: Build em produção com npm rum build
       run: npm run build
     
-    - name: Upload artifacts to be used in next job
+    - name: Subindo artefatos para ser usado no próximo fluxo
       if: success()
       uses: actions/upload-artifact@v3
       with:
@@ -42,14 +42,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download artifacts created at previous job
+    - name: Baixando artefatos criados no fluxo anterior
       if: success()
       uses: actions/download-artifact@v3
       with:
         name: deploy_dist
         path: dist
     
-    - name: Deploy to FTP
+    - name: Implantando no servidor FTP
       if: success()
       uses: SamKirkland/FTP-Deploy-Action@master
       with:
@@ -60,5 +60,5 @@ jobs:
         server-dir: trilhar.iques.com.br/
         protocol: ftps
         dangerous-clean-slate: true
-        retries: 5   # Tentativas adicionais
+        retries: 2   # Tentativas adicionais
         retry-delay: 30  # Atraso entre tentativas em segundos
