@@ -16,10 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checagem do GitHub Action
+    - name: Checando do GitHub Action
       uses: actions/checkout@v3
 
-    - name: Configura o NodeJS
+    - name: Configurando o NodeJS
       uses: actions/setup-node@v3
       with:
         node-version: 18.20.4
@@ -27,10 +27,10 @@ jobs:
     - name: Instalando pacotes com npm install
       run: npm install
     
-    - name: Build em produção com npm rum build
+    - name: Construíndo em produção com npm rum build
       run: npm run build
     
-    - name: Subindo artefatos para ser usado no próximo fluxo
+    - name: Subindo artefatos para serem usados no próximo fluxo
       if: success()
       uses: actions/upload-artifact@v3
       with:
