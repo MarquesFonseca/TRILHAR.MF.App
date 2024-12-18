@@ -17,10 +17,10 @@ jobs:
     
     steps:
     - name: Checando do GitHub Action
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configurando o NodeJS
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 18.20.4
     
@@ -32,7 +32,7 @@ jobs:
     
     - name: Subindo artefatos para serem usados no próximo fluxo
       if: success()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: deploy_dist
         path: dist
@@ -44,21 +44,21 @@ jobs:
     steps:
     - name: Baixando artefatos criados no fluxo anterior
       if: success()
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: deploy_dist
         path: dist
     
     - name: Implantando no servidor FTP
       if: success()
-      uses: SamKirkland/FTP-Deploy-Action@master
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USER }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/trilhar/browser/
         server-dir: trilhar.iques.com.br/
-        protocol: ftps
+        # protocol: ftps
         dangerous-clean-slate: true
         retries: 2   # Tentativas adicionais
         retry-delay: 30  # Atraso entre tentativas em segundos
