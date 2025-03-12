@@ -21,16 +21,13 @@
       <h1>Dashboard de Cadastro de Crianças</h1>
       <div class="stats-summary">
         <div class="stat-item">
-          <h3>{{ totalCriancas }}</h3>
-          <p>Total de Crianças</p>
+          <h3>Total de Crianças: {{ totalCriancas }}</h3>
         </div>
         <div class="stat-item active">
-          <h3>{{ criancasAtivas }}</h3>
-          <p>Crianças Ativas</p>
+          <h3>Crianças Ativas: {{ criancasAtivas }}</h3>
         </div>
         <div class="stat-item inactive">
-          <h3>{{ criancasInativas }}</h3>
-          <p>Crianças Inativas</p>
+          <h3>Crianças Inativas: {{ criancasInativas }}</h3>
         </div>
       </div>
     </div>
@@ -113,9 +110,8 @@
             <i class="fas fa-allergies"></i>
           </div>
           <div class="card-content">
-            <h3>{{ criancasComAlergia }}</h3>
-            <p>Com Alergia</p>
             <small>{{ (criancasComAlergia / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+            <h3>Com Alergia: {{ criancasComAlergia }}</h3>
           </div>
         </div>
 
@@ -124,9 +120,8 @@
             <i class="fas fa-utensils"></i>
           </div>
           <div class="card-content">
-            <h3>{{ criancasComRestricao }}</h3>
-            <p>Com Restrição Alimentar</p>
             <small>{{ (criancasComRestricao / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+            <h3>Com Restrição Alimentar: {{ criancasComRestricao }}</h3>
           </div>
         </div>
 
@@ -135,9 +130,8 @@
             <i class="fas fa-wheelchair"></i>
           </div>
           <div class="card-content">
-            <h3>{{ criancasComDeficiencia }}</h3>
-            <p>Com Necessidades Especiais</p>
             <small>{{ (criancasComDeficiencia / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+            <h3>Com Necessidades Especiais: {{ criancasComDeficiencia }}</h3>
           </div>
         </div>
 
@@ -146,9 +140,8 @@
             <i class="fas fa-church"></i>
           </div>
           <div class="card-content">
-            <h3>{{ criancasBatizadas }}</h3>
-            <p>Batizadas</p>
             <small>{{ (criancasBatizadas / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+            <h3>Batizadas: {{ criancasBatizadas }}</h3>
           </div>
         </div>
       </div>
