@@ -199,6 +199,7 @@ import { CriancasFormularioComponent } from './trilhar/crianca/criancas-formular
 import { TumaListarComponent } from './trilhar/turma/tuma-listar/tuma-listar.component';
 import { TurmaFormularioComponent } from './trilhar/turma/turma-formulario/turma-formulario.component';
 import { TurmaAtualizarLimiteMaximoComponent } from './trilhar/turma/turma-atualizar-limite-maximo/turma-atualizar-limite-maximo.component';
+import { DashboardComponent } from './trilhar/crianca/dashboard/dashboard.component';
 
 export const routes: Routes = [
     {path: '', component: EcommerceComponent},
@@ -219,6 +220,7 @@ export const routes: Routes = [
             {path: 'novo', component: CriancasFormularioComponent, data: { rota: "criancas", titulo: "Nova Criança", breadcrumb: "Novo", } },
             {path: 'alterar/:id', component: CriancasFormularioComponent, data: { rota: "criancas", titulo: "Alterar Criança", breadcrumb: "Alterar", } },
             {path: 'detalhar/:id', component: CriancasFormularioComponent, data: { rota: "criancas", titulo: "Detalhar Criança", breadcrumb: "Detalhar", } },
+            {path: 'dashboard', component: DashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
         ]
     },
     {

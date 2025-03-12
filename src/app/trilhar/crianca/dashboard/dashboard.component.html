@@ -1,0 +1,162 @@
+<div class="dashboard-container">
+  <!-- Loading Spinner -->
+  <div *ngIf="carregando" class="loading-container">
+    <div class="spinner"></div>
+    <p>Carregando dados...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="erro" class="error-container">
+    <div class="error-message">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>{{ erro }}</p>
+      <button (click)="carregarDados()">Tentar Novamente</button>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!carregando && !erro" class="dashboard-content">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+      <h1>Dashboard de Cadastro de Crianças</h1>
+      <div class="stats-summary">
+        <div class="stat-item">
+          <h3>{{ totalCriancas }}</h3>
+          <p>Total de Crianças</p>
+        </div>
+        <div class="stat-item active">
+          <h3>{{ criancasAtivas }}</h3>
+          <p>Crianças Ativas</p>
+        </div>
+        <div class="stat-item inactive">
+          <h3>{{ criancasInativas }}</h3>
+          <p>Crianças Inativas</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Charts Section -->
+    <div class="charts-row">
+      <!-- Status Chart -->
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="chartStatus"></canvas>
+        </div>
+      </div>
+
+      <!-- Idade Chart -->
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="chartFaixaEtaria"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Conditions Charts Section -->
+    <div class="charts-row">
+      <!-- Alergia Chart -->
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="chartAlergia"></canvas>
+        </div>
+      </div>
+
+      <!-- Restrição Alimentar Chart -->
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="chartRestricao"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <!-- Deficiência Chart -->
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="chartDeficiencia"></canvas>
+        </div>
+      </div>
+
+      <!-- Batismo Chart -->
+      <div class="chart-card">
+        <div class="chart-container">
+          <canvas id="chartBatismo"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Registration Charts Section -->
+    <div class="charts-row">
+      <!-- Cadastro Anual Chart -->
+      <div class="chart-card wide">
+        <div class="chart-container">
+          <canvas id="chartCadastroAnual"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <!-- Cadastro Mensal Chart -->
+      <div class="chart-card wide">
+        <div class="chart-container">
+          <canvas id="chartCadastroMensal"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Cards Section -->
+    <div class="summary-section">
+      <h2>Resumo de Condições Especiais</h2>
+      <div class="summary-cards">
+        <div class="summary-card">
+          <div class="card-icon alergia-icon">
+            <i class="fas fa-allergies"></i>
+          </div>
+          <div class="card-content">
+            <h3>{{ criancasComAlergia }}</h3>
+            <p>Com Alergia</p>
+            <small>{{ (criancasComAlergia / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="card-icon restricao-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <div class="card-content">
+            <h3>{{ criancasComRestricao }}</h3>
+            <p>Com Restrição Alimentar</p>
+            <small>{{ (criancasComRestricao / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="card-icon deficiencia-icon">
+            <i class="fas fa-wheelchair"></i>
+          </div>
+          <div class="card-content">
+            <h3>{{ criancasComDeficiencia }}</h3>
+            <p>Com Necessidades Especiais</p>
+            <small>{{ (criancasComDeficiencia / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="card-icon batismo-icon">
+            <i class="fas fa-church"></i>
+          </div>
+          <div class="card-content">
+            <h3>{{ criancasBatizadas }}</h3>
+            <p>Batizadas</p>
+            <small>{{ (criancasBatizadas / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="dashboard-footer">
+      <p>Dashboard atualizado em {{ currentDate | date:'dd/MM/yyyy' }}</p>
+    </div>
+  </div>
+</div>
