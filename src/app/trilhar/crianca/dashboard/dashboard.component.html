@@ -18,7 +18,7 @@
   <div *ngIf="!carregando && !erro" class="dashboard-content">
     <!-- Header Section -->
     <div class="dashboard-header">
-      <h1>Dashboard de Cadastro de Crianças</h1>
+      <h1>Dashboard Crianças</h1>
       <div class="stats-summary">
         <div class="stat-item">
           <h3>Total de Crianças: {{ totalCriancas }}</h3>
@@ -101,6 +101,9 @@
       </div>
     </div>
 
+    <br/>
+    <br/>
+
     <!-- Summary Cards Section -->
     <div class="summary-section">
       <h2>Resumo de Condições Especiais</h2>
@@ -149,7 +152,7 @@
 
     <!-- Footer -->
     <div class="dashboard-footer">
-      <p>Dashboard atualizado em {{ currentDate | date:'dd/MM/yyyy' }}</p>
+      <p>Dashboard atualizado em {{ currentDate | date:'dd/MM/yyyy HH:mm:ss' }}</p>
     </div>
   </div>
 </div>
