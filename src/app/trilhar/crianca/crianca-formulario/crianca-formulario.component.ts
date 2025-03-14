@@ -9,10 +9,10 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { map, Observable, startWith } from 'rxjs';
 import { BaseFormComponent } from '../../../shared/baseForms';
 import { MaterialModule } from '../../../material.module';
-import { CriancasService } from '../criancas.service';
+import { CriancaService } from '../crianca.service';
 import * as utils from '../../../funcoes-comuns/utils';
 import * as validar from '../../../funcoes-comuns/validators/validator';
-import * as types from '../criancas.types';
+import * as types from '../crianca.types';
 
 
 @Component({
@@ -28,10 +28,10 @@ import * as types from '../criancas.types';
   ],
   providers: [provideNgxMask()],
 
-  templateUrl: './criancas-formulario.component.html',
-  styleUrl: './criancas-formulario.component.scss',
+  templateUrl: './crianca-formulario.component.html',
+  styleUrl: './crianca-formulario.component.scss',
 })
-export class CriancasFormularioComponent
+export class CriancaFormularioComponent
   extends BaseFormComponent
   implements OnInit
 {
@@ -43,7 +43,7 @@ export class CriancasFormularioComponent
 
   constructor(
     private fb: FormBuilder,
-    private criancaService: CriancasService,
+    private criancaService: CriancaService,
     private _adapter: DateAdapter<any>,
     private _intl: MatDatepickerIntl,
     public override router: Router,

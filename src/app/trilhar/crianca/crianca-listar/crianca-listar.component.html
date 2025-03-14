@@ -5,7 +5,7 @@
   </h5>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
       <li class="breadcrumb-item position-relative">
-          <a routerLink="/" class="d-inline-block position-relative">
+          <a routerLink="/criancas/dashboard" class="d-inline-block position-relative">
               <i class="ri-home-8-line"></i>
               Dashboard
           </a>
@@ -97,7 +97,7 @@
                             {{element.NomeCrianca}}
                         </td> -->
                         <td mat-cell *matCellDef="let element">
-                            <a [routerLink]="['/criancas/detalhar', element.Codigo]" class="fw-medium">
+                            <a [routerLink]="['/crianca/detalhar', element.Codigo]" class="fw-medium">
                                 {{element.NomeCrianca}}
                             </a>
                         </td>
@@ -326,12 +326,12 @@
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <div class="action-info">
-                                <a mat-button [routerLink]="['/criancas/detalhar', element.Codigo]" matTooltip="Ver Criança" matTooltipPosition="above">
+                                <a mat-button [routerLink]="['/crianca/detalhar', element.Codigo]" matTooltip="Ver Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.view}}
                                     </i>
                                 </a>
-                                <a mat-button [routerLink]="['/criancas/alterar', element.Codigo]" matTooltip="Editar Criança" matTooltipPosition="above">
+                                <a mat-button [routerLink]="['/crianca/alterar', element.Codigo]" matTooltip="Editar Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.edit}}
                                     </i>

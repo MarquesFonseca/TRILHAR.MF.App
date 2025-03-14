@@ -89,31 +89,31 @@
                                 <i class="material-symbols-outlined">email</i>
                                 <span class="title">Crianças</span>
                                 <span class="daxa-badge two">
-                                    2
+                                    3
                                 </span>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
-                            <li class="sidemenu-item">
-                                <a routerLink="/criancas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    Listar
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/criancas/novo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    Novo
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                              <a routerLink="/criancas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                  Dashboard
+                          <li class="sidemenu-item">
+                            <a routerLink="/criancas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                Dashboard
+                            </a>
+                          </li>
+                          <li class="sidemenu-item">
+                              <a routerLink="/criancas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Listar
                               </a>
                           </li>
-                            <!-- <li class="sidemenu-item">
-                                <a routerLink="/criancas/alterar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    Alterar
-                                </a>
-                            </li> -->
+                          <li class="sidemenu-item">
+                              <a routerLink="/criancas/novo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Novo
+                              </a>
+                          </li>
+                          <!-- <li class="sidemenu-item">
+                              <a routerLink="/crianca/alterar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Alterar
+                              </a>
+                          </li> -->
                         </ul>
                     </mat-expansion-panel>
                     <!-- ---------------------------------------------------- -->
@@ -142,6 +142,44 @@
                             <a routerLink="/turmas/limite" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                 Ajustar limites
                             </a>
+                        </li>
+                      </ul>
+                    </mat-expansion-panel>
+                    <!-- ---------------------------------------------------- -->
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                      <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              <i class="material-symbols-outlined">email</i>
+                              <span class="title">Matrículas</span>
+                              <span class="daxa-badge two">
+                                  1
+                              </span>
+                          </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <ul class="sidebar-sub-menu">
+                        <li class="sidemenu-item">
+                          <a routerLink="/matriculas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              Dashboard
+                          </a>
+                        </li>
+                      </ul>
+                    </mat-expansion-panel>
+                    <!-- ---------------------------------------------------- -->
+                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                      <mat-expansion-panel-header>
+                          <mat-panel-title>
+                              <i class="material-symbols-outlined">email</i>
+                              <span class="title">Frequências</span>
+                              <span class="daxa-badge two">
+                                  1
+                              </span>
+                          </mat-panel-title>
+                      </mat-expansion-panel-header>
+                      <ul class="sidebar-sub-menu">
+                        <li class="sidemenu-item">
+                          <a routerLink="/frequencias/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              Dashboard
+                          </a>
                         </li>
                       </ul>
                     </mat-expansion-panel>

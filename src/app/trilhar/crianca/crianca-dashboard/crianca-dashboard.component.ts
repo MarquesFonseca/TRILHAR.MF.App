@@ -1,94 +1,38 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-dashboard',
-//   standalone: true,
-//   imports: [],
-//   templateUrl: './dashboard.component.html',
-//   styleUrl: './dashboard.component.scss'
-// })
-// export class DashboardComponent {
-
-// }
-
-
-
-
 import { Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as Papa from 'papaparse';
 import { Chart, registerables } from 'chart.js';
 import { CommonModule, NgIf, isPlatformBrowser } from '@angular/common';
-
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../material.module';
-import { CriancasService } from '../criancas.service';
-import * as types from '../criancas.types';
+import { CriancaService } from '../crianca.service';
+import * as types from './crianca-dashboard.types';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 import { BaseFormComponent } from '../../../shared/baseForms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-// import { MatPaginator } from '@angular/material/paginator';
-// import { MatTableDataSource } from '@angular/material/table';
-// import { SelectionModel } from '@angular/cdk/collections';
 
 // Registrar todos os componentes do Chart.js
 Chart.register(...registerables);
 
-interface CriancaData {
-  Codigo: number;
-  CodigoCadastro: number;
-  NomeCrianca: string;
-  DataNascimento: string;
-  NomeMae: string;
-  NomePai: string;
-  OutroResponsavel: string | null;
-  Telefone: string;
-  EnderecoEmail: string | null;
-  Alergia: number;
-  DescricaoAlergia: string | null;
-  RestricaoAlimentar: number;
-  DescricaoRestricaoAlimentar: string | null;
-  DeficienciaOuSituacaoAtipica: number;
-  DescricaoDeficiencia: string | null;
-  Batizado: number;
-  DataBatizado: string | null;
-  IgrejaBatizado: string | null;
-  Ativo: number;
-  CodigoUsuarioLogado: number | null;
-  DataAtualizacao: string;
-  DataCadastro: string;
-}
-
-interface ContagemGrafico {
-  labels: string[];
-  data: number[];
-}
-
-interface FaixaEtaria {
-  faixa: string;
-  quantidade: number;
-}
-
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-crianca-dashboard',
   standalone: true,
   imports: [
     CommonModule,
-    //RouterLink,
     ReactiveFormsModule,
     MaterialModule,
     NgIf,
   ],
-  templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  templateUrl: './crianca-dashboard.component.html',
+  styleUrl: './crianca-dashboard.component.scss'
 })
-export class DashboardComponent extends BaseFormComponent implements OnInit {
+export class CriancaDashboardComponent extends BaseFormComponent implements OnInit {
 
   currentDate: string | undefined;
   private isBrowser: boolean;
 
   // Propriedades para armazenar estatísticas
-  dadosCriancas: CriancaData[] = [];
+  dadosCriancas: types.CriancaData[] = [];
   totalCriancas = 0;
   criancasAtivas = 0;
   criancasInativas = 0;
@@ -119,7 +63,7 @@ export class DashboardComponent extends BaseFormComponent implements OnInit {
       private http: HttpClient,
       public themeService: CustomizerSettingsService,
           private fb: FormBuilder,
-          private criancaService: CriancasService,
+          private criancaService: CriancaService,
           public override router: Router,
           public override activatedRoute: ActivatedRoute,
           @Inject(PLATFORM_ID) private platformId: Object
@@ -141,8 +85,6 @@ export class DashboardComponent extends BaseFormComponent implements OnInit {
     this.carregando = true;
     this.erro = null;
 
-    // Substitua pelo caminho real do seu arquivo CSV
-    // this.http.get('../assets/data/crianca.csv', { responseType: 'text' })
     var filtro = this.montaFiltro(0, 0);
     this.criancaService.listarPorFiltro(filtro, (res: any) => {
       if (res?.dados) {
@@ -204,65 +146,6 @@ export class DashboardComponent extends BaseFormComponent implements OnInit {
 
     return filtro;
   }
-
-  processarDados(csvData: string): void {
-    Papa.parse<CriancaData>(csvData, {
-      header: true,
-      dynamicTyping: true,
-      skipEmptyLines: true,
-      complete: (result: any) => {
-        this.dadosCriancas = result.data;
-        this.totalCriancas = this.dadosCriancas.length;
-
-        // Calcular estatísticas
-        this.calcularEstatisticas();
-
-        // Criar gráficos
-        setTimeout(() => {
-          this.criarGraficos();
-          this.carregando = false;
-        }, 500);
-      },
-      error: (error: any) => {
-        console.error('Erro ao processar CSV:', error);
-        this.erro = 'Falha ao processar os dados. Por favor, verifique o formato do arquivo.';
-        this.carregando = false;
-      }
-    });
-  }
-
-  carregarAlunos(filtro: any) {
-    this.criancaService.listarPorFiltro(filtro, (res: any) => {
-      if (res) {
-        //console.log(res);
-        const alunosView = res.dados.map((aluno: any) => ({
-          Codigo: aluno.codigo.toString(),
-          CodigoCadastro: aluno.codigoCadastro,
-          NomeCrianca: aluno.nomeCrianca,
-          DataNascimento: aluno.dataNascimento,
-          NomeMae: aluno.nomeMae,
-          NomePai: aluno.nomePai,
-          OutroResponsavel: aluno.outroResponsavel,
-          Telefone: aluno.telefone,
-          EnderecoEmail: aluno.enderecoEmail,
-          Alergia: aluno.alergia,
-          DescricaoAlergia: aluno.descricaoAlergia,
-          RestricaoAlimentar: aluno.restricaoAlimentar,
-          DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-          DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-          DescricaoDeficiencia: aluno.descricaoDeficiencia,
-          Batizado: aluno.batizado,
-          DataBatizado: aluno.dataBatizado,
-          IgrejaBatizado: aluno.igrejaBatizado,
-          Ativo: aluno.ativo,
-          CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-          DataAtualizacao: aluno.dataAtualizacao,
-          DataCadastro: aluno.dataCadastro,
-        }));
-        return alunosView;
-        }
-      });
-    }
 
   calcularEstatisticas(): void {
     // Status (Ativo/Inativo)
@@ -465,7 +348,7 @@ export class DashboardComponent extends BaseFormComponent implements OnInit {
 
       // Calcular faixas etárias
       const hoje = new Date();
-      const faixasEtarias: FaixaEtaria[] = [
+      const faixasEtarias: types.FaixaEtaria[] = [
         { faixa: '0-3 anos', quantidade: 0 },
         { faixa: '4-6 anos', quantidade: 0 },
         { faixa: '7-10 anos', quantidade: 0 },

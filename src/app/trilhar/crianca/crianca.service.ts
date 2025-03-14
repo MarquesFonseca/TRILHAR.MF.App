@@ -3,13 +3,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-import * as types from './criancas.types';
+import * as types from './crianca.types';
 import { LoadingService } from '../../services/loading.service';
 
 @Injectable({
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
 })
-export class CriancasService {
+export class CriancaService {
   private apiUrl = `${environment.API_TRILHAR}/aluno`; // URL da API
 
   constructor(

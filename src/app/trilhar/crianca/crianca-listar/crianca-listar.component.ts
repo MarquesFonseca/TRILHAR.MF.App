@@ -8,8 +8,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 import { BaseListComponent } from '../../../shared/baseList';
-import { CriancasService } from '../criancas.service';
-import * as types from '../criancas.types';
+import { CriancaService } from '../crianca.service';
+import * as types from '../crianca.types';
 
 @Component({
   selector: 'app-criancas-listar',
@@ -21,10 +21,10 @@ import * as types from '../criancas.types';
     MaterialModule,
     NgIf,
   ],
-  templateUrl: './criancas-listar.component.html',
-  styleUrl: './criancas-listar.component.scss',
+  templateUrl: './crianca-listar.component.html',
+  styleUrl: './crianca-listar.component.scss',
 })
-export class CriancasListarComponent extends BaseListComponent implements OnInit {
+export class CriancaListarComponent extends BaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [
@@ -68,7 +68,7 @@ export class CriancasListarComponent extends BaseListComponent implements OnInit
   constructor(
     public themeService: CustomizerSettingsService,
     private fb: FormBuilder,
-    private criancaService: CriancasService,
+    private criancaService: CriancaService,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
   ) {

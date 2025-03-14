@@ -12,7 +12,7 @@ import * as types from '../turma.types';
 import { TurmaService } from '../turma.service';
 
 @Component({
-  selector: 'app-tuma-listar',
+  selector: 'app-turma-listar',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,10 +21,10 @@ import { TurmaService } from '../turma.service';
     MaterialModule,
     NgIf,
   ],
-  templateUrl: './tuma-listar.component.html',
-  styleUrl: './tuma-listar.component.scss'
+  templateUrl: './turma-listar.component.html',
+  styleUrl: './turma-listar.component.scss'
 })
-export class TumaListarComponent extends BaseListComponent implements OnInit {
+export class TurmaListarComponent extends BaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   pesquisarPorAtivosInativos: boolean = true;
