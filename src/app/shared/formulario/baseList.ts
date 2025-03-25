@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Base } from '../shared/base';
+import { Base } from './base';
 import { FormGroup } from '@angular/forms';
 
 const KEY = 'filtroListar';

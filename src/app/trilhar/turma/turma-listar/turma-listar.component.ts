@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
-import { BaseListComponent } from '../../../shared/baseList';
+import { BaseListComponent } from '../../../shared/formulario/baseList';
 import * as types from '../turma.types';
 import { TurmaService } from '../turma.service';
 

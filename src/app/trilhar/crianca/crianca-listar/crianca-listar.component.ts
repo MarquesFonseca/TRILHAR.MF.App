@@ -7,7 +7,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
-import { BaseListComponent } from '../../../shared/baseList';
+import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { CriancaService } from '../crianca.service';
 import * as types from '../crianca.types';
 
@@ -123,44 +123,43 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     this.selection = new SelectionModel<types.CriancaView>(true, []);
   }
 
-  carregarAlunos(filtro: any) {
-  this.criancaService.listarPorFiltro(filtro, (res: any) => {
-    if (res) {
-      //console.log(res);
-      this.totalItems = res.totalItens;
-      const alunosView: types.CriancaView[] = res.dados.map((aluno: any) => ({
-        Codigo: aluno.codigo.toString(),
-        CodigoCadastro: aluno.codigoCadastro,
-        NomeCrianca: aluno.nomeCrianca,
-        DataNascimento: aluno.dataNascimento,
-        NomeMae: aluno.nomeMae,
-        NomePai: aluno.nomePai,
-        OutroResponsavel: aluno.outroResponsavel,
-        Telefone: aluno.telefone,
-        EnderecoEmail: aluno.enderecoEmail,
-        Alergia: aluno.alergia,
-        DescricaoAlergia: aluno.descricaoAlergia,
-        RestricaoAlimentar: aluno.restricaoAlimentar,
-        DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-        DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-        DescricaoDeficiencia: aluno.descricaoDeficiencia,
-        Batizado: aluno.batizado,
-        DataBatizado: aluno.dataBatizado,
-        IgrejaBatizado: aluno.igrejaBatizado,
-        Ativo: aluno.ativo,
-        CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-        DataAtualizacao: aluno.dataAtualizacao,
-        DataCadastro: aluno.dataCadastro,
-        // Adicionando a propriedade 'Action' para que o AlunoView fique completo
-        Action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete',
-        },
-      }));
-      this.dataSource = new MatTableDataSource<types.CriancaView>(alunosView);
-      }
-    });
+  async carregarAlunos(filtro: any) {
+  var res = await this.criancaService.listarPorFiltroPromise(filtro);
+  if (res?.dados) {
+    //console.log(res);
+    this.totalItems = res.totalItens;
+    const alunosView: types.CriancaView[] = res.dados.map((aluno: any) => ({
+      Codigo: aluno.codigo.toString(),
+      CodigoCadastro: aluno.codigoCadastro,
+      NomeCrianca: aluno.nomeCrianca,
+      DataNascimento: aluno.dataNascimento,
+      NomeMae: aluno.nomeMae,
+      NomePai: aluno.nomePai,
+      OutroResponsavel: aluno.outroResponsavel,
+      Telefone: aluno.telefone,
+      EnderecoEmail: aluno.enderecoEmail,
+      Alergia: aluno.alergia,
+      DescricaoAlergia: aluno.descricaoAlergia,
+      RestricaoAlimentar: aluno.restricaoAlimentar,
+      DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
+      DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
+      DescricaoDeficiencia: aluno.descricaoDeficiencia,
+      Batizado: aluno.batizado,
+      DataBatizado: aluno.dataBatizado,
+      IgrejaBatizado: aluno.igrejaBatizado,
+      Ativo: aluno.ativo,
+      CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
+      DataAtualizacao: aluno.dataAtualizacao,
+      DataCadastro: aluno.dataCadastro,
+      // Adicionando a propriedade 'Action' para que o AlunoView fique completo
+      Action: {
+          view: 'visibility',
+          edit: 'edit',
+          delete: 'delete',
+      },
+    }));
+    this.dataSource = new MatTableDataSource<types.CriancaView>(alunosView);
+    }
   }
 
   async carregarAlunosPromise(): Promise<void> {

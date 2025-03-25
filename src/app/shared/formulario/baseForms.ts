@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Base } from '../shared/base';
+import { Base } from './base';
 
 const ROTAREPLACE: string = '/afc/';
 

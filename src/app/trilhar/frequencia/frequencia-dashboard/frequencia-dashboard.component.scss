@@ -1,4 +1,417 @@
-/* Variables */
+// Variáveis
 $primary-color: #3f51b5;
 $secondary-color: #2196f3;
-$success-color: #28f035
+$success-color: #4caf50;
+$warning-color: #ff9800;
+$danger-color: #f44336;
+$light-color: #f5f5f5;
+$dark-color: #333333;
+$gray-color: #757575;
+$light-gray: #e0e0e0;
+
+// Estilos de Container
+.dashboard-container {
+  padding: 16px;
+  background-color: #f9f9f9;
+  min-height: calc(100vh - 64px);
+
+  @media (max-width: 768px) {
+    padding: 8px;
+  }
+}
+
+// Loading e Erro
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+
+  .loading-spinner {
+    margin-bottom: 16px;
+  }
+
+  .loading-text {
+    color: $gray-color;
+    font-size: 16px;
+  }
+}
+
+.error-container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+
+  .error-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 500px;
+
+    mat-icon {
+      font-size: 48px;
+      height: 48px;
+      width: 48px;
+      margin-bottom: 16px;
+    }
+
+    p {
+      margin-bottom: 20px;
+      color: $dark-color;
+      font-size: 16px;
+    }
+  }
+}
+
+// Seção de Filtros
+.filter-section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  .filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    .filter-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 500;
+      color: $dark-color;
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .filter-form {
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+
+      mat-form-field {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      button {
+        align-self: center;
+      }
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+
+        mat-form-field {
+          width: 100%;
+        }
+
+        button {
+          width: 100%;
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Seção de Estatísticas
+.stats-section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  .stats-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .stat-card {
+      flex: 1;
+      min-width: 200px;
+      padding: 16px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      transition: transform 0.3s ease;
+
+      &:hover {
+        transform: translateY(-5px);
+      }
+
+      &.total {
+        background-color: rgba($secondary-color, 0.1);
+        border-left: 4px solid $secondary-color;
+      }
+
+      &.presente {
+        background-color: rgba($success-color, 0.1);
+        border-left: 4px solid $success-color;
+      }
+
+      &.ausente {
+        background-color: rgba($danger-color, 0.1);
+        border-left: 4px solid $danger-color;
+      }
+
+      &.taxa {
+        background-color: rgba($warning-color, 0.1);
+        border-left: 4px solid $warning-color;
+      }
+
+      .card-icon {
+        margin-right: 16px;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .total & {
+          background-color: rgba($secondary-color, 0.2);
+          color: $secondary-color;
+        }
+
+        .presente & {
+          background-color: rgba($success-color, 0.2);
+          color: $success-color;
+        }
+
+        .ausente & {
+          background-color: rgba($danger-color, 0.2);
+          color: $danger-color;
+        }
+
+        .taxa & {
+          background-color: rgba($warning-color, 0.2);
+          color: $warning-color;
+        }
+
+        mat-icon {
+          font-size: 24px;
+          height: 24px;
+          width: 24px;
+        }
+      }
+
+      .card-content {
+        .card-value {
+          font-size: 24px;
+          font-weight: 700;
+          margin: 0;
+          line-height: 1.2;
+
+          .total & {
+            color: $secondary-color;
+          }
+
+          .presente & {
+            color: $success-color;
+          }
+
+          .ausente & {
+            color: $danger-color;
+          }
+
+          .taxa & {
+            color: $warning-color;
+          }
+        }
+
+        .card-label {
+          font-size: 14px;
+          color: $gray-color;
+          margin: 0;
+        }
+      }
+
+      @media (max-width: 576px) {
+        min-width: 100%;
+      }
+    }
+  }
+}
+
+// Seção de Gráficos
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    &.chart-card-large {
+      grid-column: span 2;
+
+      @media (max-width: 768px) {
+        grid-column: span 1;
+      }
+    }
+
+    .chart-header {
+      padding: 16px;
+      border-bottom: 1px solid $light-gray;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .chart-title {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: $dark-color;
+      }
+
+      .chart-subtitle {
+        font-size: 12px;
+        color: $gray-color;
+      }
+
+      .chart-actions {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .chart-container {
+      padding: 16px;
+      flex: 1;
+      min-height: 300px;
+      position: relative;
+    }
+
+    .chart-footer {
+      padding: 8px 16px;
+      border-top: 1px solid $light-gray;
+      background-color: #fafafa;
+
+      .empty-chart-message {
+        color: $gray-color;
+        text-align: center;
+        margin: 8px 0;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Seção de Insights
+.insights-section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+
+  .section-title {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 500;
+    color: $dark-color;
+  }
+
+  .insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+
+    .insight-card {
+      border: 1px solid $light-gray;
+      border-radius: 8px;
+      padding: 16px;
+
+      &.insight-card-wide {
+        grid-column: 1 / -1;
+      }
+
+      .insight-title {
+        margin-top: 0;
+        margin-bottom: 16px;
+        font-size: 16px;
+        font-weight: 500;
+        color: $primary-color;
+        padding-bottom: 8px;
+        border-bottom: 1px solid $light-gray;
+      }
+
+      .insight-content {
+        .insight-item {
+          margin-bottom: 16px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          h5 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: $gray-color;
+          }
+
+          .insight-value {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: $dark-color;
+          }
+
+          .insight-detail {
+            margin: 0;
+            font-size: 12px;
+            color: $gray-color;
+          }
+        }
+
+        .insight-summary {
+          p {
+            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: $dark-color;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            strong {
+              font-weight: 600;
+              color: $primary-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Footer
+.dashboard-footer {
+  text-align: center;
+  padding: 16px 0;
+
+  .update-info {
+    font-size: 12px;
+    color: $gray-color;
+    margin: 0;
+  }
+}

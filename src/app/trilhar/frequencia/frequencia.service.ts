@@ -23,24 +23,48 @@ export class FrequenciaService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
+  // listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
+  //   this.loadingService.show();
+  //   this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
+  //       next: (resp: any) => {
+  //           this.loadingService.hide();
+  //           if (callback) {
+  //               callback(resp); // Invoca o callback com os dados da resposta
+  //           }
+  //       },
+  //       error: (err: any) => {
+  //           this.loadingService.hide();
+  //           console.error('Erro ao listar por filtro:', err);
+  //           // Aqui você pode adicionar lógica para mostrar mensagens de erro
+  //           if (callback) {
+  //               callback(null); // Invoca o callback com `null` para indicar erro
+  //           }
+  //       }
+  //   });
+  // }
+
+  listarPorFiltroPromise(filtro: any): Promise<any> {
     this.loadingService.show();
-    this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
         next: (resp: any) => {
-            this.loadingService.hide();
-            if (callback) {
-                callback(resp); // Invoca o callback com os dados da resposta
-            }
+          this.loadingService.hide();
+          resolve(resp); // Resolve a Promise com os dados da resposta
         },
         error: (err: any) => {
-            this.loadingService.hide();
-            console.error('Erro ao listar por filtro:', err);
-            // Aqui você pode adicionar lógica para mostrar mensagens de erro
-            if (callback) {
-                callback(null); // Invoca o callback com `null` para indicar erro
-            }
+          this.loadingService.hide();
+          console.error('Erro ao listar por filtro:', err);
+          reject(err); // Rejeita a Promise em caso de erro
         }
+      });
     });
+  }
+
+  listarPorFiltro(filtro: any): Observable<any> {
+    this.loadingService.show();
+    return this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).pipe(
+        finalize(() => this.loadingService.hide()) // Garante que o loading sempre será escondido
+    );
 }
 
   async listarTodosPromise(): Promise<any> {

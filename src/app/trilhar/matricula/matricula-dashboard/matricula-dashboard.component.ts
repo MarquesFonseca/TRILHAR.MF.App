@@ -7,7 +7,7 @@ import { MaterialModule } from '../../../material.module';
 import { MatriculaService } from '../matricula.service';
 import * as types from './matricula-dashboard.types';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
-import { BaseFormComponent } from '../../../shared/baseForms';
+import { BaseFormComponent } from '../../../shared/formulario/baseForms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 // Registrar todos os componentes do Chart.js

@@ -7,7 +7,7 @@ import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { map, Observable, startWith } from 'rxjs';
-import { BaseFormComponent } from '../../../shared/baseForms';
+import { BaseFormComponent } from '../../../shared/formulario/baseForms';
 import { MaterialModule } from '../../../material.module';
 import { CriancaService } from '../crianca.service';
 import * as utils from '../../../funcoes-comuns/utils';

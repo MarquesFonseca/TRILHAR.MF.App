@@ -1,150 +1,281 @@
 <div class="dashboard-container">
   <!-- Loading Spinner -->
   <div *ngIf="carregando" class="loading-container">
-    <div class="spinner"></div>
-    <p>Carregando dados...</p>
+    <mat-spinner class="loading-spinner"></mat-spinner>
+    <p class="loading-text">Carregando dados de frequência...</p>
   </div>
 
   <!-- Error Message -->
   <div *ngIf="erro" class="error-container">
     <div class="error-message">
-      <i class="fas fa-exclamation-triangle"></i>
+      <mat-icon color="warn">error</mat-icon>
       <p>{{ erro }}</p>
-      <button (click)="carregarDados()">Tentar Novamente</button>
+      <button mat-raised-button color="primary" (click)="carregarDados()">Tentar Novamente</button>
     </div>
   </div>
 
   <!-- Dashboard Content -->
   <div *ngIf="!carregando && !erro" class="dashboard-content">
-    <!-- Header Section -->
-    <div class="dashboard-header">
-      <h1>Dashboard Crianças</h1>
-      <div class="stats-summary">
-        <div class="stat-item">
-          <h3>Total de Crianças: {{ totalCriancas }}</h3>
-        </div>
-        <div class="stat-item active">
-          <h3>Crianças Ativas: {{ criancasAtivas }}</h3>
-        </div>
-        <div class="stat-item inactive">
-          <h3>Crianças Inativas: {{ criancasInativas }}</h3>
+    <!-- Filtros -->
+    <div class="filter-section mat-elevation-z2">
+      <div class="filter-header">
+        <h2 class="filter-title">Filtros</h2>
+        <div class="filter-actions">
+          <mat-slide-toggle color="primary" formControlName="apenasAtivas">
+            Apenas Turmas Ativas
+          </mat-slide-toggle>
         </div>
       </div>
+
+      <form [formGroup]="filtroForm" (ngSubmit)="aplicarFiltro()" class="filter-form">
+        <div class="filter-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Data Inicial</mat-label>
+            <input matInput [matDatepicker]="dataInicioPicker" formControlName="dataInicio">
+            <mat-datepicker-toggle matSuffix [for]="dataInicioPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dataInicioPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Data Final</mat-label>
+            <input matInput [matDatepicker]="dataFimPicker" formControlName="dataFim">
+            <mat-datepicker-toggle matSuffix [for]="dataFimPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dataFimPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Turma</mat-label>
+            <mat-select formControlName="turma">
+              <mat-option [value]="">Todas as Turmas</mat-option>
+              <mat-option *ngFor="let turma of turmasAtivas" [value]="turma">{{ turma }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button type="submit" mat-raised-button color="primary" [disabled]="!filtroForm.valid">
+            <mat-icon>filter_list</mat-icon>
+            Aplicar Filtro
+          </button>
+        </div>
+      </form>
     </div>
 
-    <!-- Main Charts Section -->
-    <div class="charts-row">
-      <!-- Status Chart -->
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="chartStatus"></canvas>
-        </div>
-      </div>
-
-      <!-- Idade Chart -->
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="chartFaixaEtaria"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Conditions Charts Section -->
-    <div class="charts-row">
-      <!-- Alergia Chart -->
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="chartAlergia"></canvas>
-        </div>
-      </div>
-
-      <!-- Restrição Alimentar Chart -->
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="chartRestricao"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="charts-row">
-      <!-- Deficiência Chart -->
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="chartDeficiencia"></canvas>
-        </div>
-      </div>
-
-      <!-- Batismo Chart -->
-      <div class="chart-card">
-        <div class="chart-container">
-          <canvas id="chartBatismo"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <!-- Registration Charts Section -->
-    <div class="charts-row">
-      <!-- Cadastro Anual Chart -->
-      <div class="chart-card wide">
-        <div class="chart-container">
-          <canvas id="chartCadastroAnual"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <div class="charts-row">
-      <!-- Cadastro Mensal Chart -->
-      <div class="chart-card wide">
-        <div class="chart-container">
-          <canvas id="chartCadastroMensal"></canvas>
-        </div>
-      </div>
-    </div>
-
-    <br/>
-    <br/>
-
-    <!-- Summary Cards Section -->
-    <div class="summary-section">
-      <h2>Resumo de Condições Especiais</h2>
-      <div class="summary-cards">
-        <div class="summary-card">
-          <div class="card-icon alergia-icon">
-            <i class="fas fa-allergies"></i>
+    <!-- Estatísticas Gerais -->
+    <div class="stats-section mat-elevation-z2">
+      <div class="stats-cards">
+        <div class="stat-card total">
+          <div class="card-icon">
+            <mat-icon>people</mat-icon>
           </div>
           <div class="card-content">
-            <small>{{ (criancasComAlergia / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
-            <h3>Com Alergia: {{ criancasComAlergia }}</h3>
+            <p class="card-value">{{ totalFrequencias }}</p>
+            <p class="card-label">Total de Registros</p>
           </div>
         </div>
 
-        <div class="summary-card">
-          <div class="card-icon restricao-icon">
-            <i class="fas fa-utensils"></i>
+        <div class="stat-card presente">
+          <div class="card-icon">
+            <mat-icon>check_circle</mat-icon>
           </div>
           <div class="card-content">
-            <small>{{ (criancasComRestricao / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
-            <h3>Com Restrição Alimentar: {{ criancasComRestricao }}</h3>
+            <p class="card-value">{{ totalPresentes }}</p>
+            <p class="card-label">Presentes</p>
           </div>
         </div>
 
-        <div class="summary-card">
-          <div class="card-icon deficiencia-icon">
-            <i class="fas fa-wheelchair"></i>
+        <div class="stat-card ausente">
+          <div class="card-icon">
+            <mat-icon>cancel</mat-icon>
           </div>
           <div class="card-content">
-            <small>{{ (criancasComDeficiencia / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
-            <h3>Com Necessidades Especiais: {{ criancasComDeficiencia }}</h3>
+            <p class="card-value">{{ totalAusentes }}</p>
+            <p class="card-label">Ausentes</p>
           </div>
         </div>
 
-        <div class="summary-card">
-          <div class="card-icon batismo-icon">
-            <i class="fas fa-church"></i>
+        <div class="stat-card taxa">
+          <div class="card-icon">
+            <mat-icon>trending_up</mat-icon>
           </div>
           <div class="card-content">
-            <small>{{ (criancasBatizadas / totalCriancas * 100) | number:'1.1-1' }}% do total</small>
-            <h3>Batizadas: {{ criancasBatizadas }}</h3>
+            <p class="card-value">{{ taxaPresencaGeral | number: '1.1-1' }}%</p>
+            <p class="card-label">Taxa de Presença</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Principais Gráficos -->
+    <div class="charts-grid">
+      <!-- Gráfico de Frequência Geral (Pizza) -->
+      <div class="chart-card mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Frequência Geral</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartFrequenciaGeral"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico de Frequência de Hoje (Pizza) -->
+      <div class="chart-card mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Frequência de Hoje</h3>
+          <span class="chart-subtitle">{{ hoje | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartFrequenciaHoje"></canvas>
+        </div>
+        <div class="chart-footer" *ngIf="frequenciaHoje.total === 0">
+          <p class="empty-chart-message">Não há registros para o dia de hoje.</p>
+        </div>
+      </div>
+
+      <!-- Gráfico de Frequência por Turma Hoje (Barras Horizontais) -->
+      <div class="chart-card chart-card-large mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Frequência por Turma Hoje</h3>
+          <span class="chart-subtitle">{{ hoje | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartTurmasHoje"></canvas>
+        </div>
+        <div class="chart-footer" *ngIf="frequenciaTurmasHoje.length === 0">
+          <p class="empty-chart-message">Não há registros de frequência por turma para o dia de hoje.</p>
+        </div>
+      </div>
+
+      <!-- Gráfico de Frequência por Período (Linha) -->
+      <div class="chart-card chart-card-large mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Frequência por Período</h3>
+          <div class="chart-actions">
+            <mat-button-toggle-group [value]="tipoVisualizacao" (change)="alternarVisualizacao($event.value)">
+              <mat-button-toggle value="dia">Diário</mat-button-toggle>
+              <mat-button-toggle value="mes">Mensal</mat-button-toggle>
+              <mat-button-toggle value="ano">Anual</mat-button-toggle>
+            </mat-button-toggle-group>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartFrequenciaPorPeriodo"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico de Taxa de Presença por Turma (Barras Horizontais) -->
+      <div class="chart-card chart-card-large mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Taxa de Presença por Turma</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartFrequenciaPorTurma"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico de Tendência de Presença por Turma (Linha) -->
+      <div class="chart-card chart-card-large mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Tendência de Presença das Turmas</h3>
+          <span class="chart-subtitle">Últimos 6 meses</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartTendenciaTurmas"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico de Comparativo entre Turmas (Radar) -->
+      <div class="chart-card chart-card-large mat-elevation-z2">
+        <div class="chart-header">
+          <h3 class="chart-title">Comparativo entre Turmas</h3>
+        </div>
+        <div class="chart-container">
+          <canvas id="chartComparativoTurmas"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insights e Sumário -->
+    <div class="insights-section mat-elevation-z2">
+      <h3 class="section-title">Insights de Frequência</h3>
+
+      <div class="insights-grid">
+        <!-- Turmas com Maior e Menor Presença -->
+        <div class="insight-card">
+          <h4 class="insight-title">Destaques por Turma</h4>
+
+          <div class="insight-content">
+            <div class="insight-item" *ngIf="turmaMaiorPresenca">
+              <h5>Maior Taxa de Presença</h5>
+              <p class="insight-value">{{ turmaMaiorPresenca.turma }}</p>
+              <p class="insight-detail">
+                {{ turmaMaiorPresenca.taxaPresenca | number:'1.1-1' }}% de presença
+                ({{ turmaMaiorPresenca.presentes }} de {{ turmaMaiorPresenca.total }})
+              </p>
+            </div>
+
+            <div class="insight-item" *ngIf="turmaMenorPresenca">
+              <h5>Menor Taxa de Presença</h5>
+              <p class="insight-value">{{ turmaMenorPresenca.turma }}</p>
+              <p class="insight-detail">
+                {{ turmaMenorPresenca.taxaPresenca | number:'1.1-1' }}% de presença
+                ({{ turmaMenorPresenca.presentes }} de {{ turmaMenorPresenca.total }})
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dias com Maior e Menor Presença -->
+        <div class="insight-card">
+          <h4 class="insight-title">Destaques por Dia</h4>
+
+          <div class="insight-content">
+            <div class="insight-item" *ngIf="diasMaiorPresenca.length > 0">
+              <h5>Dia com Maior Presença</h5>
+              <p class="insight-value">{{ diasMaiorPresenca[0].data | date:'dd/MM/yyyy' }}</p>
+              <p class="insight-detail">
+                Turma: {{ diasMaiorPresenca[0].turma }}
+                <br>Taxa: {{ diasMaiorPresenca[0].taxaPresenca | number:'1.1-1' }}%
+                ({{ diasMaiorPresenca[0].presentes }} de {{ diasMaiorPresenca[0].totalAlunos }})
+              </p>
+            </div>
+
+            <div class="insight-item" *ngIf="diasMenorPresenca.length > 0">
+              <h5>Dia com Menor Presença</h5>
+              <p class="insight-value">{{ diasMenorPresenca[0].data | date:'dd/MM/yyyy' }}</p>
+              <p class="insight-detail">
+                Turma: {{ diasMenorPresenca[0].turma }}
+                <br>Taxa: {{ diasMenorPresenca[0].taxaPresenca | number:'1.1-1' }}%
+                ({{ diasMenorPresenca[0].presentes }} de {{ diasMenorPresenca[0].totalAlunos }})
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sumário Geral -->
+        <div class="insight-card insight-card-wide">
+          <h4 class="insight-title">Resumo da Análise</h4>
+
+          <div class="insight-content">
+            <div class="insight-summary">
+              <p>
+                No período analisado, foram registradas <strong>{{ totalFrequencias }}</strong> frequências,
+                com uma taxa média de presença de <strong>{{ taxaPresencaGeral | number:'1.1-1' }}%</strong>.
+              </p>
+
+              <p *ngIf="frequenciaPorTurma.length > 0">
+                A turma <strong>{{ frequenciaPorTurma[0].turma }}</strong> apresentou a maior taxa de presença
+                (<strong>{{ frequenciaPorTurma[0].taxaPresenca | number:'1.1-1' }}%</strong>),
+                enquanto <strong>{{ frequenciaPorTurma[frequenciaPorTurma.length-1].turma }}</strong>
+                teve a menor (<strong>{{ frequenciaPorTurma[frequenciaPorTurma.length-1].taxaPresenca | number:'1.1-1' }}%</strong>).
+              </p>
+
+              <p *ngIf="frequenciaPorMes.length > 1">
+                Comparando com o mês anterior, a taxa de presença
+                <strong>
+                  {{ frequenciaPorMes[frequenciaPorMes.length-1].taxaPresenca > frequenciaPorMes[frequenciaPorMes.length-2].taxaPresenca ? 'aumentou' : 'diminuiu' }}
+                  {{ (frequenciaPorMes[frequenciaPorMes.length-1].taxaPresenca - frequenciaPorMes[frequenciaPorMes.length-2].taxaPresenca) | abs | number:'1.1-1' }}%
+                </strong>.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -152,7 +283,7 @@
 
     <!-- Footer -->
     <div class="dashboard-footer">
-      <p>Dashboard atualizado em {{ currentDate | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+      <p class="update-info">Dashboard atualizado em {{ currentDate | date:'dd/MM/yyyy HH:mm' }}</p>
     </div>
   </div>
 </div>

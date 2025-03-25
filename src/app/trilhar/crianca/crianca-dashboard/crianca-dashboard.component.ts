@@ -1,15 +1,13 @@
-import { Component, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import * as Papa from 'papaparse';
-import { Chart, registerables } from 'chart.js';
+import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { CommonModule, NgIf, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseFormComponent } from '../../../shared/formulario/baseForms';
 import { MaterialModule } from '../../../material.module';
+import { Chart, registerables } from 'chart.js';
 import { CriancaService } from '../crianca.service';
 import * as types from './crianca-dashboard.types';
-import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
-import { BaseFormComponent } from '../../../shared/baseForms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 // Registrar todos os componentes do Chart.js
 Chart.register(...registerables);
@@ -60,7 +58,6 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
   erro: string | null = null;
 
   constructor(
-      private http: HttpClient,
       public themeService: CustomizerSettingsService,
           private fb: FormBuilder,
           private criancaService: CriancaService,
@@ -81,14 +78,15 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
     throw new Error('Method not implemented.');
   }
 
-  carregarDados(): void {
+  async carregarDados() {
     this.carregando = true;
     this.erro = null;
 
     var filtro = this.montaFiltro(0, 0);
-    this.criancaService.listarPorFiltro(filtro, (res: any) => {
+    try {
+      const res = await this.criancaService.listarPorFiltroPromise(filtro);
       if (res?.dados) {
-        var dadosMapeados = res.dados.map((aluno: any) => ({
+        this.dadosCriancas = res.dados.map((aluno: any) => ({
           Codigo: aluno.codigo.toString(),
           CodigoCadastro: aluno.codigoCadastro,
           NomeCrianca: aluno.nomeCrianca,
@@ -113,7 +111,6 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
           DataCadastro: aluno.dataCadastro,
         }));
 
-        this.dadosCriancas = dadosMapeados;
         this.totalCriancas = this.dadosCriancas.length;
 
         // Calcular estatísticas
@@ -129,7 +126,11 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
         this.erro = 'Falha ao carregar os dados.';
         this.carregando = false;
       }
-    });
+    } catch (error) {
+      console.error('Erro ao carregar crianças:', error);
+      this.erro = 'Falha ao carregar os dados.';
+      this.carregando = false;
+    }
   }
 
   montaFiltro(page: number, pageSize: number) {
