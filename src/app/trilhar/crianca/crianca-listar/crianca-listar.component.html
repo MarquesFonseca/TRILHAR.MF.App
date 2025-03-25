@@ -32,8 +32,16 @@
                 <i class="material-symbols-outlined">
                     search
                 </i>
-                <input type="text" class="input-search d-block w-100 border-none outline-0" placeholder="Pesquisar criança..." (keyup)="applyFilter($event)" #input>
-            </form>
+                <!-- (keyup)="applyFilter()" -->
+                <input type="text"
+                       class="input-search d-block w-100 border-none outline-0"
+                       placeholder="Pesquisar criança..."
+                       [(ngModel)]="searchText"
+                       name="search"
+                       #input>
+                <!-- <button type="button" (click)="applyFilter()">Buscar</button> -->
+                <button mat-flat-button class="search-btn" (click)="applyFilter()">Buscar</button>
+              </form>
         </mat-card-title>
         <mat-card-subtitle>
             <a mat-button class="add-new-btn" routerLink="/criancas/novo">

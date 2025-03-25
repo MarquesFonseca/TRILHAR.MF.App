@@ -1,0 +1,27 @@
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaço entre input e botão */
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.input-search {
+  flex: 1; /* Faz o input ocupar o máximo de espaço disponível */
+  border: none;
+  outline: none;
+}
+
+.search-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background-color: #0056b3;
+}

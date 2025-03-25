@@ -10,6 +10,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
 import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { CriancaService } from '../crianca.service';
 import * as types from '../crianca.types';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-criancas-listar',
@@ -20,6 +21,7 @@ import * as types from '../crianca.types';
     ReactiveFormsModule,
     MaterialModule,
     NgIf,
+    FormsModule,
   ],
   templateUrl: './crianca-listar.component.html',
   styleUrl: './crianca-listar.component.scss',
@@ -27,6 +29,7 @@ import * as types from '../crianca.types';
 export class CriancaListarComponent extends BaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  searchText: string = ''; // Variável para armazenar o texto da pesquisa
   displayedColumns: string[] = [
     //'select',
     //'Codigo',
@@ -89,12 +92,17 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     throw new Error('Method not implemented.');
   }
 
-  onPageChange(event: any): void {
+  async onPageChange(event: any): Promise<void> {
     this.page = event.pageIndex + 1;
     this.pageSize = event.pageSize;
 
     var filtro = this.montaFiltro(this.page, this.pageSize);
-    this.carregarAlunos(filtro);
+    if(this.searchText) {
+      this.applyFilter();
+    }
+    else {
+      await this.carregarAlunos(filtro);
+    }
   }
 
   montaFiltro(page: number, pageSize: number) {
@@ -234,10 +242,31 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     }`;
   }
 
+
   // Filtro de pesquisa
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  async applyFilter() {
+    //this.dataSource.filter = this.searchText.trim().toLowerCase();
+
+
+    if(this.searchText) {
+      var filtro = {
+        condicao: "CodigoCadastro = @CodigoCadastro",
+        parametros: {
+          CodigoCadastro: this.searchText.trim()
+        },
+        isPaginacao: true,
+        page: this.page = 1,
+        pageSize: this.pageSize = 10,
+      }
+      await this.carregarAlunos(filtro);
+    }
+    else {
+      var filtros = this.montaFiltro(this.page, this.pageSize);
+      await this.carregarAlunos(filtros);
+    }
+
+
+
   }
 }
 
