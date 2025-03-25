@@ -261,7 +261,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
       await this.carregarAlunos(filtro);
     }
     else {
-      var filtros = this.montaFiltro(this.page, this.pageSize);
+      var filtros = this.montaFiltro(this.page = 1, this.pageSize = 10);
       await this.carregarAlunos(filtros);
     }
 
