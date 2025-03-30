@@ -305,7 +305,7 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
             },
             title: {
               display: true,
-              text: 'Crianças com Necessidades Especiais'
+              text: 'Crianças com Necessidades Especiais / Situção Atípica'
             }
           }
         }
