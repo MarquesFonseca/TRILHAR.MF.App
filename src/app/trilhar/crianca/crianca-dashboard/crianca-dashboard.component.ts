@@ -50,8 +50,10 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
   chartDeficiencia: Chart | null = null;
   chartBatismo: Chart | null = null;
   chartFaixaEtaria: Chart | null = null;
-  chartCadastroAnual: Chart | null = null;
+  chartCadastroHoje: Chart | null = null;
+  chartCadastroHojeSintetizado: Chart | null = null;
   chartCadastroMensal: Chart | null = null;
+  chartCadastroAnual: Chart | null = null;
 
   // Propriedade para controle de carregamento
   carregando = true;
@@ -177,8 +179,10 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
     this.criarGraficoDeficiencia();
     this.criarGraficoBatismo();
     this.criarGraficoFaixaEtaria();
-    this.criarGraficoCadastroAnual();
+    this.criarGraficoCadastroHoje();
+    this.criarGraficoCadastroHojeSintetizado();
     this.criarGraficoCadastroMensal();
+    this.criarGraficoCadastroAnual();
   }
 
   criarGraficoStatus(): void {
@@ -413,22 +417,31 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
     }
   }
 
-  criarGraficoCadastroAnual(): void {
-    // Verifica se está no navegador
+  criarGraficoCadastroHoje(): void {
     if (this.isBrowser) {
-      const ctx = document.getElementById('chartCadastroAnual') as HTMLCanvasElement;
+      const ctx = document.getElementById('chartCadastroHoje') as HTMLCanvasElement;
       if (!ctx) return;
 
-      // Calcular cadastros por ano
-      const cadastrosPorAno: Record<string, number> = {};
+      // Obter a data de hoje
+      const hoje = new Date();
+      const hojeString = hoje.toISOString().split('T')[0]; // Formato YYYY-MM-DD
 
+      // Inicializar contadores por hora (0-23)
+      const cadastrosPorHora: number[] = new Array(24).fill(0);
+
+      // Contar cadastros por hora
       this.dadosCriancas.forEach(crianca => {
         if (crianca.DataCadastro) {
           try {
             const dataCadastro = new Date(crianca.DataCadastro);
             if (!isNaN(dataCadastro.getTime())) {
-              const ano = dataCadastro.getFullYear().toString();
-              cadastrosPorAno[ano] = (cadastrosPorAno[ano] || 0) + 1;
+              const cadastroString = dataCadastro.toISOString().split('T')[0];
+
+              // Verificar se é hoje
+              if (cadastroString === hojeString) {
+                const hora = dataCadastro.getHours();
+                cadastrosPorHora[hora]++;
+              }
             }
           } catch (error) {
             console.error("Erro ao processar data de cadastro:", error);
@@ -436,18 +449,23 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
         }
       });
 
-      // Ordenar anos
-      const anos = Object.keys(cadastrosPorAno).sort();
+      // Preparar labels para as horas (formato 24h)
+      const labelsHoras = Array.from({length: 24}, (_, i) => {
+        return `${i.toString().padStart(2, '0')}h`;
+      });
 
-      this.chartCadastroAnual = new Chart(ctx, {
-        type: 'bar',
+      this.chartCadastroHoje = new Chart(ctx, {
+        type: 'line', // Gráfico de linha para mostrar a variação ao longo do dia
         data: {
-          labels: anos,
+          labels: labelsHoras,
           datasets: [{
-            label: 'Número de Cadastros',
-            data: anos.map(ano => cadastrosPorAno[ano]),
-            backgroundColor: '#3F51B5',
-            borderWidth: 1
+            label: 'Cadastros por Hora (Hoje)',
+            data: cadastrosPorHora,
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 2,
+            tension: 0.4, // Suaviza a linha
+            fill: true
           }]
         },
         options: {
@@ -458,12 +476,127 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
             },
             title: {
               display: true,
-              text: 'Cadastros por Ano'
+              text: `Cadastros Hoje (${hoje.toLocaleDateString('pt-BR')})`
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return `${context.parsed.y} cadastro(s)`;
+                }
+              }
             }
           },
           scales: {
             y: {
-              beginAtZero: true
+              beginAtZero: true,
+              title: {
+                display: true,
+                text: 'Número de Cadastros'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Horário do Dia'
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  criarGraficoCadastroHojeSintetizado(): void {
+    if (this.isBrowser) {
+      const ctx = document.getElementById('chartCadastroHojeSintetizado') as HTMLCanvasElement;
+      if (!ctx) return;
+
+      // 1. Obter a data de hoje no formato YYYY-MM-DD
+      const hoje = new Date();
+      const hojeString = hoje.toISOString().split('T')[0];
+
+      // 2. Inicializar contadores por hora (0-23)
+      const cadastrosPorHora: number[] = new Array(24).fill(0);
+
+      // 3. Contar cadastros por hora
+      this.dadosCriancas.forEach(crianca => {
+        if (crianca.DataCadastro) {
+          try {
+            const dataCadastro = new Date(crianca.DataCadastro);
+            if (!isNaN(dataCadastro.getTime())) {
+              const cadastroString = dataCadastro.toISOString().split('T')[0];
+
+              // Verificar se é hoje
+              if (cadastroString === hojeString) {
+                const hora = dataCadastro.getHours();
+                cadastrosPorHora[hora]++;
+              }
+            }
+          } catch (error) {
+            console.error("Erro ao processar data de cadastro:", error);
+          }
+        }
+      });
+
+      // 4. MELHORIA: Filtrar apenas horas com cadastros
+      const horasComCadastros = cadastrosPorHora
+      .map((count, hora) => ({ hora, count })) // Cria objetos {hora, count}
+      .filter(item => item.count > 0); // Filtra apenas horas com count > 0
+
+      // 5. Preparar labels e dados para o gráfico
+      const labelsHoras = horasComCadastros.map(item =>
+        `${item.hora.toString().padStart(2, '0')}h`
+      );
+      const dadosHoras = horasComCadastros.map(item => item.count);
+
+      // 6. Criar o gráfico
+      this.chartCadastroHojeSintetizado = new Chart(ctx, {
+        type: 'bar', // Alterado para gráfico de barras (fica melhor com poucos dados)
+        data: {
+          labels: labelsHoras,
+          datasets: [{
+            label: 'Cadastros por Hora (Hoje)',
+            data: dadosHoras,
+            backgroundColor: '#4CAF50', // Verde
+            borderColor: '#388E3C',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false // Oculta a legenda (redundante)
+            },
+            title: {
+              display: true,
+              text: `Cadastros Hoje (${hoje.toLocaleDateString('pt-BR')})`,
+              font: {
+                size: 16
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => `${context.parsed.y} cadastro(s) às ${context.label}`
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1 // Garante números inteiros
+              },
+              title: {
+                display: true,
+                text: 'Número de Cadastros'
+              }
+            },
+            x: {
+              title: {
+                display: true,
+                text: 'Horário'
+              }
             }
           }
         }
@@ -537,6 +670,64 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
             title: {
               display: true,
               text: 'Cadastros por Mês (Últimos 12 meses)'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+  }
+
+  criarGraficoCadastroAnual(): void {
+    // Verifica se está no navegador
+    if (this.isBrowser) {
+      const ctx = document.getElementById('chartCadastroAnual') as HTMLCanvasElement;
+      if (!ctx) return;
+
+      // Calcular cadastros por ano
+      const cadastrosPorAno: Record<string, number> = {};
+
+      this.dadosCriancas.forEach(crianca => {
+        if (crianca.DataCadastro) {
+          try {
+            const dataCadastro = new Date(crianca.DataCadastro);
+            if (!isNaN(dataCadastro.getTime())) {
+              const ano = dataCadastro.getFullYear().toString();
+              cadastrosPorAno[ano] = (cadastrosPorAno[ano] || 0) + 1;
+            }
+          } catch (error) {
+            console.error("Erro ao processar data de cadastro:", error);
+          }
+        }
+      });
+
+      // Ordenar anos
+      const anos = Object.keys(cadastrosPorAno).sort();
+
+      this.chartCadastroAnual = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: anos,
+          datasets: [{
+            label: 'Número de Cadastros',
+            data: anos.map(ano => cadastrosPorAno[ano]),
+            backgroundColor: '#3F51B5',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Cadastros por Ano'
             }
           },
           scales: {
