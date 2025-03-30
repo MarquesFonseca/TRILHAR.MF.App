@@ -204,7 +204,8 @@ import { MatriculaDashboardComponent } from './trilhar/matricula/matricula-dashb
 import { FrequenciaDashboardComponent } from './trilhar/frequencia/frequencia-dashboard/frequencia-dashboard.component';
 
 export const routes: Routes = [
-    {path: '', component: EcommerceComponent},
+    // {path: '', component: EcommerceComponent},
+    {path: '', component: CriancaDashboardComponent},
     {path: 'crm', component: CrmComponent},
     {path: 'project-management', component: ProjectManagementComponent},
     {path: 'lms', component: LmsComponent},

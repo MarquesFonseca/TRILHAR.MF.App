@@ -19,8 +19,7 @@
                     "options": {
                       "allowedCommonJsDependencies": [
                             "moment",
-                            "apexcharts",
-                            "lodash"
+                            "apexcharts"
                         ],
                         "outputPath": "dist/trilhar",
                         "index": "src/index.html",

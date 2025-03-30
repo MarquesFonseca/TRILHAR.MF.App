@@ -175,77 +175,77 @@
                     <!-- Alergia -->
                     <ng-container matColumnDef="Alergia">
                         <th mat-header-cell *matHeaderCellDef>
-                            Alergia
+                            Alergia?
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Alergia">
-                                SIM
+                              SIM
                             </span>
                             <span class="d-inline-block" *ngIf="!element.Alergia">
-
+                              NÃO
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- DescricaoAlergia -->
-                    <!-- <ng-container matColumnDef="DescricaoAlergia">
+                    <ng-container matColumnDef="DescricaoAlergia">
                         <th mat-header-cell *matHeaderCellDef>
                             Descrição da Alergia
                         </th>
                         <td mat-cell *matCellDef="let element">
                             {{element.DescricaoAlergia}}
                         </td>
-                    </ng-container> -->
+                    </ng-container>
 
                     <!-- RestricaoAlimentar -->
                     <ng-container matColumnDef="RestricaoAlimentar">
                         <th mat-header-cell *matHeaderCellDef>
-                            Restrição Alimentar
+                            Restrição Alimentar?
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <span class="daxa-badge upcoming d-inline-block" *ngIf="element.RestricaoAlimentar">
-                                SIM
+                              SIM
                             </span>
                             <span class="d-inline-block" *ngIf="!element.RestricaoAlimentar">
-
+                              NÃO
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- DescricaoRestricaoAlimentar -->
-                    <!-- <ng-container matColumnDef="DescricaoRestricaoAlimentar">
+                    <ng-container matColumnDef="DescricaoRestricaoAlimentar">
                         <th mat-header-cell *matHeaderCellDef>
                             Descrição da Restrição Alimentar
                         </th>
                         <td mat-cell *matCellDef="let element">
                             {{element.DescricaoRestricaoAlimentar}}
                         </td>
-                    </ng-container> -->
+                    </ng-container>
 
                     <!-- DeficienciaOuSituacaoAtipica -->
                     <ng-container matColumnDef="DeficienciaOuSituacaoAtipica">
                         <th mat-header-cell *matHeaderCellDef>
-                            Deficiência ou Situação Atípica
+                            Deficiência ou Situação Atípica?
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <span class="daxa-badge upcoming d-inline-block" *ngIf="element.DeficienciaOuSituacaoAtipica">
-                                SIM
+                              SIM
                             </span>
                             <span class="d-inline-block" *ngIf="!element.DeficienciaOuSituacaoAtipica">
-
+                              NÃO
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- DescricaoDeficiencia -->
-                    <!-- <ng-container matColumnDef="DescricaoDeficiencia">
+                    <ng-container matColumnDef="DescricaoDeficiencia">
                         <th mat-header-cell *matHeaderCellDef>
                             Descrição de Deficiência ou Situação Atípica
                         </th>
                         <td mat-cell *matCellDef="let element">
                             {{element.DescricaoDeficiencia}}
                         </td>
-                    </ng-container> -->
+                    </ng-container>
 
                     <!-- Batizado -->
                     <!-- <ng-container matColumnDef="Batizado">

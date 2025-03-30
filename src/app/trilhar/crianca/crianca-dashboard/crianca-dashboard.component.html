@@ -24,10 +24,19 @@
           <h3>Total de Crianças: {{ totalCriancas }}</h3>
         </div>
         <div class="stat-item active">
-          <h3>Crianças Ativas: {{ criancasAtivas }}</h3>
+          <h3>Crianças Ativas: {{ criancasAtivas }}  |  {{ (criancasAtivas / totalCriancas * 100) | number:'1.1-1' }}% do total</h3>
         </div>
         <div class="stat-item inactive">
-          <h3>Crianças Inativas: {{ criancasInativas }}</h3>
+          <h3>Crianças Inativas: {{ criancasInativas }}  |  {{ (criancasInativas / totalCriancas * 100) | number:'1.1-1' }}% do total</h3>
+        </div>
+        <div class="stat-item inactive">
+          <h3>Com Alergia: {{ criancasComAlergia }} |  {{ (criancasComAlergia / totalCriancas * 100) | number:'1.1-1' }}% do total</h3>
+        </div>
+        <div class="stat-item inactive">
+          <h3>Com Restrição Alimentar: {{ criancasComRestricao }}  |  {{ (criancasComRestricao / totalCriancas * 100) | number:'1.1-1' }}% do total</h3>
+        </div>
+        <div class="stat-item inactive">
+          <h3>Com Necessidades Especiais: {{ criancasComDeficiencia }}  |  {{ (criancasComDeficiencia / totalCriancas * 100) | number:'1.1-1' }}% do total</h3>
         </div>
       </div>
     </div>
@@ -105,7 +114,7 @@
     <br/>
 
     <!-- Summary Cards Section -->
-    <div class="summary-section">
+    <!-- <div class="summary-section">
       <h2>Resumo de Condições Especiais</h2>
       <div class="summary-cards">
         <div class="summary-card">
@@ -148,11 +157,14 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Footer -->
     <div class="dashboard-footer">
       <p>Dashboard atualizado em {{ currentDate | date:'dd/MM/yyyy HH:mm:ss' }}</p>
     </div>
+
+    <br/>
+
   </div>
 </div>
