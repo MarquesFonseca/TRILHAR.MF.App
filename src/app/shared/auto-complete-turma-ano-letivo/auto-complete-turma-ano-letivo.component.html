@@ -1,0 +1,67 @@
+<form>
+
+
+  <div class="row">
+
+    <!-- Ano Letivo -->
+    <div class="col-sm-2">
+      <mat-label>Ano</mat-label>
+      <app-auto-complete [itens]="anos" propriedadeMostrar="descricao" label="Selecione..." [valorInicial]="null"
+        [formControl]="controleAno" (itemSelecionado)="onAnoSelecionado($event)">
+      </app-auto-complete>
+    </div>
+
+    <!-- Semestre Letivo -->
+    <!-- [attr.disabled]="!anoSelecionado ? true : null"> -->
+    <div class="col-sm-2">
+      <mat-label>Semestre</mat-label>
+      <app-auto-complete [itens]="semestres" propriedadeMostrar="descricao" label="Selecione..." [valorInicial]="null"
+        [formControl]="controleSemestre" (itemSelecionado)="onSemestreSelecionado($event)" [attr.disabled]="true">
+      </app-auto-complete>
+    </div>
+
+    <!-- Turma -->
+    <div class="col-sm-6">
+      <mat-label>Turma</mat-label>
+      <app-auto-complete [itens]="turmas" propriedadeMostrar="descricao" label="Selecione..." [valorInicial]="null"
+        [formControl]="controleTurma" (itemSelecionado)="onTurmaSelecionado($event)"
+        [attr.disabled]="!semestreSelecionado ? true : null">
+      </app-auto-complete>
+    </div>
+
+    <div class="col-sm-2">
+      <mat-slide-toggle [checked]="controleAno.disabled"
+        (change)="controleAno.disabled ? controleAno.enable() : controleAno.disable()">
+        Disable Input?
+      </mat-slide-toggle>
+    </div>
+
+    <div class="col-sm-3">
+      Lista Anos
+      <pre>{{ anos | json}}</pre>
+      Ano Selecionado
+      <pre>{{ this.anoSelecionado | json}}</pre>
+    </div>
+    <div class="col-sm-3">
+      Lista Semestres
+      <pre>{{ semestres | json}}</pre>
+      Semestre Selecionado
+      <pre>{{ this.semestreSelecionado | json}}</pre>
+    </div>
+    <div class="col-sm-3">
+      Lista Turmas
+      <pre>{{ turmas | json}}</pre>
+      Turma Selecionado
+      <pre>{{ this.turmaSelecionado | json}}</pre>
+    </div>
+    <div class="col-sm-3">
+      Formulário
+      <pre>{{ formulario.value | json}}</pre>
+    </div>
+
+  </div>
+
+
+
+
+</form>

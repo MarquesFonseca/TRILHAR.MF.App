@@ -13,7 +13,14 @@ import { CriancaService } from '../crianca.service';
 import * as utils from '../../../funcoes-comuns/utils';
 import * as validar from '../../../funcoes-comuns/validators/validator';
 import * as types from '../crianca.types';
+import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
 
+interface Turma {
+  id: number;
+  descricao: string;
+  ano: string;
+  semestre: string;
+}
 
 @Component({
   selector: 'app-criancas-formulario',
@@ -25,6 +32,7 @@ import * as types from '../crianca.types';
     MaterialModule,
     NgIf,
     NgxMaskDirective,
+    AutoCompleteComponent
   ],
   providers: [provideNgxMask()],
 
@@ -40,6 +48,9 @@ export class CriancaFormularioComponent
   // Filter Autocomplete
   listaMatriculas!: MatriculaAutoComplete[];
   listaMatriculasFiltradas!: Observable<MatriculaAutoComplete[]>;
+
+  turmas: Turma[] = [];
+  turmaSelecionado: Turma | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -82,25 +93,7 @@ export class CriancaFormularioComponent
 
     this.handleConditionalFields();
 
-    //auto complete
-    // Observando o valueChanges e filtrando
-    this.listaMatriculasFiltradas = this.formulario
-      .get('TurmaMatricula')!
-      .valueChanges.pipe(
-        startWith(''),
-        map((value) => (typeof value === 'string' ? value : value?.descricao)),
-        map((descricao) =>
-          descricao
-            ? this.filtrarAutoComplete(descricao)
-            : this.listaMatriculas.slice()
-        ) // Usar slice no array original
-      );
-
-    this.listaMatriculas = [
-      { id: 1, descricao: 'Branco/Rosa' },
-      { id: 2, descricao: 'Lilas 2' },
-      { id: 3, descricao: 'Lilas 3' },
-    ];
+    this.carregarDadosTurma('2024', '2');
   }
 
   override preencheFormulario(): void {}
@@ -312,6 +305,33 @@ export class CriancaFormularioComponent
 
   limpar(): void {
     this.formulario.reset();
+  }
+
+  private carregarDadosTurma(anoSelecionado: string, semestreSelecionado: string) {
+    // Simulando carregamento de dados de um serviço
+    //traga todos as turmas no ano selecionado, semestre selecionado
+    var listaTurmasMock = [
+      { id: 1, descricao: 'Turma 1', ano: '2023', semestre: '1' },
+      { id: 2, descricao: 'Turma 2', ano: '2023', semestre: '2' },
+      { id: 3, descricao: 'Turma 3', ano: '2024', semestre: '1' },
+      { id: 4, descricao: 'Turma 4', ano: '2024', semestre: '2' },
+      { id: 5, descricao: 'Turma 5', ano: '2025', semestre: '1' },
+      { id: 6, descricao: 'Turma 6', ano: '2025', semestre: '2' },
+    ] as any[];
+
+    this.turmas =
+      listaTurmasMock.filter(
+        (t) => t.ano === anoSelecionado
+      ) || [];
+  }
+
+  onTurmaSelecionado(turma: Turma): void {
+    console.log('Turma selecionado do autocomplete:', turma);
+    if (turma) {
+      this.formulario.patchValue({
+        TurmaMatricula: turma
+      });
+    }
   }
 }
 

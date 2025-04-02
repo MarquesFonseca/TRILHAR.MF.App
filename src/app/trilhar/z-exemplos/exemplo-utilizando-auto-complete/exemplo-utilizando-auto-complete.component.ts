@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
 import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
 import { RouterLink } from '@angular/router';
-import { AutoCompleteTurmaAnoLetivoComponent } from '../../../shared/auto-complete-turma-ano-letivo/auto-complete-turma-ano-letivo.component';
 
 interface Usuario {
   id: number;
@@ -20,22 +19,21 @@ interface Produto {
 }
 
 @Component({
-  selector: 'app-turma-atualizar-limite-maximo',
+  selector: 'app-auto-complete',
   standalone: true,
   imports: [
-    CommonModule,
+    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
-    //AutoCompleteComponent,
-    AutoCompleteTurmaAnoLetivoComponent,
+    AutoCompleteComponent,
+    CommonModule,
     //RouterLink,
     //NgIf,
   ],
-  templateUrl: './turma-atualizar-limite-maximo.component.html',
-  styleUrl: './turma-atualizar-limite-maximo.component.scss'
+  templateUrl: './exemplo-utilizando-auto-complete.component.html',
+  styleUrl: './exemplo-utilizando-auto-complete.component.scss'
 })
-export class TurmaAtualizarLimiteMaximoComponent implements OnInit {
+export class ExemploUtilizandoAutoCompleteComponent implements OnInit {
   formulario!: FormGroup;
 
   usuarios: Usuario[] = [];
@@ -134,16 +132,6 @@ export class TurmaAtualizarLimiteMaximoComponent implements OnInit {
       this.formulario.patchValue({
         produtoId: produto.id,
         produto: produto
-      });
-    }
-  }
-
-  onTurmaSelecionado(turma: any): void {
-    console.log('Turma selecionado do autocomplete:', turma);
-    if (turma) {
-      this.formulario.patchValue({
-        produtoId: turma.id,
-        produto: turma
       });
     }
   }

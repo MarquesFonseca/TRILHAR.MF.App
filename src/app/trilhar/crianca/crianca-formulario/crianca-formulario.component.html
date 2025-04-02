@@ -61,12 +61,12 @@
                 </div>
 
                 <!-- Idade da criança -->
-                <div class="col-sm-8" *ngIf="formulario.get('IdadeCrianca')?.value">
+                <div class="col-sm-8">
                   <!-- <mat-card>
                     <mat-card-content class="fw-medium">{{formulario.get('IdadeCrianca')?.value}}</mat-card-content>
                   </mat-card> -->
 
-                  <mat-card class="mb-25">
+                  <!-- <mat-card class="mb-25">
                     <mat-card-header class="mb-15">
                         <mat-card-title-group>
                             <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('IdadeCrianca')?.value}}</mat-card-title>
@@ -78,13 +78,21 @@
                         <h3 style="color: red;">Lilás 1</h3>
                     </span>
                     </mat-card-content>
-                </mat-card>
+                  </mat-card> -->
+
+                    <app-auto-complete
+                    [itens]="turmas"
+                    propriedadeMostrar="descricao"
+                    label="Selecione..."
+                    [valorInicial]="turmaSelecionado"
+                    (itemSelecionado)="onTurmaSelecionado($event)">
+                    </app-auto-complete>
                 </div>
 
                 <!-- Matriculado na Turma -->
-                <div class="col-sm-12">
+                <!-- <div class="col-sm-12"> -->
                     <!-- novo -->
-                    <mat-form-field class="mb-25">
+                    <!-- <mat-form-field class="mb-25">
                         <mat-label>Turma atual</mat-label>
                         <input
                             type="text"
@@ -100,7 +108,19 @@
                             </mat-option>
                         </mat-autocomplete>
                     </mat-form-field>
-                </div>
+                </div> -->
+
+                <!-- Matriculado na Turma -->
+                <!-- <div class="col-sm-12">
+                    <mat-label>Turma atual</mat-label>
+                    <app-auto-complete
+                    [itens]="turmas"
+                    propriedadeMostrar="descricao"
+                    label="Selecione..."
+                    [valorInicial]="turmaSelecionado"
+                    (itemSelecionado)="onTurmaSelecionado($event)">
+                    </app-auto-complete>
+                </div> -->
 
                 <!-- Nome da Mãe -->
                 <div class="col-sm-4">

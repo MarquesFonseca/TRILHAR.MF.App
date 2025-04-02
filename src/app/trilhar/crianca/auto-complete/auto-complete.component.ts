@@ -42,4 +42,16 @@ export class AutoCompleteComponent {
         return this.options.filter(option => option.toLowerCase().includes(filterValue));
     }
 
+    opcaoSelecionada($event: any) {
+        var evento = $event.option.value;
+        //console.log('Selecionado:');
+        //console.log(evento);
+      }
+
+      // Função para exibir a descrição no campo de texto
+      displayFn(value: any): string {
+        var retorno = value && value.descricao ? value.descricao : '';
+        return retorno;
+      }
+
 }

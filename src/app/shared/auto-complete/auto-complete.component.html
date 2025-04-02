@@ -1,0 +1,16 @@
+<!-- auto-complete.component.html -->
+<mat-form-field class="w-100">
+  <mat-label>{{ label }}</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="formulario"
+    [placeholder]="placeholder"
+    [matAutocomplete]="auto"
+  >
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarTexto" (optionSelected)="selecionarItem($event)">
+    <mat-option *ngFor="let item of itensFiltrados | async" [value]="item">
+      {{ mostrarTexto(item) }}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
