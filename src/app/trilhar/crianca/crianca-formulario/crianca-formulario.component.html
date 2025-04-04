@@ -50,14 +50,16 @@
                 </div>
 
                 <!-- Data de Nascimento -->
-                <div class="col-sm-4">
-                    <mat-form-field class="mb-25">
-                        <mat-label>Data de Nascimento</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="DataNascimento">
-                        <!-- <mat-hint>{{'DD/MM/YYYY'}}</mat-hint> -->
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
+                <div class="col-md-4">
+                  <div class="mb-25">
+                    <app-calendario ngSkipHydration
+                    [formGroup]="formulario"
+                    [field]="'DataNascimento'"
+                    [label]="'Data de Nascimento'"
+                    [disabled]="false"
+                    (itemSelecionado)="onDataNascimentoSelecionada($event)">
+                  </app-calendario>
+                </div>
                 </div>
 
                 <!-- Idade da criança -->
@@ -66,7 +68,7 @@
                     <mat-card-content class="fw-medium">{{formulario.get('IdadeCrianca')?.value}}</mat-card-content>
                   </mat-card> -->
 
-                  <!-- <mat-card class="mb-25">
+                  <mat-card class="mb-25">
                     <mat-card-header class="mb-15">
                         <mat-card-title-group>
                             <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('IdadeCrianca')?.value}}</mat-card-title>
@@ -78,15 +80,7 @@
                         <h3 style="color: red;">Lilás 1</h3>
                     </span>
                     </mat-card-content>
-                  </mat-card> -->
-
-                    <app-auto-complete
-                    [itens]="turmas"
-                    propriedadeMostrar="descricao"
-                    label="Selecione..."
-                    [valorInicial]="turmaSelecionado"
-                    (itemSelecionado)="onTurmaSelecionado($event)">
-                    </app-auto-complete>
+                  </mat-card>
                 </div>
 
                 <!-- Matriculado na Turma -->
@@ -121,6 +115,19 @@
                     (itemSelecionado)="onTurmaSelecionado($event)">
                     </app-auto-complete>
                 </div> -->
+
+                <!-- Matriculado na Turma -->
+                <div class="col-sm-8">
+                  <div class="mb-25">
+                    <app-auto-complete ngSkipHydration
+                    [itens]="turmas"
+                    propriedadeMostrar="descricao"
+                    label="Selecione uma turma"
+                    [valorInicial]="turmaSelecionado"
+                    (itemSelecionado)="onTurmaSelecionado($event)">
+                    </app-auto-complete>
+                  </div>
+                </div>
 
                 <!-- Nome da Mãe -->
                 <div class="col-sm-4">
@@ -196,6 +203,7 @@
                     <br />
                     <br />
                 </div>
+
                 <!-- Descrição da Restrição Alimentar -->
                 <div class="col-sm-8" *ngIf="formulario.get('RestricaoAlimentar')?.value">
                     <mat-form-field class="textarea">
@@ -216,6 +224,7 @@
                     <br />
                     <br />
                   </div>
+
                 <!-- Descrição da Deficiência -->
                 <div class="col-sm-8" *ngIf="formulario.get('DeficienciaOuSituacaoAtipica')?.value">
                     <mat-form-field class="textarea">
@@ -273,6 +282,13 @@
                 <br />
                 <br />
                 <br />
+
+                <div class="row mt-3">
+                  <div class="col-12">
+                    <h3>Valores do Formulário:</h3>
+                    <pre>{{ formulario.value | json }}</pre>
+                  </div>
+                </div>
 
                 <!-- Botão de Salvar -->
                 <div class="col-lg-12">

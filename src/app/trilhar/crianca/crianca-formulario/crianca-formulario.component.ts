@@ -1,5 +1,5 @@
 import { CommonModule, NgIf } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -10,11 +10,16 @@ import { map, Observable, startWith } from 'rxjs';
 import { BaseFormComponent } from '../../../shared/formulario/baseForms';
 import { MaterialModule } from '../../../material.module';
 import { CriancaService } from '../crianca.service';
+import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
+import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
 import * as utils from '../../../funcoes-comuns/utils';
 import * as validar from '../../../funcoes-comuns/validators/validator';
 import * as types from '../crianca.types';
-import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
 
+interface MatriculaAutoComplete {
+  id: number;
+  descricao: string;
+}
 interface Turma {
   id: number;
   descricao: string;
@@ -32,17 +37,18 @@ interface Turma {
     MaterialModule,
     NgIf,
     NgxMaskDirective,
-    AutoCompleteComponent
-  ],
+    AutoCompleteComponent,
+    CalendarioComponent
+],
   providers: [provideNgxMask()],
 
   templateUrl: './crianca-formulario.component.html',
   styleUrl: './crianca-formulario.component.scss',
 })
-export class CriancaFormularioComponent
-  extends BaseFormComponent
-  implements OnInit
-{
+export class CriancaFormularioComponent extends BaseFormComponent implements OnInit {
+  @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
+  @ViewChild(CalendarioComponent) childCalendarioComponent!: CalendarioComponent;
+
   override formulario!: FormGroup;
 
   // Filter Autocomplete
@@ -93,10 +99,15 @@ export class CriancaFormularioComponent
 
     this.handleConditionalFields();
 
-    this.carregarDadosTurma('2024', '2');
+    this.preencheFormulario();
   }
 
-  override preencheFormulario(): void {}
+  override preencheFormulario(): void {
+    this.carregarDadosTurma('2024', '2');
+    this.turmaSelecionado = this.turmas.find(u => u.id === 4) || null;
+
+    //this.formulario.get("DataNascimento")?.setValue('10/09/2025');
+  }
 
   //auto complete
   // Função de filtro
@@ -164,7 +175,7 @@ export class CriancaFormularioComponent
       }
       if (value) {
         const idadeFormatada = utils.preencheIdadeFormatada(
-          value.toISOString()
+          value
         );
         idadeCrianca?.setValue(idadeFormatada, { emitEvent: true });
         //idadeCrianca?.setValue(idadeFormatada);
@@ -325,17 +336,23 @@ export class CriancaFormularioComponent
       ) || [];
   }
 
-  onTurmaSelecionado(turma: Turma): void {
-    console.log('Turma selecionado do autocomplete:', turma);
-    if (turma) {
+  onTurmaSelecionado(turmaSelecionada: Turma): void {
+    //console.log('Turma selecionado do autocomplete:', turmaSelecionada);
+    if (turmaSelecionada) {
       this.formulario.patchValue({
-        TurmaMatricula: turma
+        TurmaMatricula: turmaSelecionada
+      });
+    }
+  }
+  // childCalendarioComponent
+  onDataNascimentoSelecionada(dataNascimentoSelecionada: DataOutPut): void {
+    //console.log('dataNascimentoSelecionada selecionado do autocomplete:', dataNascimentoSelecionada);
+    if (dataNascimentoSelecionada) {
+      this.formulario.patchValue({
+        DataNascimento: dataNascimentoSelecionada.dataFormatada
       });
     }
   }
 }
 
-export interface MatriculaAutoComplete {
-    id: number;
-    descricao: string;
-  }
+

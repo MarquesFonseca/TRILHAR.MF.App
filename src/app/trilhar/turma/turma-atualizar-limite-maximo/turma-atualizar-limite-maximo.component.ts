@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MaterialModule } from '../../../material.module';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
@@ -36,6 +36,8 @@ interface Produto {
   styleUrl: './turma-atualizar-limite-maximo.component.scss'
 })
 export class TurmaAtualizarLimiteMaximoComponent implements OnInit {
+  @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
+
   formulario!: FormGroup;
 
   usuarios: Usuario[] = [];

@@ -40,7 +40,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
   private valorDefinido = false;
 
   ngOnInit() {
-    console.log('ngOnInit - valorInicial:', this.valorInicial);
+    //console.log('ngOnInit - valorInicial:', this.valorInicial);
     // Inicializa o filtro primeiro sem o valor inicial
     this.inicializarFiltro();
   }
@@ -49,7 +49,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
     // Após a renderização, configura o valor inicial com delay
     setTimeout(() => {
       if (this.valorInicial && !this.valorDefinido) {
-        console.log('ngAfterViewInit - Definindo valor:', this.valorInicial);
+        //console.log('ngAfterViewInit - Definindo valor:', this.valorInicial);
         this.formulario.setValue(this.valorInicial);
         this.valorDefinido = true;
         this.itemSelecionado.emit(this.valorInicial);
@@ -58,17 +58,17 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('ngOnChanges:', changes);
+    //console.log('ngOnChanges:', changes);
 
     // Se a lista de itens mudar
     if (changes['itens'] && !changes['itens'].firstChange) {
-      console.log('Itens mudaram, reinicializando filtro');
+      //console.log('Itens mudaram, reinicializando filtro');
       this.inicializarFiltro();
     }
 
     // Se o valorInicial mudar e for não nulo
     if (changes['valorInicial'] && changes['valorInicial'].currentValue) {
-      console.log('Valor inicial mudou para:', changes['valorInicial'].currentValue);
+      //console.log('Valor inicial mudou para:', changes['valorInicial'].currentValue);
 
       // Aguarda os itens estarem disponíveis
       if (this.itens && this.itens.length > 0) {
@@ -78,10 +78,10 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
         let itemEncontrado = this.itens.find(item => item.id === novoValor.id);
 
         if (itemEncontrado) {
-          console.log('Item encontrado na lista:', itemEncontrado);
+          //console.log('Item encontrado na lista:', itemEncontrado);
           this.formulario.setValue(itemEncontrado);
         } else {
-          console.log('Item não encontrado na lista, usando o valor direto');
+          //console.log('Item não encontrado na lista, usando o valor direto');
           this.formulario.setValue(novoValor);
         }
 
@@ -103,7 +103,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
 
   mostrarTexto = (item: any): string => {
     if (!item) return '';
-    console.log('mostrarTexto chamado com:', item);
+    //console.log('mostrarTexto chamado com:', item);
     return item && item[this.propriedadeMostrar] ? item[this.propriedadeMostrar] : '';
   };
 
@@ -120,7 +120,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   selecionarItem(evento: MatAutocompleteSelectedEvent): void {
-    console.log('Item selecionado manualmente:', evento.option.value);
+    //console.log('Item selecionado manualmente:', evento.option.value);
     this.itemSelecionado.emit(evento.option.value);
   }
 
