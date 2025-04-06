@@ -28,7 +28,6 @@ Chart.register(...registerables);
 })
 export class MatriculaDashboardComponent extends BaseFormComponent implements OnInit {
 
-  currentDate: string | undefined;
   private isBrowser: boolean;
 
   // Propriedades para armazenar estatísticas
@@ -78,6 +77,14 @@ export class MatriculaDashboardComponent extends BaseFormComponent implements On
   }
 
   override preencheFormulario(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  override salvar(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  override carregaFormGroup(): void {
     throw new Error('Method not implemented.');
   }
 

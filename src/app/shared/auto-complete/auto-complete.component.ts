@@ -1,40 +1,44 @@
 // auto-complete.component.ts
-import { NgFor, AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Observable, startWith, map, of } from 'rxjs';
+import { Observable, startWith, map, Subject, takeUntil } from 'rxjs';
 import { MaterialModule } from '../../material.module';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-
-interface AutoCompleteOption {
-  id: number;
-  [key: string]: any; // Permite outras propriedades dinâmicas
-}
+import * as utils from "../funcoes-comuns/utils";
 
 @Component({
   selector: 'app-auto-complete',
   standalone: true,
   imports: [
+    CommonModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
     AsyncPipe,
-    NgFor
   ],
   templateUrl: './auto-complete.component.html',
   styleUrl: './auto-complete.component.scss'
 })
 export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
 
+  //@Input() formGroup = new FormGroup('');
+  @Input() formGroup!: FormGroup;
+  @Input() field: string = '';
+  @Input() label: string = 'Selecione...';
+  @Input() disabled: boolean = false;
   @Input() itens: any[] = [];
   @Input() propriedadeMostrar: string = 'nome';
-  @Input() label: string = 'Selecione';
   @Input() placeholder: string = 'Digite para pesquisar';
   @Input() valorInicial: any = null;
 
   @Output() itemSelecionado = new EventEmitter<any>();
 
-  formulario = new FormControl();
+  private destroy$ = new Subject<void>();
+
+  get controle(): FormControl {
+    return this.formGroup?.get(this.field) as FormControl;
+  }
   itensFiltrados!: Observable<any[]>;
 
   private valorDefinido = false;
@@ -48,9 +52,10 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
   ngAfterViewInit() {
     // Após a renderização, configura o valor inicial com delay
     setTimeout(() => {
-      if (this.valorInicial && !this.valorDefinido) {
+      // if (this.valorInicial && !this.valorDefinido) {
+      if (this.valorInicial) {
         //console.log('ngAfterViewInit - Definindo valor:', this.valorInicial);
-        this.formulario.setValue(this.valorInicial);
+        this.controle?.setValue(this.valorInicial);
         this.valorDefinido = true;
         this.itemSelecionado.emit(this.valorInicial);
       }
@@ -79,10 +84,10 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
 
         if (itemEncontrado) {
           //console.log('Item encontrado na lista:', itemEncontrado);
-          this.formulario.setValue(itemEncontrado);
+          this.controle?.setValue(itemEncontrado);
         } else {
           //console.log('Item não encontrado na lista, usando o valor direto');
-          this.formulario.setValue(novoValor);
+          this.controle?.setValue(novoValor);
         }
 
         this.valorDefinido = true;
@@ -95,7 +100,8 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
 
   private inicializarFiltro() {
     // Configura o observable de filtragem
-    this.itensFiltrados = this.formulario.valueChanges.pipe(
+    this.itensFiltrados = this.controle?.valueChanges.pipe(
+      takeUntil(this.destroy$),
       startWith(''),
       map(valor => this._filtrarItens(valor || ''))
     );
@@ -113,9 +119,9 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
     // Se o valor for um objeto, retorna todos os itens (para exibir todas as opções)
     if (typeof valor !== 'string') return this.itens;
 
-    const filtro = valor.toLowerCase();
+    const filtro = utils.removeAcento(valor.toLowerCase());
     return this.itens.filter(item =>
-      item[this.propriedadeMostrar]?.toLowerCase().includes(filtro)
+      utils.removeAcento(item[this.propriedadeMostrar]?.toLowerCase()).includes(filtro)
     );
   }
 
@@ -126,8 +132,13 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
 
   // Método para limpar o campo
   limpar(): void {
-    this.formulario.setValue('');
+    this.controle?.setValue('');
     this.valorDefinido = false;
     this.itemSelecionado.emit(null);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

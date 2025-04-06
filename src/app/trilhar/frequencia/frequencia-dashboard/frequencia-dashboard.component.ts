@@ -30,9 +30,7 @@ Chart.register(...registerables);
   styleUrl: './frequencia-dashboard.component.scss'
 })
 export class FrequenciaDashboardComponent extends BaseFormComponent implements OnInit, OnDestroy {
-  // Propriedades para datas e ambiente
-  currentDate: string | undefined;
-  hoje: Date = new Date();
+
   dataInicial: Date = new Date();
   dataFinal: Date = new Date();
   private isBrowser: boolean;
@@ -105,6 +103,16 @@ export class FrequenciaDashboardComponent extends BaseFormComponent implements O
     this.dataInicial.setMonth(this.dataInicial.getMonth() - 1);
   }
 
+  override salvar(): void {
+    throw new Error('Method not implemented.');
+  }
+  override preencheFormulario(): void {
+    throw new Error('Method not implemented.');
+  }
+  override carregaFormGroup(): void {
+    throw new Error('Method not implemented.');
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -131,15 +139,11 @@ export class FrequenciaDashboardComponent extends BaseFormComponent implements O
     return data.toISOString().split('T')[0];
   }
 
-  override preencheFormulario(): void {
-    // Método obrigatório da classe base
-  }
-
   // Aplicar filtros quando o formulário for submetido
-  aplicarFiltro(): void {
+  async aplicarFiltro() {
     if (this.filtroForm.valid) {
       this.filtroAplicado = true;
-      this.carregarDados();
+      await this.carregarDados();
     }
   }
 
@@ -149,15 +153,15 @@ export class FrequenciaDashboardComponent extends BaseFormComponent implements O
     this.atualizarGraficosPorPeriodo();
   }
 
-  carregarDados(): void {
+  async carregarDados() {
     this.carregando = true;
     this.erro = null;
 
 
 
     // Para este exemplo, vamos simular o carregamento e depois chamar o método de processamento
-    setTimeout(() => {
-      this.simularCarregamentoDados();
+    setTimeout(async () => {
+      await this.simularCarregamentoDados();
       //this.processarDados(dadosMapeados);
     }, 1000);
   }

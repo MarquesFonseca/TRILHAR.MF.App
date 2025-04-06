@@ -24,6 +24,13 @@ export class TurmaService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
+  ListarTurmasAtivas(): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get(`${this.apiUrl}/ListarTurmasAtivas`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
   listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
     this.loadingService.show();
     this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({

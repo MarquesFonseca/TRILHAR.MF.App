@@ -26,3 +26,17 @@ export interface TurmaModel {
     dataCadastro: string;
     Action: any;
 }
+export interface TurmaOutput {
+  codigo: string | null;
+  descricao: string | null;
+  descricaoAnoSemestreLetivo: string | null;
+  idadeInicialAluno: string | null;
+  idadeFinalAluno: string | null;
+  anoLetivo: string | null;
+  semestreLetivo: string | null;
+  limiteMaximo: string | null;
+  ativo: string | null;
+  codigoUsuarioLogado: string | null;
+  dataAtualizacao: string | null;
+  dataCadastro: string | null;
+}

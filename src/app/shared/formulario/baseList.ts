@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
 const KEY = 'filtroListar';
 
 @Component({
-    template: ''
+  template: ''
 })
 export abstract class BaseListComponent extends Base implements OnInit {
   filtro: any;
@@ -73,23 +73,13 @@ export abstract class BaseListComponent extends Base implements OnInit {
     }
   }
 
-  selecionarPeloTabAsync (event: any, form: FormGroup, field: string, listaPromise: Promise<any[]>): void {
-        if (event.key === 'Tab') {
-            listaPromise.then(function (lista: any[]): void {
-                const firstItem = lista[0];
-                form?.get(field)?.setValue(firstItem);
-            })
-        }
+  selecionarPeloTabAsync(event: any, form: FormGroup, field: string, listaPromise: Promise<any[]>): void {
+    if (event.key === 'Tab') {
+      listaPromise.then(function (lista: any[]): void {
+        const firstItem = lista[0];
+        form?.get(field)?.setValue(firstItem);
+      })
     }
-
-  // selecionarPeloTabModel(event: any, field: any, lista: any[]): void {
-  //   if (event.keyCode === 9) {
-  //     this[field] = lista[0];
-  //   }
-  // }
-
-  compararNumeros(a: any, b: any) {
-    return a.id - b.id;
   }
 
   goto(tela: string) {
@@ -99,26 +89,11 @@ export abstract class BaseListComponent extends Base implements OnInit {
     });
   }
 
-  override removeAcento(text: string): string {
-    return text.replace(new RegExp('[áàâã]', 'gi'), 'a')
-      .replace(new RegExp('[éèê]', 'gi'), 'e')
-      .replace(new RegExp('[íìî]', 'gi'), 'i')
-      .replace(new RegExp('[óòôõ]', 'gi'), 'o')
-      .replace(new RegExp('[úùû]', 'gi'), 'u')
-      .replace(new RegExp('[ç]', 'gi'), 'c')
-      .replace(new RegExp('[ÁÀÂÃ]', 'gi'), 'A')
-      .replace(new RegExp('[ÉÈÊ]', 'gi'), 'E')
-      .replace(new RegExp('[ÍÌÎ]', 'gi'), 'I')
-      .replace(new RegExp('[ÓÒÔÕ]', 'gi'), 'O')
-      .replace(new RegExp('[ÚÙÛ]', 'gi'), 'U')
-      .replace(new RegExp('[Ç]', 'gi'), 'C');
-  }
-
   getTitle() {
     var retorno = this.activatedRoute.routeConfig
       ? this.activatedRoute.routeConfig.data?.['titulo']
       : '';
-      return retorno;
+    return retorno;
   }
 
   getOperacao() {
@@ -132,7 +107,7 @@ export abstract class BaseListComponent extends Base implements OnInit {
     var retorno = this.activatedRoute.routeConfig
       ? this.activatedRoute.routeConfig.data?.['rota']
       : '';
-      return retorno;
+    return retorno;
   }
 
   getRotaOperacao() {

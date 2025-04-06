@@ -1,0 +1,15 @@
+<div *ngIf="exibeErro && control?.errors as errors">
+  <mat-error *ngFor="let errorKey of objectKeysForMessagesErros(errors)">
+    {{ getValidatorMessage(errorKey, errors[errorKey]) }}
+  </mat-error>
+</div>
+
+
+<!-- exemplo de utilização -->
+<!--
+<app-mensagem-erro
+  [control]="formulario.get('nomeCrianca')"
+  field="nomeCrianca"
+  [customMessages]="{ required: 'Informe o nome da criança corretamente.' }">
+</app-mensagem-erro>
+-->

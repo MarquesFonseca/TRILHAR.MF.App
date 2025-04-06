@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, Inject } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, FormControl } from '@angular/forms';
 import { MaterialModule } from '../../material.module';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
@@ -17,6 +18,7 @@ export interface DataOutPut {
   selector: 'app-calendario',
   standalone: true,
   imports: [
+    CommonModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule
@@ -26,18 +28,22 @@ export interface DataOutPut {
 })
 export class CalendarioComponent implements OnInit {
 
-  @Input() formGroup!: FormGroup;
+  @Input() formGroup = new FormGroup('');
   @Input() field: string = '';
+  @Input() label: string = 'Selecione uma data';
   @Input() disabled: boolean = false;
   @Input('maxDate') maxDate = new Date('9999-12-31');
   @Input('minDate') minDate = new Date('1900-01-01');
   @Input() selectOtherMonths: boolean = false;
-  @Input() label: string = 'Selecione uma data';
 
   @Output() itemSelecionado = new EventEmitter<DataOutPut>();
 
+  get controle(): FormControl {
+    return this.formGroup.get(this.field) as FormControl;
+  }
+
   // FormControl interno para o componente
-  dateControl = new FormControl();
+  //dateControl = new FormControl();
 
   private destroy$ = new Subject<void>();
 
@@ -58,22 +64,22 @@ export class CalendarioComponent implements OnInit {
     if (this.formGroup && this.field && this.formGroup.get(this.field)) {
       const fieldValue = this.formGroup.get(this.field)?.value;
       if (fieldValue) {
-        this.dateControl.setValue(this.converterDataStringParaDate(fieldValue));
+        this.controle.setValue(this.converterDataStringParaDate(fieldValue));
       }
 
       // Ouvir mudanças no controle do formulário pai
       this.formGroup.get(this.field)?.valueChanges.pipe(
         takeUntil(this.destroy$)
       ).subscribe(value => {
-        if (value && value !== this.dateControl.value) {
-          this.dateControl.setValue(this.converterDataStringParaDate(value));
+        if (value && value !== this.controle.value) {
+          this.controle.setValue(this.converterDataStringParaDate(value));
         }
       });
     }
 
     // Se o formulário estiver desabilitado, desabilita o dateControl
     if (this.disabled) {
-      this.dateControl.disable();
+      this.controle.disable();
     }
   }
 

@@ -220,7 +220,7 @@ export const routes: Routes = [
         children: [
             {path: '', component: CriancaListarComponent, data: { rota: "criancas", titulo: "Listar Crianças", breadcrumb: "Listar", } },
             {path: 'listar', component: CriancaListarComponent, data: { rota: "criancas", titulo: "Listar Crianças", breadcrumb: "Listar", } },
-            {path: 'novo', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Nova Criança", breadcrumb: "Novo", } },
+            {path: 'incluir', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Nova Criança", breadcrumb: "Incluir", } },
             {path: 'alterar/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Alterar Criança", breadcrumb: "Alterar", } },
             {path: 'detalhar/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Detalhar Criança", breadcrumb: "Detalhar", } },
             {path: 'dashboard', component: CriancaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
@@ -231,7 +231,7 @@ export const routes: Routes = [
       children: [
           {path: '', component: TurmaListarComponent, data: { rota: "turmas", titulo: "Listar Turmas", breadcrumb: "Listar", },},
           {path: 'listar', component: TurmaListarComponent, data: { rota: "turmas", titulo: "Listar Turmas", breadcrumb: "Listar", },},
-          {path: 'novo', component: TurmaFormularioComponent, data: { rota: "turmas", titulo: "Nova Turma", breadcrumb: "Novo", },},
+          {path: 'incluir', component: TurmaFormularioComponent, data: { rota: "turmas", titulo: "Nova Turma", breadcrumb: "Incluir", },},
           {path: 'alterar/:id', component: TurmaFormularioComponent, data: { rota: "turmas", titulo: "Alterar Turma", breadcrumb: "Alterar", },},
           {path: 'detalhar/:id', component: TurmaFormularioComponent, data: { rota: "turmas", titulo: "Detalhar Turma", breadcrumb: "Detalhar", },},
           {path: 'limite', component: TurmaAtualizarLimiteMaximoComponent, data: { rota: "turmas", titulo: "Limitar Turma", breadcrumb: "Limitar", },},

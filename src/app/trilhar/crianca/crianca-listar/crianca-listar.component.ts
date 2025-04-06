@@ -83,9 +83,12 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     var lkjlll = this.getTitle();
   }
 
-  override ngOnInit() {
-    var filtro = this.montaFiltro(1, 10);
-    this.carregarAlunos(filtro);
+  override async ngOnInit() {
+    // Depois, com um pequeno delay, definimos os valores iniciais
+    setTimeout(async () => {
+      var filtro = this.montaFiltro(1, 10);
+      await this.carregarAlunos(filtro);
+    }, 100);
   }
 
   override preencheFiltro(): void {

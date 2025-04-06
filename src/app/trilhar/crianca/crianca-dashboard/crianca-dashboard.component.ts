@@ -26,7 +26,6 @@ Chart.register(...registerables);
 })
 export class CriancaDashboardComponent extends BaseFormComponent implements OnInit {
 
-  currentDate: string | undefined;
   private isBrowser: boolean;
 
   // Propriedades para armazenar estatísticas
@@ -60,23 +59,31 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
   erro: string | null = null;
 
   constructor(
-      public themeService: CustomizerSettingsService,
-          private fb: FormBuilder,
-          private criancaService: CriancaService,
-          public override router: Router,
-          public override activatedRoute: ActivatedRoute,
-          @Inject(PLATFORM_ID) private platformId: Object
-    ) {
-      super(router, activatedRoute);
-      this.isBrowser = isPlatformBrowser(this.platformId);
-      this.currentDate = new Date().toISOString();
-    }
+    public themeService: CustomizerSettingsService,
+    private fb: FormBuilder,
+    private criancaService: CriancaService,
+    public override router: Router,
+    public override activatedRoute: ActivatedRoute,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    super(router, activatedRoute);
+    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.currentDate = new Date().toISOString();
+  }
 
-  override ngOnInit(): void {
-    this.carregarDados();
+  override async ngOnInit() {
+    await this.carregarDados();
   }
 
   override preencheFormulario(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  override salvar(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  override carregaFormGroup(): void {
     throw new Error('Method not implemented.');
   }
 
@@ -122,7 +129,7 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
         setTimeout(() => {
           this.criarGraficos();
           this.carregando = false;
-        }, 500);
+        }, 1000);
       } else {
         console.error('Resposta inválida:', res);
         this.erro = 'Falha ao carregar os dados.';
@@ -450,7 +457,7 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
       });
 
       // Preparar labels para as horas (formato 24h)
-      const labelsHoras = Array.from({length: 24}, (_, i) => {
+      const labelsHoras = Array.from({ length: 24 }, (_, i) => {
         return `${i.toString().padStart(2, '0')}h`;
       });
 
@@ -480,7 +487,7 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
             },
             tooltip: {
               callbacks: {
-                label: function(context) {
+                label: function (context) {
                   return `${context.parsed.y} cadastro(s)`;
                 }
               }
@@ -540,8 +547,8 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
 
       // 4. MELHORIA: Filtrar apenas horas com cadastros
       const horasComCadastros = cadastrosPorHora
-      .map((count, hora) => ({ hora, count })) // Cria objetos {hora, count}
-      .filter(item => item.count > 0); // Filtra apenas horas com count > 0
+        .map((count, hora) => ({ hora, count })) // Cria objetos {hora, count}
+        .filter(item => item.count > 0); // Filtra apenas horas com count > 0
 
       // 5. Preparar labels e dados para o gráfico
       const labelsHoras = horasComCadastros.map(item =>
