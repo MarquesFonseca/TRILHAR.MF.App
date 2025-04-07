@@ -1,3 +1,5 @@
+import { DataOutPut } from "../calendario/calendario.component";
+
 export function retornaIdadeFormatadaAnoMesDia(dataNascimento: Date): string {
   try {
     if (!isNaN(dataNascimento.getTime())) {
@@ -26,6 +28,23 @@ export function retornaIdadeFormatadaAnoMesDia(dataNascimento: Date): string {
 
 //#region Data
 
+export function converterParaDataOutput(dataString: string): DataOutPut {
+  const data = new Date(dataString);
+
+  const dia = data.getDate().toString().padStart(2, '0');
+  const mes = (data.getMonth() + 1).toString().padStart(2, '0');
+  const ano = data.getFullYear().toString();
+  const dataFormatada = `${dia}/${mes}/${ano}`;
+
+  return {
+    dia,
+    mes,
+    ano,
+    data,
+    dataFormatada
+  };
+}
+
 export function formatarDataBrasileira(data: string | Date): string {
   const date = new Date(data);
 
@@ -38,14 +57,14 @@ export function formatarDataBrasileira(data: string | Date): string {
   return `${dia}/${mes}/${ano}`;
 }
 
-export function formatarData(data: Date) {
+export function formatarData(data: Date): string {
   let dia = data.getDate().toString().padStart(2, '0');
   let mes = (data.getMonth() + 1).toString().padStart(2, '0'); //+1 pois no getMonth Janeiro começa com zero.
   let ano = data.getFullYear();
   return dia + '/' + mes + '/' + ano;
 }
 
-export function formatarDataComPontos(data: Date) {
+export function formatarDataComPontos(data: Date): string {
   let dia = data.getDate().toString().padStart(2, '0');
   let mes = (data.getMonth() + 1).toString().padStart(2, '0'); //+1 pois no getMonth Janeiro começa com zero.
   let ano = data.getFullYear();
@@ -71,7 +90,7 @@ export function extrairData(dataStr: string): { dia: number; mes: number; ano: n
   return { dia, mes, ano };
 }
 
-export function retornaDataByString(ataStr: string) {
+export function retornaDataByString(ataStr: string): Date {
   var retorno = new Date(extrairData(ataStr).ano, extrairData(ataStr).mes - 1, extrairData(ataStr).dia);
   return retorno;
 }

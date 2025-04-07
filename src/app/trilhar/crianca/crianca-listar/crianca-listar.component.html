@@ -105,7 +105,7 @@
                             {{element.NomeCrianca}}
                         </td> -->
                         <td mat-cell *matCellDef="let element">
-                            <a [routerLink]="['/crianca/detalhar', element.Codigo]" class="fw-medium">
+                            <a [routerLink]="['/criancas/detalhar', element.Codigo]" class="fw-medium">
                                 {{element.NomeCrianca}}
                             </a>
                         </td>
@@ -334,12 +334,12 @@
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <div class="action-info">
-                                <a mat-button [routerLink]="['/crianca/detalhar', element.Codigo]" matTooltip="Ver Criança" matTooltipPosition="above">
+                                <a mat-button [routerLink]="['/criancas/detalhar', element.Codigo]" matTooltip="Ver Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.view}}
                                     </i>
                                 </a>
-                                <a mat-button [routerLink]="['/crianca/alterar', element.Codigo]" matTooltip="Editar Criança" matTooltipPosition="above">
+                                <a mat-button [routerLink]="['/criancas/alterar', element.Codigo]" matTooltip="Editar Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.edit}}
                                     </i>

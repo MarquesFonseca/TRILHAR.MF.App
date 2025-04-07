@@ -17,6 +17,13 @@ export class CriancaService {
     private loadingService: LoadingService
   ) {}
 
+  listarPorId(Id: string): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get<any>(`${this.apiUrl}/${Id}`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
   listarTodos(): Observable<any[]> {
     this.loadingService.show();
     return this.http

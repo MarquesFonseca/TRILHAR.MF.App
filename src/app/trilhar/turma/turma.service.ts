@@ -24,11 +24,23 @@ export class TurmaService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  ListarTurmasAtivas(): Observable<any> {
+  // ListarTurmasAtivas(): Observable<any> {
+  //   this.loadingService.show();
+  //   return this.http
+  //     .get(`${this.apiUrl}/ListarTurmasAtivas`)
+  //     .pipe(finalize(() => this.loadingService.hide()));
+  // }
+
+  async listarTurmasAtivasPromise(): Promise<any> {
     this.loadingService.show();
-    return this.http
-      .get(`${this.apiUrl}/ListarTurmasAtivas`)
-      .pipe(finalize(() => this.loadingService.hide()));
+    try {
+      const resultado = await firstValueFrom(
+        this.http.get(`${this.apiUrl}/ListarTurmasAtivas`)
+      );
+      return resultado;
+    } finally {
+      this.loadingService.hide();
+    }
   }
 
   listarPorFiltro(filtro: any, callback?: (resp: any) => void) {

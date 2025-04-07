@@ -1,6 +1,6 @@
 import { CommonModule, NgIf, ViewportScroller } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { Observable, map } from 'rxjs';
@@ -46,9 +46,10 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   turmaSelecionado: any | null = null;
   maxData: Date = new Date();
   turmaSugeridaDescricao: string = '';
+  id: any;
 
   constructor(
-    //private fb: FormBuilder,
+    private fb: FormBuilder,
     private criancaService: CriancaService,
     private turmaService: TurmaService,
     private matriculaService: MatriculaService,
@@ -60,39 +61,44 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     super(router, activatedRoute);
   }
 
-  override ngOnInit(): void {
+  override async ngOnInit(): Promise<void> {
+    this.viewportScroller.scrollToPosition([0, 0]);
     this.maxData = utils.obterDataHoraBrasileira();
+    if (this.operacao.isEditar || this.operacao.isDetalhar) {
+      this.id = this.activatedRoute.snapshot.params['id'];
+    }
     this.carregaFormGroup();
+    await this.carregarTurmasAtiva();
     this.preencheFormulario();
-    this.handleConditionalFields();
+    //this.handleConditionalFields();
   }
 
   override carregaFormGroup() {
-    this.formulario = new FormGroup({
-      codigo: new FormControl({ value: 0, disabled: this.operacao.disabled }),
-      codigoCadastro: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      nomeCrianca: new FormControl({ value: '', disabled: this.operacao.disabled }, Validators.required),
-      dataNascimento: new FormControl({ value: null, disabled: this.operacao.disabled }, [Validators.required, validar.dataValidaValidator(), validar.dataNaoFuturaValidator()]),
-      idadeCrianca: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      turmaMatricula: new FormControl({ value: null, disabled: this.operacao.disabled }),
-      nomeMae: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      nomePai: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      outroResponsavel: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      telefone: new FormControl({ value: '', disabled: this.operacao.disabled }, validar.telefoneValidator()),
-      enderecoEmail: new FormControl({ value: '', disabled: this.operacao.disabled }, validar.emailValidator()),
-      alergia: new FormControl(false),
-      descricaoAlergia: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      restricaoAlimentar: new FormControl(false),
-      descricaoRestricaoAlimentar: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      deficienciaOuSituacaoAtipica: new FormControl(false),
-      descricaoDeficiencia: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      batizado: new FormControl(false),
-      dataBatizado: new FormControl({ value: null, disabled: this.operacao.disabled }),
-      igrejaBatizado: new FormControl({ value: '', disabled: this.operacao.disabled }),
-      ativo: new FormControl(true),
-      codigoUsuarioLogado: new FormControl({ value: null, disabled: this.operacao.disabled }),
-      dataAtualizacao: new FormControl({ value: null, disabled: this.operacao.disabled }),
-      dataCadastro: new FormControl({ value: null, disabled: this.operacao.disabled }),
+    this.formulario = this.fb.group({
+      codigo: [0],
+      codigoCadastro: [''],
+      nomeCrianca: ['', [Validators.required]],
+      dataNascimento: [null, [Validators.required, validar.dataValidaValidator(), validar.dataNaoFuturaValidator()]],
+      idadeCrianca: [''],
+      turmaMatricula: [null],
+      nomeMae: [''],
+      nomePai: [''],
+      outroResponsavel: [''],
+      telefone: ['', validar.telefoneValidator()],
+      enderecoEmail: ['', validar.emailValidator()],
+      alergia: [false],
+      descricaoAlergia: [''],
+      restricaoAlimentar: [false],
+      descricaoRestricaoAlimentar: [''],
+      deficienciaOuSituacaoAtipica: [false],
+      descricaoDeficiencia: [''],
+      batizado: [false],
+      dataBatizado: [null],
+      igrejaBatizado: [''],
+      ativo: [true],
+      codigoUsuarioLogado: [null],
+      dataAtualizacao: [null],
+      dataCadastro: [null],
     });
   }
 
@@ -226,15 +232,57 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       // //this.formulario.get("DataNascimento")?.setValue('10/09/2025');
 
 
-      this.getTurmasByMatriculasAtiva();
-    }
-
-    if (this.operacao.isEditar) {
 
     }
 
-    if (this.operacao.isDetalhar) {
-
+    if (this.operacao.isEditar || this.operacao.isDetalhar) {
+      this.criancaService.listarPorId(this.id).subscribe(resp => {
+        this.formulario.get('codigo')?.setValue(resp.dados.codigo);
+        this.formulario.get('codigoCadastro')?.setValue(resp.dados.codigoCadastro);
+        this.formulario.get('nomeCrianca')?.setValue(resp.dados.nomeCrianca);
+        if (this.operacao.disabled) { this.formulario.controls["nomeCrianca"].disable(); }
+        this.formulario.get('dataNascimento')?.setValue(resp.dados.dataNascimento);
+        if (this.operacao.disabled) { this.formulario.controls["dataNascimento"].disable(); }
+        const dataNascimentoRetornada = utils.converterParaDataOutput(resp.dados.dataNascimento);
+        this.onDataNascimentoSelecionada(dataNascimentoRetornada);
+        if (this.operacao.disabled) { this.formulario.controls["turmaMatricula"].disable(); }
+        this.formulario.get('nomeMae')?.setValue(resp.dados.nomeMae);
+        if (this.operacao.disabled) { this.formulario.controls["nomeMae"].disable(); }
+        this.formulario.get('nomePai')?.setValue(resp.dados.nomePai);
+        if (this.operacao.disabled) { this.formulario.controls["nomePai"].disable(); }
+        this.formulario.get('outroResponsavel')?.setValue(resp.dados.outroResponsavel);
+        if (this.operacao.disabled) { this.formulario.controls["outroResponsavel"].disable(); }
+        this.formulario.get('telefone')?.setValue(resp.dados.telefone);
+        if (this.operacao.disabled) { this.formulario.controls["telefone"].disable(); }
+        this.formulario.get('enderecoEmail')?.setValue(resp.dados.enderecoEmail);
+        if (this.operacao.disabled) { this.formulario.controls["enderecoEmail"].disable(); }
+        this.formulario.get('alergia')?.setValue(resp.dados.alergia);
+        if (this.operacao.disabled) { this.formulario.controls["alergia"].disable(); }
+        this.formulario.get('descricaoAlergia')?.setValue(resp.dados.descricaoAlergia);
+        if (this.operacao.disabled) { this.formulario.controls["descricaoAlergia"].disable(); }
+        this.formulario.get('restricaoAlimentar')?.setValue(resp.dados.restricaoAlimentar);
+        if (this.operacao.disabled) { this.formulario.controls["restricaoAlimentar"].disable(); }
+        this.formulario.get('descricaoRestricaoAlimentar')?.setValue(resp.dados.descricaoRestricaoAlimentar);
+        if (this.operacao.disabled) { this.formulario.controls["descricaoRestricaoAlimentar"].disable(); }
+        this.formulario.get('deficienciaOuSituacaoAtipica')?.setValue(resp.dados.deficienciaOuSituacaoAtipica);
+        if (this.operacao.disabled) { this.formulario.controls["deficienciaOuSituacaoAtipica"].disable(); }
+        this.formulario.get('descricaoDeficiencia')?.setValue(resp.dados.descricaoDeficiencia);
+        if (this.operacao.disabled) { this.formulario.controls["descricaoDeficiencia"].disable(); }
+        this.formulario.get('batizado')?.setValue(resp.dados.batizado);
+        if (this.operacao.disabled) { this.formulario.controls["batizado"].disable(); }
+        this.formulario.get('dataBatizado')?.setValue(resp.dados.dataBatizado);
+        if (this.operacao.disabled) { this.formulario.controls["dataBatizado"].disable(); }
+        this.formulario.get('igrejaBatizado')?.setValue(resp.dados.igrejaBatizado);
+        if (this.operacao.disabled) { this.formulario.controls["igrejaBatizado"].disable(); }
+        this.formulario.get('ativo')?.setValue(resp.dados.ativo);
+        if (this.operacao.disabled) { this.formulario.controls["ativo"].disable(); }
+        this.formulario.get('codigoUsuarioLogado')?.setValue(resp.dados.codigoUsuarioLogado);
+        if (this.operacao.disabled) { this.formulario.controls["codigoUsuarioLogado"].disable(); }
+        this.formulario.get('dataAtualizacao')?.setValue(resp.dados.dataAtualizacao);
+        if (this.operacao.disabled) { this.formulario.controls["dataAtualizacao"].disable(); }
+        this.formulario.get('dataCadastro')?.setValue(resp.dados.dataCadastro);
+        if (this.operacao.disabled) { this.formulario.controls["dataCadastro"].disable(); }
+      });
     }
 
   }
@@ -245,43 +293,28 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
 
     const valoresForm = this.formulario.getRawValue();
-    // valoresForm.codigo = 0;
-    // valoresForm.codigoCadastro = '';
-    // valoresForm.codigoUsuarioLogado = 0;
-    // valoresForm.dataAtualizacao = utils.obterDataHoraBrasileira();
-    // valoresForm.dataCadastro = utils.obterDataHoraBrasileira();
-    // valoresForm.dataBatizado = null;
-
     var filtro: criancasTypes.CriancaModel = valoresForm;
-
-    //   "codigo": 0,
-    // "codigoCadastro": "string",
-    // "nomeCrianca": "string",
-    // "dataNascimento": "2025-04-06T05:33:15.378Z",
-    // "nomeMae": "string",
-    // "nomePai": "string",
-    // "outroResponsavel": "string",
-    // "telefone": "string",
-    // "enderecoEmail": "string",
-    // "alergia": true,
-    // "descricaoAlergia": "string",
-    // "restricaoAlimentar": true,
-    // "descricaoRestricaoAlimentar": "string",
-    // "deficienciaOuSituacaoAtipica": true,
-    // "descricaoDeficiencia": "string",
-    // "batizado": true,
-    // "dataBatizado": "2025-04-06T05:33:15.378Z",
-    // "igrejaBatizado": "string",
-    // "ativo": true,
-    // "codigoUsuarioLogado": 0,
-    // "dataAtualizacao": "2025-04-06T05:33:15.378Z",
-    // "dataCadastro": "2025-04-06T05:33:15.378Z"
 
     if (this.operacao.isNovo) {
       this.criancaService.Incluir(filtro, (res: any) => {
         if (res) {
-          var url = `crianca/detalhar/${res.dados}`;
-          this.finalizarAcao(url);
+          const codigoAluno = res.dados;
+          const { turmaMatricula } = this.formulario.value;
+          var filtroMatricula = {
+            "codigo": 0,
+            "codigoAluno": codigoAluno,
+            "codigoTurma": turmaMatricula.codigo,
+            "ativo": true,
+            "codigoUsuarioLogado": 0,
+            "dataAtualizacao": utils.obterDataHoraBrasileira(),
+            "dataCadastro": utils.obterDataHoraBrasileira()
+          }
+          this.matriculaService.Incluir(filtroMatricula, (res: any) => {
+            if (res) {
+              var url = `criancas/detalhar/${codigoAluno}`;
+              this.finalizarAcao(url);
+            }
+          });
         }
       });
     }
@@ -289,7 +322,23 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     if (this.operacao.isEditar) {
       this.criancaService.Alterar(filtro, (res: any) => {
         if (res) {
-          this.finalizarAcao();
+          const codigoAluno = res.dados;
+          const { turmaMatricula } = this.formulario.value;
+          var filtroMatricula = {
+            "codigo": 0,
+            "codigoAluno": codigoAluno,
+            "codigoTurma": turmaMatricula.codigo,
+            "ativo": true,
+            "codigoUsuarioLogado": 0,
+            "dataAtualizacao": utils.obterDataHoraBrasileira(),
+            "dataCadastro": utils.obterDataHoraBrasileira()
+          }
+          this.matriculaService.Alterar(filtroMatricula, (res: any) => {
+            if (res) {
+              var url = `criancas/detalhar/${codigoAluno}`;
+              this.finalizarAcao(url);
+            }
+          });
         }
       });
     }
@@ -361,12 +410,13 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
   }
 
-  private getTurmasByMatriculasAtiva() {
-    this.turmaService.ListarTurmasAtivas().subscribe(resp => {
-      if (resp && resp?.dados) {
-        this.turmas = resp?.dados;
-      }
-    });
+  async carregarTurmasAtiva() {
+    try {
+      const turmas = await this.turmaService.listarTurmasAtivasPromise();
+      this.turmas = turmas?.dados ?? [];
+    } catch (err) {
+      console.error('Erro ao carregar turmas', err);
+    }
   }
 
   public retornaTurmaSugerida(dataNascimento: Date, listaTurmas: any[]): any | null {

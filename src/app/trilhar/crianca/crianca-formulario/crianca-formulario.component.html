@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- Idade da criança -->
-                <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12">
                   <!-- <mat-card>
                     <mat-card-content class="fw-medium">{{formulario.get('idadeCrianca')?.value}}</mat-card-content>
                   </mat-card> -->
@@ -115,7 +115,7 @@
                 <div class="col-sm-4">
                   <mat-form-field class="mb-25">
                     <mat-label>Nome da Mãe</mat-label>
-                    <input matInput formControlName="nomeMae" placeholder="Nome da mãe">
+                    <input matInput formControlName="nomeMae" [readonly]="operacao.disabled" placeholder="Nome da mãe">
                   </mat-form-field>
                 </div>
 
@@ -123,7 +123,7 @@
                 <div class="col-sm-4">
                     <mat-form-field class="mb-25">
                         <mat-label>Nome do Pai</mat-label>
-                        <input matInput formControlName="nomePai" placeholder="Nome do pai">
+                        <input matInput formControlName="nomePai" [readonly]="operacao.disabled" placeholder="Nome do pai">
                     </mat-form-field>
                 </div>
 
@@ -131,7 +131,7 @@
                 <div class="col-sm-4">
                     <mat-form-field class="mb-25">
                         <mat-label>Outro Responsável</mat-label>
-                        <input matInput formControlName="outroResponsavel" placeholder="Outro responsável">
+                        <input matInput formControlName="outroResponsavel" [readonly]="operacao.disabled" placeholder="Outro responsável">
                     </mat-form-field>
                 </div>
 
@@ -139,7 +139,7 @@
                 <div class="col-sm-4">
                     <mat-form-field class="mb-25">
                         <mat-label>Telefone celular</mat-label>
-                        <input matInput formControlName="telefone" mask="(00)00000-0000" placeholder="(99)99999-9999"
+                        <input matInput formControlName="telefone" mask="(00)00000-0000" [readonly]="operacao.disabled" placeholder="(99)99999-9999"
                             maxlength="14">
                         <mat-error *ngIf="formulario.get('telefone')?.hasError('telefoneInvalid')">
                             Formato de telefone inválido.
@@ -151,7 +151,7 @@
                 <div class="col-sm-8">
                     <mat-form-field class="mb-25">
                         <mat-label>Email</mat-label>
-                        <input matInput formControlName="enderecoEmail" placeholder="email@exemplo.com">
+                        <input matInput formControlName="enderecoEmail" [readonly]="operacao.disabled" placeholder="email@exemplo.com">
                         <mat-error *ngIf="formulario.get('enderecoEmail')?.hasError('emailInvalid')">
                             Formato de e-mail inválido.
                         </mat-error>
@@ -169,7 +169,7 @@
                 <div class="col-sm-8" *ngIf="formulario.get('alergia')?.value">
                     <mat-form-field class="textarea">
                         <mat-label>Descrição da Alergia</mat-label>
-                        <input matInput formControlName="descricaoAlergia" placeholder="Descrição da alergia">
+                        <input matInput formControlName="descricaoAlergia" [readonly]="operacao.disabled" placeholder="Descrição da alergia">
                         <!-- <textarea matInput formControlName="DescricaoAlergia"
                             placeholder="Descrição da alergia"></textarea> -->
                     </mat-form-field>
@@ -189,8 +189,7 @@
                 <div class="col-sm-8" *ngIf="formulario.get('restricaoAlimentar')?.value">
                     <mat-form-field class="textarea">
                         <mat-label>Descrição da Restrição Alimentar</mat-label>
-                        <input matInput formControlName="descricaoRestricaoAlimentar"
-                            placeholder="Descrição da restrição alimentar">
+                        <input matInput formControlName="descricaoRestricaoAlimentar" [readonly]="operacao.disabled" placeholder="Descrição da restrição alimentar">
                         <!-- <textarea matInput formControlName="descricaoRestricaoAlimentar"
                             placeholder="Descrição da restrição alimentar"></textarea> -->
                     </mat-form-field>
@@ -210,8 +209,7 @@
                 <div class="col-sm-8" *ngIf="formulario.get('deficienciaOuSituacaoAtipica')?.value">
                     <mat-form-field class="textarea">
                         <mat-label>Descrição da Deficiência</mat-label>
-                        <input matInput formControlName="descricaoDeficiencia"
-                            placeholder="Descrição da deficiência">
+                        <input matInput formControlName="descricaoDeficiencia" [readonly]="operacao.disabled" placeholder="Descrição da deficiência">
                         <!-- <textarea matInput formControlName="descricaoDeficiencia"
                             placeholder="Descrição da deficiência"></textarea> -->
                     </mat-form-field>
@@ -231,7 +229,7 @@
                 <div class="col-sm-4" *ngIf="formulario.get('batizado')?.value">
                     <mat-form-field class="mb-25">
                         <mat-label>Data do Batizado</mat-label>
-                        <input matInput [matDatepicker]="batizadoPicker" formControlName="dataBatizado">
+                        <input matInput [matDatepicker]="batizadoPicker" formControlName="dataBatizado" [readonly]="operacao.disabled" >
                         <mat-datepicker-toggle matSuffix [for]="batizadoPicker"></mat-datepicker-toggle>
                         <mat-datepicker #batizadoPicker></mat-datepicker>
                     </mat-form-field>
@@ -241,7 +239,7 @@
                 <div class="col-sm-8" *ngIf="formulario.get('batizado')?.value">
                     <mat-form-field class="mb-25">
                         <mat-label>Igreja do Batizado</mat-label>
-                        <input matInput formControlName="igrejaBatizado" placeholder="Igreja do batizado">
+                        <input matInput formControlName="igrejaBatizado" [readonly]="operacao.disabled" placeholder="Igreja do batizado">
                     </mat-form-field>
                     <br />
                     <br />
@@ -265,7 +263,7 @@
                 <br />
 
                 <!-- Botão de Salvar -->
-                <div class="col-lg-12">
+                <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-lg-12">
                     <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
                         <mat-card-header>
                             <mat-card-title>

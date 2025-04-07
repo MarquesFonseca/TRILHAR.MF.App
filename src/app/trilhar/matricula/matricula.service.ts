@@ -54,7 +54,7 @@ export class MatriculaService {
     });
   }
 
-  Alterar(Entity: types.MatriculaModel, Id: any, callback?: any) {
+  Alterar(Entity: any, Id: any, callback?: any) {
     this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
       //this.tratarMensagemRetornoSucesso("Registro alterado com sucesso!");
       callback(resp);
