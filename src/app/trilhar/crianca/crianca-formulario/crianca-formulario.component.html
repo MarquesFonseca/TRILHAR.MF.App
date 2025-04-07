@@ -279,7 +279,7 @@
                     </mat-card>
                 </div>
 
-                <div class="row mt-3">
+                <div *ngIf="!isProducao" class="row mt-3">
                   <div class="col-12">
                     <h3>Valores do Formulário:</h3>
                     <pre>{{ formulario.value | json }}</pre>

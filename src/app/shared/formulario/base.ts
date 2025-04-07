@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 import * as utils from '../funcoes-comuns/utils';
 
 @Component({
@@ -9,7 +10,11 @@ export class Base implements OnInit {
 
   limiteRetornoAutoComplete = 100;
 
-  constructor() { }
+  isProducao: boolean = false;
+
+  constructor() {
+    this.isProducao = environment.production;
+  }
 
   ngOnInit() { }
 
