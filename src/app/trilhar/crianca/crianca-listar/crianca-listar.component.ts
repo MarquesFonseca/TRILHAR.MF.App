@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
+import { MensagemService } from '../../../services/mensagem.service';
 import { CriancaService } from '../crianca.service';
 import * as types from '../crianca.types';
 import { FormsModule } from '@angular/forms';
@@ -72,6 +73,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     public themeService: CustomizerSettingsService,
     private fb: FormBuilder,
     private criancaService: CriancaService,
+    private mensagemService: MensagemService,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
   ) {
