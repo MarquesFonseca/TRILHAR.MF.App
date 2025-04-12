@@ -52,6 +52,7 @@
     <mat-card-content>
         <div class="events-table">
             <div class="table-responsive">
+              <!-- <pre>{{dataSource.data| json}}</pre> -->
                 <table mat-table [dataSource]="dataSource">
 
                     <!-- Checkbox Column -->
@@ -77,269 +78,269 @@
                     </ng-container> -->
 
                     <!-- Codigo -->
-                    <!-- <ng-container matColumnDef="Codigo">
+                    <!-- <ng-container matColumnDef="codigo">
                         <th mat-header-cell *matHeaderCellDef>
                             Código
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.Codigo}}
+                            {{element.codigo}}
                         </td>
                     </ng-container> -->
 
                     <!-- CodigoCadastro -->
-                    <ng-container matColumnDef="CodigoCadastro">
+                    <ng-container matColumnDef="codigoCadastro">
                         <th mat-header-cell *matHeaderCellDef>
                             Código Cadastro
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            # {{element.CodigoCadastro}}
+                            # {{element.codigoCadastro}}
                         </td>
                     </ng-container>
 
                     <!-- NomeCrianca -->
-                    <ng-container matColumnDef="NomeCrianca">
+                    <ng-container matColumnDef="nomeCrianca">
                         <th mat-header-cell *matHeaderCellDef>
                             Nome da Criança
                         </th>
                         <!-- <td mat-cell *matCellDef="let element">
-                            {{element.NomeCrianca}}
+                            {{element.nomeCrianca}}
                         </td> -->
                         <td mat-cell *matCellDef="let element">
-                            <a [routerLink]="['/criancas/detalhar', element.Codigo]" class="fw-medium">
-                                {{element.NomeCrianca}}
+                            <a [routerLink]="['/criancas/detalhar', element.codigo]" class="fw-medium">
+                                {{element.nomeCrianca}}
                             </a>
                         </td>
                     </ng-container>
 
                     <!-- DataNascimento -->
-                    <ng-container matColumnDef="DataNascimento">
+                    <ng-container matColumnDef="dataNascimento">
                         <th mat-header-cell *matHeaderCellDef>
                             Data de Nascimento
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.DataNascimento | date: 'dd/MM/yyyy' }}
+                            {{ element.dataNascimento | date: 'dd/MM/yyyy' }}
                         </td>
                     </ng-container>
 
                     <!-- NomeMae -->
-                    <ng-container matColumnDef="NomeMae">
+                    <ng-container matColumnDef="nomeMae">
                         <th mat-header-cell *matHeaderCellDef>
                             Nome da Mãe
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.NomeMae}}
+                            {{element.nomeMae}}
                         </td>
                     </ng-container>
 
 
                     <!-- NomePai -->
-                    <ng-container matColumnDef="NomePai">
+                    <ng-container matColumnDef="nomePai">
                         <th mat-header-cell *matHeaderCellDef>
                             Nome do Pai
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.NomePai}}
+                            {{element.nomePai}}
                         </td>
                     </ng-container>
 
                     <!-- OutroResponsavel -->
-                    <ng-container matColumnDef="OutroResponsavel">
+                    <ng-container matColumnDef="outroResponsavel">
                         <th mat-header-cell *matHeaderCellDef>
                             Outro Responsável
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.OutroResponsavel}}
+                            {{element.outroResponsavel}}
                         </td>
                     </ng-container>
 
                     <!-- Telefone -->
-                    <ng-container matColumnDef="Telefone">
+                    <ng-container matColumnDef="telefone">
                         <th mat-header-cell *matHeaderCellDef>
                             Telefone
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.Telefone}}
+                            {{element.telefone}}
                         </td>
                     </ng-container>
 
                     <!-- EnderecoEmail -->
-                    <!-- <ng-container matColumnDef="EnderecoEmail">
+                    <!-- <ng-container matColumnDef="enderecoEmail">
                         <th mat-header-cell *matHeaderCellDef>
                             EnderecoEmail
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.EnderecoEmail}}
+                            {{element.enderecoEmail}}
                         </td>
                     </ng-container> -->
 
                     <!-- Alergia -->
-                    <ng-container matColumnDef="Alergia">
+                    <ng-container matColumnDef="alergia">
                         <th mat-header-cell *matHeaderCellDef>
                             Alergia?
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Alergia">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.alergia">
                               SIM
                             </span>
-                            <span class="d-inline-block" *ngIf="!element.Alergia">
+                            <span class="d-inline-block" *ngIf="!element.alergia">
                               NÃO
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- DescricaoAlergia -->
-                    <ng-container matColumnDef="DescricaoAlergia">
+                    <ng-container matColumnDef="descricaoAlergia">
                         <th mat-header-cell *matHeaderCellDef>
                             Descrição da Alergia
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.DescricaoAlergia}}
+                            {{element.descricaoAlergia}}
                         </td>
                     </ng-container>
 
                     <!-- RestricaoAlimentar -->
-                    <ng-container matColumnDef="RestricaoAlimentar">
+                    <ng-container matColumnDef="restricaoAlimentar">
                         <th mat-header-cell *matHeaderCellDef>
                             Restrição Alimentar?
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.RestricaoAlimentar">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.restricaoAlimentar">
                               SIM
                             </span>
-                            <span class="d-inline-block" *ngIf="!element.RestricaoAlimentar">
+                            <span class="d-inline-block" *ngIf="!element.restricaoAlimentar">
                               NÃO
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- DescricaoRestricaoAlimentar -->
-                    <ng-container matColumnDef="DescricaoRestricaoAlimentar">
+                    <ng-container matColumnDef="descricaoRestricaoAlimentar">
                         <th mat-header-cell *matHeaderCellDef>
                             Descrição da Restrição Alimentar
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.DescricaoRestricaoAlimentar}}
+                            {{element.descricaoRestricaoAlimentar}}
                         </td>
                     </ng-container>
 
                     <!-- DeficienciaOuSituacaoAtipica -->
-                    <ng-container matColumnDef="DeficienciaOuSituacaoAtipica">
+                    <ng-container matColumnDef="deficienciaOuSituacaoAtipica">
                         <th mat-header-cell *matHeaderCellDef>
                             Deficiência ou Situação Atípica?
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.DeficienciaOuSituacaoAtipica">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.deficienciaOuSituacaoAtipica">
                               SIM
                             </span>
-                            <span class="d-inline-block" *ngIf="!element.DeficienciaOuSituacaoAtipica">
+                            <span class="d-inline-block" *ngIf="!element.deficienciaOuSituacaoAtipica">
                               NÃO
                             </span>
                         </td>
                     </ng-container>
 
                     <!-- DescricaoDeficiencia -->
-                    <ng-container matColumnDef="DescricaoDeficiencia">
+                    <ng-container matColumnDef="descricaoDeficiencia">
                         <th mat-header-cell *matHeaderCellDef>
                             Descrição de Deficiência ou Situação Atípica
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.DescricaoDeficiencia}}
+                            {{element.descricaoDeficiencia}}
                         </td>
                     </ng-container>
 
                     <!-- Batizado -->
-                    <!-- <ng-container matColumnDef="Batizado">
+                    <!-- <ng-container matColumnDef="batizado">
                         <th mat-header-cell *matHeaderCellDef>
                             Batizado
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Batizado">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.batizado">
                                 SIM
                             </span>
-                            <span class="d-inline-block" *ngIf="!element.Batizado">
+                            <span class="d-inline-block" *ngIf="!element.batizado">
 
                             </span>
                         </td>
                     </ng-container> -->
 
                     <!-- DataBatizado -->
-                    <!-- <ng-container matColumnDef="DataBatizado">
+                    <!-- <ng-container matColumnDef="dataBatizado">
                         <th mat-header-cell *matHeaderCellDef>
                             Data do Batizado
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.DataBatizado}}
+                            {{element.dataBatizado}}
                         </td>
                     </ng-container> -->
 
                     <!-- IgrejaBatizado -->
-                    <!-- <ng-container matColumnDef="IgrejaBatizado">
+                    <!-- <ng-container matColumnDef="igrejaBatizado">
                         <th mat-header-cell *matHeaderCellDef>
                             Igreja do Batizado
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.IgrejaBatizado}}
+                            {{element.igrejaBatizado}}
                         </td>
                     </ng-container> -->
 
                     <!-- Ativo -->
-                    <ng-container matColumnDef="Ativo">
+                    <ng-container matColumnDef="ativo">
                         <th mat-header-cell *matHeaderCellDef>
                             Situação
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.Ativo">
+                            <span class="daxa-badge upcoming d-inline-block" *ngIf="element.ativo">
                                 ATIVO
                             </span>
-                            <span class="daxa-badge past d-inline-block" *ngIf="!element.Ativo">
+                            <span class="daxa-badge past d-inline-block" *ngIf="!element.ativo">
                                 INATIVO
                             </span>
                         </td>
                     </ng-container>
 
-                    <!-- CodigoUsuarioLogado -->
-                    <!-- <ng-container matColumnDef="CodigoUsuarioLogado">
+                    <!-- codigoUsuarioLogado -->
+                    <!-- <ng-container matColumnDef="codigoUsuarioLogado">
                         <th mat-header-cell *matHeaderCellDef>
                             Usuário
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.CodigoUsuarioLogado}}
+                            {{element.codigoUsuarioLogado}}
                         </td>
                     </ng-container> -->
 
                     <!-- DataAtualizacao -->
-                    <ng-container matColumnDef="DataAtualizacao">
+                    <ng-container matColumnDef="dataAtualizacao">
                         <th mat-header-cell *matHeaderCellDef>
                             Data Atualização
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.DataAtualizacao | date: 'dd/MM/yyyy HH:mm' }}
+                            {{ element.dataAtualizacao | date: 'dd/MM/yyyy HH:mm' }}
                         </td>
                     </ng-container>
 
                     <!-- DataCadastro -->
-                    <ng-container matColumnDef="DataCadastro">
+                    <ng-container matColumnDef="dataCadastro">
                         <th mat-header-cell *matHeaderCellDef>
                             Data Cadastro
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ element.DataCadastro | date: 'dd/MM/yyyy HH:mm' }}
+                            {{ element.dataCadastro | date: 'dd/MM/yyyy HH:mm' }}
                         </td>
                     </ng-container>
 
                     <!-- Action Column -->
-                    <ng-container matColumnDef="Action">
+                    <ng-container matColumnDef="acoes">
                         <th mat-header-cell *matHeaderCellDef>
                             Ações
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <div class="action-info">
-                                <a mat-button [routerLink]="['/criancas/detalhar', element.Codigo]" matTooltip="Ver Criança" matTooltipPosition="above">
+                                <a mat-button [routerLink]="['/criancas/detalhar', element.codigo]" matTooltip="Ver Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.view}}
                                     </i>
                                 </a>
-                                <a mat-button [routerLink]="['/criancas/alterar', element.Codigo]" matTooltip="Editar Criança" matTooltipPosition="above">
+                                <a mat-button [routerLink]="['/criancas/alterar', element.codigo]" matTooltip="Editar Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.edit}}
                                     </i>
