@@ -8,6 +8,7 @@ import { MaterialModule } from '../../../material.module';
 import { Chart, registerables } from 'chart.js';
 import { CriancaService } from '../crianca.service';
 import * as types from './crianca-dashboard.types';
+import * as typesAluno from '../crianca.types';
 
 // Registrar todos os componentes do Chart.js
 Chart.register(...registerables);
@@ -143,16 +144,10 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
   }
 
   montaFiltro(page: number, pageSize: number) {
-    var filtro = {
-      //condicao: "Ativo = @Ativo",
-      // parametros: {
-      //   Ativo: true,
-      //   CodigoCadastro: "1484"
-      // },
-      isPaginacao: false,
-      page: page,
-      pageSize: pageSize
-    }
+    var filtro: typesAluno.IAlunoInput = new typesAluno.IAlunoInput();
+    filtro.isPaginacao = false;
+    filtro.page = page;
+    filtro.pageSize = pageSize;
 
     return filtro;
   }

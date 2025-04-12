@@ -73,17 +73,6 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     await this.carregarTurmasAtiva();
     this.preencheFormulario();
     //this.handleConditionalFields();
-
-    if (await this.mensagemService.confirm('Atenção', 'Deseja prosseguir com esta operação?')) {
-      this.mensagemService.showSuccess(`apertou: 'Confirmou'`);
-      return;
-    }
-    else {
-      this.mensagemService.showInfo(`apertou: 'Cancelou'`);
-      return;
-    }
-    this.mensagemService.showError(`Foi para o retorno final.`);
-    return;
   }
 
   override carregaFormGroup() {
@@ -306,7 +295,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
 
     const valoresForm = this.formulario.getRawValue();
-    var filtro: criancasTypes.CriancaModel = valoresForm;
+    var filtro: criancasTypes.IAlunoEntity = valoresForm;
     filtro.dataCadastro = utils.obterDataHoraBrasileira();
     filtro.dataAtualizacao = utils.obterDataHoraBrasileira();
     filtro.codigoUsuarioLogado = 0;

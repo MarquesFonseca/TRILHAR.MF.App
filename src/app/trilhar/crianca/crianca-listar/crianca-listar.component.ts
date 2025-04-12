@@ -33,32 +33,32 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   searchText: string = ''; // Variável para armazenar o texto da pesquisa
   displayedColumns: string[] = [
     //'select',
-    //'Codigo',
-    'CodigoCadastro',
-    'NomeCrianca',
-    'DataNascimento',
-    'NomeMae',
-    'NomePai',
-    'OutroResponsavel',
-    'Telefone',
-    //'EnderecoEmail',
-    'Alergia',
-    'DescricaoAlergia',
-    'RestricaoAlimentar',
-    'DescricaoRestricaoAlimentar',
-    'DeficienciaOuSituacaoAtipica',
-    'DescricaoDeficiencia',
-    //'Batizado',
-    //'DataBatizado',
-    //'IgrejaBatizado',
-    'Ativo',
-    //'CodigoUsuarioLogado',
-    'DataAtualizacao',
-    'DataCadastro',
-    'Action',
+    //'codigo',
+    'codigoCadastro',
+    'nomeCrianca',
+    'dataNascimento',
+    'nomeMae',
+    'nomePai',
+    'outroResponsavel',
+    'telefone',
+    //'enderecoEmail',
+    'alergia',
+    'descricaoAlergia',
+    'restricaoAlimentar',
+    'descricaoRestricaoAlimentar',
+    'deficienciaOuSituacaoAtipica',
+    'descricaoDeficiencia',
+    //'batizado',
+    //'dataBatizado',
+    //'igrejaBatizado',
+    'ativo',
+    //'codigoUsuarioLogado',
+    'dataAtualizacao',
+    'dataCadastro',
+    'acoes',
   ];
-  dataSource = new MatTableDataSource<types.CriancaView>([]);
-  selection = new SelectionModel<types.CriancaView>(true, []);
+  dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
+  selection = new SelectionModel<types.IAlunoOutput>(true, []);
 
   //dataSource = new MatTableDataSource<any>();
   totalItems = 0;
@@ -111,16 +111,10 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   }
 
   montaFiltro(page: number, pageSize: number) {
-    var filtro = {
-      //condicao: "Ativo = @Ativo",
-      // parametros: {
-      //   Ativo: true,
-      //   CodigoCadastro: "1484"
-      // },
-      isPaginacao: true,
-      page: page,
-      pageSize: pageSize
-    }
+    var filtro: types.IAlunoInput = new types.IAlunoInput();
+    filtro.isPaginacao = true;
+    filtro.page = page;
+    filtro.pageSize = pageSize;
 
     return filtro;
   }
@@ -132,46 +126,24 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.dataSource = new MatTableDataSource<types.CriancaView>([]);
-    this.selection = new SelectionModel<types.CriancaView>(true, []);
+    this.dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
+    this.selection = new SelectionModel<types.IAlunoOutput>(true, []);
   }
 
-  async carregarAlunos(filtro: any) {
+  async carregarAlunos(filtro: types.IAlunoInput): Promise<void> {
   var res = await this.criancaService.listarPorFiltroPromise(filtro);
   if (res?.dados) {
-    //console.log(res);
     this.totalItems = res.totalItens;
-    const alunosView: types.CriancaView[] = res.dados.map((aluno: any) => ({
-      Codigo: aluno.codigo.toString(),
-      CodigoCadastro: aluno.codigoCadastro,
-      NomeCrianca: aluno.nomeCrianca,
-      DataNascimento: aluno.dataNascimento,
-      NomeMae: aluno.nomeMae,
-      NomePai: aluno.nomePai,
-      OutroResponsavel: aluno.outroResponsavel,
-      Telefone: aluno.telefone,
-      EnderecoEmail: aluno.enderecoEmail,
-      Alergia: aluno.alergia,
-      DescricaoAlergia: aluno.descricaoAlergia,
-      RestricaoAlimentar: aluno.restricaoAlimentar,
-      DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-      DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-      DescricaoDeficiencia: aluno.descricaoDeficiencia,
-      Batizado: aluno.batizado,
-      DataBatizado: aluno.dataBatizado,
-      IgrejaBatizado: aluno.igrejaBatizado,
-      Ativo: aluno.ativo,
-      CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-      DataAtualizacao: aluno.dataAtualizacao,
-      DataCadastro: aluno.dataCadastro,
-      // Adicionando a propriedade 'Action' para que o AlunoView fique completo
+    var alunoOutput: types.IAlunoOutput[] = res.dados;
+    alunoOutput = alunoOutput.map(aluno => ({
+      ...aluno,
       Action: {
           view: 'visibility',
           edit: 'edit',
           delete: 'delete',
       },
     }));
-    this.dataSource = new MatTableDataSource<types.CriancaView>(alunosView);
+    this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
     }
   }
 
@@ -179,41 +151,17 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     var alunos = await this.criancaService.listarTodosPromise();
 
     if(alunos.length > 0)  {
-      // Mapeando AlunoModel para AlunoView
-      const alunosView: types.CriancaView[] = alunos.map((aluno: any) => ({
-        Codigo: aluno.codigo.toString(),
-        CodigoCadastro: aluno.codigoCadastro,
-        NomeCrianca: aluno.nomeCrianca,
-        DataNascimento: aluno.dataNascimento,
-        NomeMae: aluno.nomeMae,
-        NomePai: aluno.nomePai,
-        OutroResponsavel: aluno.outroResponsavel,
-        Telefone: aluno.telefone,
-        EnderecoEmail: aluno.enderecoEmail,
-        Alergia: aluno.alergia,
-        DescricaoAlergia: aluno.descricaoAlergia,
-        RestricaoAlimentar: aluno.restricaoAlimentar,
-        DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-        DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-        DescricaoDeficiencia: aluno.descricaoDeficiencia,
-        Batizado: aluno.batizado,
-        DataBatizado: aluno.dataBatizado,
-        IgrejaBatizado: aluno.igrejaBatizado,
-        Ativo: aluno.ativo,
-        CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-        DataAtualizacao: aluno.dataAtualizacao,
-        DataCadastro: aluno.dataCadastro,
-        // Adicionando a propriedade 'Action' para que o AlunoView fique completo
+      this.totalItems = alunos.totalItens;
+    var alunoOutput: types.IAlunoOutput[] = alunos.dados;
+    alunoOutput = alunoOutput.map(aluno => ({
+      ...aluno,
         Action: {
           view: 'visibility',
           edit: 'edit',
           delete: 'delete',
         },
-      }));
-
-      var ll = alunosView.filter(x => x.CodigoCadastro.toString() == '2239')
-
-      this.dataSource = new MatTableDataSource<types.CriancaView>(alunosView); // Definindo os dados mapeados
+    }));
+    this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
     }
   }
 
@@ -238,12 +186,12 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   }
 
   /** O rótulo da caixa de seleção na linha passada */
-  checkboxLabel(row?: types.CriancaView): string {
+  checkboxLabel(row?: types.IAlunoOutput): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.NomeCrianca + 1
+      row.nomeCrianca + 1
     }`;
   }
 
@@ -252,17 +200,12 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   async applyFilter() {
     //this.dataSource.filter = this.searchText.trim().toLowerCase();
 
-
     if(this.searchText) {
-      var filtro = {
-        condicao: "CodigoCadastro = @CodigoCadastro",
-        parametros: {
-          CodigoCadastro: this.searchText.trim()
-        },
-        isPaginacao: true,
-        page: this.page = 1,
-        pageSize: this.pageSize = 10,
-      }
+      var filtro: types.IAlunoInput = new types.IAlunoInput();
+      filtro.codigoCadastro = this.searchText.trim();
+      filtro.isPaginacao = true;
+      filtro.page = this.page = 1;
+      filtro.pageSize = this.pageSize = 10;
       await this.carregarAlunos(filtro);
     }
     else {
@@ -270,126 +213,5 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
       await this.carregarAlunos(filtros);
     }
 
-
-
   }
 }
-
-const ELEMENT_DATA: types.CriancaView[] = [
-  {
-    Codigo: '1',
-    CodigoCadastro: '11111',
-    NomeCrianca: 'ttttt',
-    DataNascimento: 'ttttt',
-    NomeMae: 'ttttt',
-    NomePai: 'ttttt',
-    OutroResponsavel: 'ttttt',
-    Telefone: 'ttttt',
-    EnderecoEmail: 'ttttt',
-    Alergia: true,
-    DescricaoAlergia: 'ttttt',
-    RestricaoAlimentar: true,
-    DescricaoRestricaoAlimentar: 'ttttt',
-    DeficienciaOuSituacaoAtipica: true,
-    DescricaoDeficiencia: 'ttttt',
-    Batizado: true,
-    DataBatizado: '6',
-    IgrejaBatizado: 'ttttt',
-    Ativo: true,
-    CodigoUsuarioLogado: 'ttttt',
-    DataAtualizacao: 'ttttt',
-    DataCadastro: 'ttttt',
-    Action: {
-      view: 'visibility',
-      edit: 'edit',
-      delete: 'delete',
-    },
-  },
-  {
-    Codigo: '2',
-    CodigoCadastro: '22222',
-    NomeCrianca: 'ttttt',
-    DataNascimento: 'ttttt',
-    NomeMae: 'ttttt',
-    NomePai: 'ttttt',
-    OutroResponsavel: 'ttttt',
-    Telefone: 'ttttt',
-    EnderecoEmail: 'ttttt',
-    Alergia: false,
-    DescricaoAlergia: 'ttttt',
-    RestricaoAlimentar: true,
-    DescricaoRestricaoAlimentar: 'ttttt',
-    DeficienciaOuSituacaoAtipica: true,
-    DescricaoDeficiencia: 'ttttt',
-    Batizado: true,
-    DataBatizado: 'ttttt',
-    IgrejaBatizado: 'ttttt',
-    Ativo: true,
-    CodigoUsuarioLogado: 'ttttt',
-    DataAtualizacao: 'ttttt',
-    DataCadastro: 'ttttt',
-    Action: {
-      view: 'visibility',
-      edit: 'edit',
-      delete: 'delete',
-    },
-  },
-  {
-    Codigo: '3',
-    CodigoCadastro: '33333',
-    NomeCrianca: 'ttttt',
-    DataNascimento: 'ttttt',
-    NomeMae: 'ttttt',
-    NomePai: 'ttttt',
-    OutroResponsavel: 'ttttt',
-    Telefone: 'ttttt',
-    EnderecoEmail: 'ttttt',
-    Alergia: true,
-    DescricaoAlergia: 'ttttt',
-    RestricaoAlimentar: true,
-    DescricaoRestricaoAlimentar: 'ttttt',
-    DeficienciaOuSituacaoAtipica: true,
-    DescricaoDeficiencia: 'ttttt',
-    Batizado: true,
-    DataBatizado: 'ttttt',
-    IgrejaBatizado: 'ttttt',
-    Ativo: true,
-    CodigoUsuarioLogado: 'ttttt',
-    DataAtualizacao: 'ttttt',
-    DataCadastro: 'ttttt',
-    Action: {
-      view: 'visibility',
-      edit: 'edit',
-      delete: 'delete',
-    },
-  },
-  {
-    Codigo: '4',
-    CodigoCadastro: '4444',
-    NomeCrianca: 'ttttt',
-    DataNascimento: 'ttttt',
-    NomeMae: 'ttttt',
-    NomePai: 'ttttt',
-    OutroResponsavel: 'ttttt',
-    Telefone: 'ttttt',
-    EnderecoEmail: 'ttttt',
-    Alergia: true,
-    DescricaoAlergia: 'ttttt',
-    RestricaoAlimentar: true,
-    DescricaoRestricaoAlimentar: 'ttttt',
-    DeficienciaOuSituacaoAtipica: true,
-    DescricaoDeficiencia: 'ttttt',
-    Batizado: true,
-    DataBatizado: 'ttttt',
-    IgrejaBatizado: 'ttttt',
-    Ativo: true,
-    CodigoUsuarioLogado: 'ttttt',
-    DataAtualizacao: 'ttttt',
-    DataCadastro: 'ttttt',
-    Action: {
-      view: 'visibility',
-      edit: 'edit',
-      delete: 'delete',
-    },
-  },
-];

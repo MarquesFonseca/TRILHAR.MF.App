@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { finalize, firstValueFrom, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-import * as types from './turma.types';
 import { LoadingService } from '../../services/loading.service';
+import { MensagemService } from '../../services/mensagem.service';
+import * as types from './turma.types';
 
 @Injectable({
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
@@ -14,7 +14,8 @@ export class TurmaService {
 
   constructor(
     private http: HttpClient,
-    private loadingService: LoadingService
+    private loadingService: LoadingService,
+    private mensagemService: MensagemService,
   ) {}
 
   listarTodos(): Observable<any[]> {
@@ -60,6 +61,20 @@ export class TurmaService {
                 callback(null); // Invoca o callback com `null` para indicar erro
             }
         }
+    });
+  }
+
+  Incluir(Entity: any, callback?: any) {
+    this.http.post(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
+      this.mensagemService.showSuccess('Registro incluído com sucesso!');
+      callback(resp);
+    });
+  }
+
+  Alterar(Entity: any, Id: any, callback?: any) {
+    this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
+      this.mensagemService.showSuccess('Registro alterado com sucesso!');
+      callback(resp);
     });
   }
 }
