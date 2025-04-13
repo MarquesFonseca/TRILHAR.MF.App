@@ -26,6 +26,7 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() formGroup!: FormGroup;
   @Input() field: string = '';
   @Input() label: string = 'Selecione...';
+  @Input() readonly: boolean = false;
   @Input() disabled: boolean = false;
   @Input() itens: any[] = [];
   @Input() propriedadeMostrar: string = 'nome';

@@ -31,6 +31,7 @@ export class CalendarioComponent implements OnInit {
   @Input() formGroup = new FormGroup('');
   @Input() field: string = '';
   @Input() label: string = 'Selecione uma data';
+  @Input() readonly: boolean = false;
   @Input() disabled: boolean = false;
   @Input('maxDate') maxDate = new Date('9999-12-31');
   @Input('minDate') minDate = new Date('1900-01-01');

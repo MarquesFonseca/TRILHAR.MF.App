@@ -242,48 +242,48 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
         this.formulario.get('codigo')?.setValue(resp.dados.codigo);
         this.formulario.get('codigoCadastro')?.setValue(resp.dados.codigoCadastro);
         this.formulario.get('nomeCrianca')?.setValue(resp.dados.nomeCrianca);
-        if (this.operacao.disabled) { this.formulario.controls["nomeCrianca"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["nomeCrianca"].disable(); }
         this.formulario.get('dataNascimento')?.setValue(resp.dados.dataNascimento);
-        if (this.operacao.disabled) { this.formulario.controls["dataNascimento"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["dataNascimento"].disable(); }
         const dataNascimentoRetornada = utils.converterParaDataOutput(resp.dados.dataNascimento);
         this.onDataNascimentoSelecionada(dataNascimentoRetornada);
-        if (this.operacao.disabled) { this.formulario.controls["turmaMatricula"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["turmaMatricula"].disable(); }
         this.formulario.get('nomeMae')?.setValue(resp.dados.nomeMae);
-        if (this.operacao.disabled) { this.formulario.controls["nomeMae"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["nomeMae"].disable(); }
         this.formulario.get('nomePai')?.setValue(resp.dados.nomePai);
-        if (this.operacao.disabled) { this.formulario.controls["nomePai"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["nomePai"].disable(); }
         this.formulario.get('outroResponsavel')?.setValue(resp.dados.outroResponsavel);
-        if (this.operacao.disabled) { this.formulario.controls["outroResponsavel"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["outroResponsavel"].disable(); }
         this.formulario.get('telefone')?.setValue(resp.dados.telefone);
-        if (this.operacao.disabled) { this.formulario.controls["telefone"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["telefone"].disable(); }
         this.formulario.get('enderecoEmail')?.setValue(resp.dados.enderecoEmail);
-        if (this.operacao.disabled) { this.formulario.controls["enderecoEmail"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["enderecoEmail"].disable(); }
         this.formulario.get('alergia')?.setValue(resp.dados.alergia);
         if (this.operacao.disabled) { this.formulario.controls["alergia"].disable(); }
         this.formulario.get('descricaoAlergia')?.setValue(resp.dados.descricaoAlergia);
-        if (this.operacao.disabled) { this.formulario.controls["descricaoAlergia"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["descricaoAlergia"].disable(); }
         this.formulario.get('restricaoAlimentar')?.setValue(resp.dados.restricaoAlimentar);
         if (this.operacao.disabled) { this.formulario.controls["restricaoAlimentar"].disable(); }
         this.formulario.get('descricaoRestricaoAlimentar')?.setValue(resp.dados.descricaoRestricaoAlimentar);
-        if (this.operacao.disabled) { this.formulario.controls["descricaoRestricaoAlimentar"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["descricaoRestricaoAlimentar"].disable(); }
         this.formulario.get('deficienciaOuSituacaoAtipica')?.setValue(resp.dados.deficienciaOuSituacaoAtipica);
         if (this.operacao.disabled) { this.formulario.controls["deficienciaOuSituacaoAtipica"].disable(); }
         this.formulario.get('descricaoDeficiencia')?.setValue(resp.dados.descricaoDeficiencia);
-        if (this.operacao.disabled) { this.formulario.controls["descricaoDeficiencia"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["descricaoDeficiencia"].disable(); }
         this.formulario.get('batizado')?.setValue(resp.dados.batizado);
         if (this.operacao.disabled) { this.formulario.controls["batizado"].disable(); }
         this.formulario.get('dataBatizado')?.setValue(resp.dados.dataBatizado);
-        if (this.operacao.disabled) { this.formulario.controls["dataBatizado"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["dataBatizado"].disable(); }
         this.formulario.get('igrejaBatizado')?.setValue(resp.dados.igrejaBatizado);
-        if (this.operacao.disabled) { this.formulario.controls["igrejaBatizado"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["igrejaBatizado"].disable(); }
         this.formulario.get('ativo')?.setValue(resp.dados.ativo);
         if (this.operacao.disabled) { this.formulario.controls["ativo"].disable(); }
         this.formulario.get('codigoUsuarioLogado')?.setValue(resp.dados.codigoUsuarioLogado);
-        if (this.operacao.disabled) { this.formulario.controls["codigoUsuarioLogado"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["codigoUsuarioLogado"].disable(); }
         this.formulario.get('dataAtualizacao')?.setValue(resp.dados.dataAtualizacao);
-        if (this.operacao.disabled) { this.formulario.controls["dataAtualizacao"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["dataAtualizacao"].disable(); }
         this.formulario.get('dataCadastro')?.setValue(resp.dados.dataCadastro);
-        if (this.operacao.disabled) { this.formulario.controls["dataCadastro"].disable(); }
+        //if (this.operacao.disabled) { this.formulario.controls["dataCadastro"].disable(); }
       });
     }
 

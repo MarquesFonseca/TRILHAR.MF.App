@@ -41,28 +41,45 @@
         <mat-card-content>
             <div class="row">
 
-                <!-- Nome da Criança -->
-                <div class="col-sm-12">
+                <!-- Código Cadastro -->
+                <div class="col-sm-3" *ngIf="operacao.isDetalhar || operacao.isEditar">
+                <!-- <div class="col-sm-2"> -->
                     <mat-form-field class="mb-25">
-                        <mat-label>Nome da Criança</mat-label>
-                        <input matInput formControlName="nomeCrianca" placeholder="Nome da criança">
+                        <mat-label>Código Cadastro</mat-label>
+                        <input matInput formControlName="codigoCadastro" [readonly]="operacao.disabled" placeholder="Código Cadastro">
                         <app-mensagem-erro ngSkipHydration
-                          [control]="formulario.get('nomeCrianca')"
-                          [field]="'nomeCrianca'">
+                          [control]="formulario.get('codigoCadastro')"
+                          [field]="'codigoCadastro'">
                         </app-mensagem-erro>
                       </mat-form-field>
-                    <!-- <pre>{{formulario.get('nomeCrianca')?.errors | json}}</pre> -->
+                    <!-- <pre>{{formulario.get('codigoCadastro')?.errors | json}}</pre> -->
                 </div>
 
+                <!-- Nome da Criança -->
+                <div [ngClass]="{
+                  'col-sm-12': operacao.isNovo,
+                  'col-sm-9': operacao.isDetalhar || operacao.isEditar }">
+                  <mat-form-field class="mb-25">
+                      <mat-label>Nome da Criança</mat-label>
+                      <input matInput formControlName="nomeCrianca" [readonly]="operacao.disabled" placeholder="Nome da criança">
+                      <app-mensagem-erro ngSkipHydration
+                        [control]="formulario.get('nomeCrianca')"
+                        [field]="'nomeCrianca'">
+                      </app-mensagem-erro>
+                    </mat-form-field>
+                  <!-- <pre>{{formulario.get('nomeCrianca')?.errors | json}}</pre> -->
+              </div>
+
                 <!-- Data de Nascimento -->
-                <div class="col-md-4">
+                <div class="col-md-3">
                   <div class="mb-25">
                     <app-calendario ngSkipHydration
                       [formGroup]="formulario"
                       [field]="'dataNascimento'"
                       [label]="'Data de Nascimento'"
                       [maxDate]="maxData"
-                      (itemSelecionado)="onDataNascimentoSelecionada($event)">
+                      (itemSelecionado)="onDataNascimentoSelecionada($event)"
+                      [readonly]="operacao.disabled">
                     </app-calendario>
                     <app-mensagem-erro ngSkipHydration
                       [control]="formulario.get('dataNascimento')"
@@ -72,7 +89,8 @@
                 </div>
 
                 <!-- Idade da criança -->
-                <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                <!-- <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12"> -->
+                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
                   <!-- <mat-card>
                     <mat-card-content class="fw-medium">{{formulario.get('idadeCrianca')?.value}}</mat-card-content>
                   </mat-card> -->
@@ -102,7 +120,8 @@
                       [propriedadeMostrar]="'descricaoAnoSemestreLetivo'"
                       [label]="'Turma matriculada'"
                       [valorInicial]="turmaSelecionado"
-                      (itemSelecionado)="onTurmaSelecionado($event)">
+                      (itemSelecionado)="onTurmaSelecionado($event)"
+                      [readonly]="operacao.disabled">
                     </app-auto-complete>
                     <app-mensagem-erro ngSkipHydration
                       [control]="formulario.get('turmaMatricula')"

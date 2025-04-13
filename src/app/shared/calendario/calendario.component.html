@@ -1,12 +1,13 @@
-<mat-form-field class="w-100">
+<mat-form-field class="w-100" appearance="fill">
   <mat-label>{{ label }}</mat-label>
   <input matInput
   [matDatepicker]="picker"
   [formControl]="controle"
   (dateChange)="onSelecionar($event)"
   [min]="minDate"
-  [max]="maxDate">
+  [max]="maxDate"
+  [readonly]="readonly">
   <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
-  <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="disabled"></mat-datepicker-toggle>
+  <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="disabled || readonly"></mat-datepicker-toggle>
   <mat-datepicker #picker></mat-datepicker>
 </mat-form-field>

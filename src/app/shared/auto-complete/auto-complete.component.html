@@ -7,7 +7,7 @@
     [formControl]="controle"
     [placeholder]="placeholder"
     [matAutocomplete]="auto"
-  >
+    [readonly]="readonly">
   <mat-autocomplete #auto="matAutocomplete" [displayWith]="mostrarTexto" (optionSelected)="selecionarItem($event)">
     <mat-option *ngFor="let item of itensFiltrados | async" [value]="item">
       {{ mostrarTexto(item) }}
