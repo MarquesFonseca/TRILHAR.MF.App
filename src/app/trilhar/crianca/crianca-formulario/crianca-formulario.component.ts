@@ -63,14 +63,15 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     super(router, activatedRoute);
   }
 
-  override async ngOnInit(): Promise<void> {
+  override ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
     this.maxData = utils.obterDataHoraBrasileira();
     if (this.operacao.isEditar || this.operacao.isDetalhar) {
       this.id = this.activatedRoute.snapshot.params['id'];
     }
     this.carregaFormGroup();
-    await this.carregarTurmasAtiva();
+    // await this.carregarTurmasAtiva();
+    this.carregarTurmasAtiva();
     this.preencheFormulario();
     if (this.operacao.isNovo || this.operacao.isEditar) this.handleConditionalFields();
   }
@@ -434,13 +435,21 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
   }
 
-  async carregarTurmasAtiva() {
-    try {
-      const turmas = await this.turmaService.listarTurmasAtivasPromise();
-      this.turmas = turmas?.dados ?? [];
-    } catch (err) {
-      console.error('Erro ao carregar turmas', err);
-    }
+  // async carregarTurmasAtiva() {
+  //   try {
+  //     const turmas = await this.turmaService.listarTurmasAtivasPromise();
+  //     this.turmas = turmas?.dados ?? [];
+  //   } catch (err) {
+  //     console.error('Erro ao carregar turmas', err);
+  //   }
+  // }
+
+  carregarTurmasAtiva() {
+    this.turmaService.ListarTurmasAtivas().subscribe((res: any) => {
+      if (res) {
+        this.turmas = res?.dados ?? [];
+      }
+    });
   }
 
   public retornaTurmaSugerida(dataNascimento: Date, listaTurmas: any[]): any | null {
