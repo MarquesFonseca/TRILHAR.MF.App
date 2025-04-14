@@ -72,7 +72,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     this.carregaFormGroup();
     await this.carregarTurmasAtiva();
     this.preencheFormulario();
-    //this.handleConditionalFields();
+    if (this.operacao.isNovo || this.operacao.isEditar) this.handleConditionalFields();
   }
 
   override carregaFormGroup() {
@@ -284,6 +284,23 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
         //if (this.operacao.disabled) { this.formulario.controls["dataAtualizacao"].disable(); }
         this.formulario.get('dataCadastro')?.setValue(resp.dados.dataCadastro);
         //if (this.operacao.disabled) { this.formulario.controls["dataCadastro"].disable(); }
+
+        this.matriculaService.listarPorCodigoAluno(resp.dados.codigo).subscribe((res: any) => {
+          if (res) {
+            const matriculaAluno = res.dados.find((m: any) => m.ativo === true);
+            if (matriculaAluno) {
+              const turmaMatricula = this.turmas.find((t: any) => t.codigo === matriculaAluno.codigoTurma);
+              if (turmaMatricula) {
+                this.childAutoCompleteComponent.limpar();
+                this.turmaSelecionado = turmaMatricula;
+                this.formulario.get('turmaMatricula')?.setValue(turmaMatricula, { emitEvent: false });
+                this.childAutoCompleteComponent.ngAfterViewInit();
+                this.cdr.detectChanges();
+              }
+            }
+
+          }
+        });
       });
     }
 
@@ -327,8 +344,9 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     if (this.operacao.isEditar) {
       this.criancaService.Alterar(filtro, (res: any) => {
         if (res) {
-          const codigoAluno = res.dados;
+          const codigoAluno = filtro.codigo;
           const { turmaMatricula } = this.formulario.value;
+
           var filtroMatricula = {
             "codigo": 0,
             "codigoAluno": codigoAluno,
@@ -338,6 +356,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
             "dataAtualizacao": utils.obterDataHoraBrasileira(),
             "dataCadastro": utils.obterDataHoraBrasileira()
           }
+
           this.matriculaService.Alterar(filtroMatricula, (res: any) => {
             if (res) {
               var url = `criancas/detalhar/${codigoAluno}`;

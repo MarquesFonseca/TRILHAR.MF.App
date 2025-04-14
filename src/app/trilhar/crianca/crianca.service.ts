@@ -132,8 +132,8 @@ export class CriancaService {
     });
   }
 
-  Alterar(Entity: types.IAlunoEntity, Id: any, callback?: any) {
-    this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
+  Alterar(Entity: types.IAlunoEntity, callback?: any) {
+    this.http.put(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
       this.mensagemService.showSuccess('Registro alterado com sucesso!');
       callback(resp);
     });
