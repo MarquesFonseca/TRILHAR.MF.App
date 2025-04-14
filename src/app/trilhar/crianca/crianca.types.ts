@@ -23,7 +23,7 @@ export interface IAlunoEntity {
   dataCadastro: Date | null; // Pode ser string ou Date
 }
 
-export class IAlunoInput implements IAlunoEntity {
+export class IAlunoInput {
   codigo: number = 0;
   codigoCadastro: string = '';
   nomeCrianca: string = '';
@@ -33,16 +33,16 @@ export class IAlunoInput implements IAlunoEntity {
   outroResponsavel: string = '';
   telefone: string = '';
   enderecoEmail: string | null = null;
-  alergia: boolean = false;
+  alergia?: boolean | null;
   descricaoAlergia: string | null = '';
-  restricaoAlimentar: boolean = false;
+  restricaoAlimentar?: boolean | null;
   descricaoRestricaoAlimentar: string | null = '';
-  deficienciaOuSituacaoAtipica: boolean = false;
+  deficienciaOuSituacaoAtipica?: boolean | null;
   descricaoDeficiencia: string | null = '';
-  batizado: boolean = false;
+  batizado?: boolean | null;
   dataBatizado: Date | null = null;
   igrejaBatizado: string | null = '';
-  ativo: boolean = true; // Definido como true por padrão
+  ativo?: boolean | null;
   codigoUsuarioLogado: number | null = 0; // Pode ser nulo
   dataAtualizacao: Date | null = null; // Pode ser nulo
   dataCadastro: Date | null = null; // Data atual por padrão
@@ -60,7 +60,7 @@ export class IAlunoInput implements IAlunoEntity {
   isPaginacao: boolean = true;
 }
 
-export class IAlunoOutput implements IAlunoEntity {
+export class IAlunoOutput {
   codigo: number = 0;
   codigoCadastro: string = '';
   nomeCrianca: string = '';
@@ -70,19 +70,19 @@ export class IAlunoOutput implements IAlunoEntity {
   outroResponsavel: string = '';
   telefone: string = '';
   enderecoEmail: string | null = null;
-  alergia: boolean = false;
+  alergia: boolean | null = null;
   descricaoAlergia: string | null = '';
-  restricaoAlimentar: boolean = false;
+  restricaoAlimentar: boolean | null = null;
   descricaoRestricaoAlimentar: string | null = '';
-  deficienciaOuSituacaoAtipica: boolean = false;
+  deficienciaOuSituacaoAtipica: boolean | null = null;
   descricaoDeficiencia: string | null = '';
-  batizado: boolean = false;
+  batizado: boolean | null = null;
   dataBatizado: Date | null = null;
   igrejaBatizado: string | null = '';
-  ativo: boolean = true; // Definido como true por padrão
+  ativo: boolean | null = null;
   codigoUsuarioLogado: number | null = 0; // Pode ser nulo
-  dataAtualizacao: Date | null = new Date(); // Pode ser nulo
-  dataCadastro: Date | null = new Date(); // Data atual por padrão
+  dataAtualizacao: Date | null = null;
+  dataCadastro: Date | null = null;
 
   Action: any;
 }

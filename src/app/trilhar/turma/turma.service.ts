@@ -25,12 +25,12 @@ export class TurmaService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  // ListarTurmasAtivas(): Observable<any> {
-  //   this.loadingService.show();
-  //   return this.http
-  //     .get(`${this.apiUrl}/ListarTurmasAtivas`)
-  //     .pipe(finalize(() => this.loadingService.hide()));
-  // }
+  ListarTurmasAtivas(): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get(`${this.apiUrl}/ListarTurmasAtivas`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
 
   async listarTurmasAtivasPromise(): Promise<any> {
     this.loadingService.show();
