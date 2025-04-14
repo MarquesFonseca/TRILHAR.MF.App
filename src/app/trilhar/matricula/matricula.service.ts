@@ -18,6 +18,75 @@ export class MatriculaService {
     private mensagemService: MensagemService,
   ) {}
 
+  listarPorCodigoAlunoCodigoTurma(codigoAluno: string, codigoTurma: string): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get(`${this.apiUrl}/listarPorCodigoAlunoCodigoTurma/${codigoAluno}/${codigoTurma}`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  async listarPorCodigoAlunoCodigoTurmaPromise(codigoAluno: string, codigoTurma: string): Promise<any> {
+    this.loadingService.show(); // Exibe o indicador de carregamento
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any>(`${this.apiUrl}/listarPorCodigoAlunoCodigoTurma/${codigoAluno}/${codigoTurma}`)
+      );
+      return response; // Retorna a resposta da API
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao buscar por ID', error);
+      console.error('Erro ao buscar por ID:', error);
+      throw error; // Propaga o erro
+    } finally {
+      this.loadingService.hide(); // Oculta o indicador de carregamento
+    }
+  }
+
+  listarPorCodigoAluno(codigoAluno: string): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get(`${this.apiUrl}/listarPorCodigoAluno/${codigoAluno}`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  async listarPorCodigoAlunoPromise(codigoAluno: string): Promise<any> {
+    this.loadingService.show(); // Exibe o indicador de carregamento
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any>(`${this.apiUrl}/listarPorCodigoAluno/${codigoAluno}`)
+      );
+      return response; // Retorna a resposta da API
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao buscar por ID', error);
+      console.error('Erro ao buscar por ID:', error);
+      throw error; // Propaga o erro
+    } finally {
+      this.loadingService.hide(); // Oculta o indicador de carregamento
+    }
+  }
+
+  listarPorCodigoTurma(codigoTurma: string): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get(`${this.apiUrl}/listarPorCodigoTurma/${codigoTurma}`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  async listarPorCodigoTurmaPromise(codigoTurma: string): Promise<any> {
+    this.loadingService.show(); // Exibe o indicador de carregamento
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any>(`${this.apiUrl}/listarPorCodigoTurma/${codigoTurma}`)
+      );
+      return response; // Retorna a resposta da API
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao buscar por ID', error);
+      console.error('Erro ao buscar por ID:', error);
+      throw error; // Propaga o erro
+    } finally {
+      this.loadingService.hide(); // Oculta o indicador de carregamento
+    }
+  }
+
   listarTodos(): Observable<any[]> {
     this.loadingService.show();
     return this.http
@@ -56,10 +125,11 @@ export class MatriculaService {
     });
   }
 
-  Alterar(Entity: any, Id: any, callback?: any) {
-    this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
+  Alterar(Entity: any, callback?: any) {
+    this.http.put(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
       this.mensagemService.showSuccess('Registro alterado com sucesso!');
       callback(resp);
     });
   }
+
 }

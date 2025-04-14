@@ -46,7 +46,7 @@
                 <!-- <div class="col-sm-2"> -->
                     <mat-form-field class="mb-25">
                         <mat-label>Código Cadastro</mat-label>
-                        <input matInput formControlName="codigoCadastro" [readonly]="operacao.disabled" placeholder="Código Cadastro">
+                        <input matInput formControlName="codigoCadastro" [readonly]="true" placeholder="Código Cadastro">
                         <app-mensagem-erro ngSkipHydration
                           [control]="formulario.get('codigoCadastro')"
                           [field]="'codigoCadastro'">
