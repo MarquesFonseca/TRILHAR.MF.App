@@ -106,7 +106,13 @@ export class CalendarioComponent implements OnInit {
     }
   }
 
-  converterDataStringParaDate(dataStr: string): Date | null {
+  converterDataStringParaDate(dataStr: string | Date): Date | null {
+    // Se já for uma data, retorna ela mesma
+    if (dataStr instanceof Date) {
+        return dataStr;
+    }
+
+    // Se não for data, tenta converter de string
     if (!dataStr) return null;
 
     const partes = dataStr.split('/');
@@ -117,7 +123,7 @@ export class CalendarioComponent implements OnInit {
 
     // JavaScript usa mês de 0 a 11
     return new Date(ano, mes - 1, dia);
-  }
+}
 
   ngOnDestroy() {
     this.destroy$.next();
