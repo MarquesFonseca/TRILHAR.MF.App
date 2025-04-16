@@ -30,15 +30,16 @@ jobs:
     # ATUALIZAÇÃO 1: Adiciona base-href e gera .htaccess automaticamente
     - name: Construíndo em produção com npm rum build
       run: |
-        npm run build -- --base-href /trilhar/
-        echo "<IfModule mod_rewrite.c>
-          RewriteEngine On
-          RewriteBase /trilhar/
-          RewriteRule ^index\.html$ - [L]
-          RewriteCond %{REQUEST_FILENAME} !-f
-          RewriteCond %{REQUEST_FILENAME} !-d
-          RewriteRule . /trilhar/index.html [L]
-        </IfModule>" > dist/trilhar/browser/.htaccess
+		npm run build -- --base-href /trilhar/
+		mkdir -p dist/trilhar/browser/  # Garante que a pasta existe
+		echo "<IfModule mod_rewrite.c>
+		  RewriteEngine On
+		  RewriteBase /trilhar/
+		  RewriteRule ^index\.html$ - [L]
+		  RewriteCond %{REQUEST_FILENAME} !-f
+		  RewriteCond %{REQUEST_FILENAME} !-d
+		  RewriteRule . /trilhar/index.html [L]
+		</IfModule>" > dist/trilhar/browser/.htacces
     
     - name: Subindo artefatos para serem usados no próximo fluxo
       if: success()
@@ -62,8 +63,8 @@ jobs:
     # ATUALIZAÇÃO 2: Verifica se os arquivos foram gerados corretamente (debug)
     - name: Verificar estrutura de arquivos
       run: |
-        ls -la dist/trilhar/browser/
-        cat dist/trilhar/browser/.htaccess
+		ls -la dist/trilhar/browser/
+		cat dist/trilhar/browser/.htaccess
     
     # ATUALIZAÇÃO 3: Ajusta server-dir conforme estrutura do servidor
     - name: Implantando no servidor FTP
