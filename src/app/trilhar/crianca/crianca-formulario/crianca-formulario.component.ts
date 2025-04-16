@@ -475,4 +475,11 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
     return null;
   }
+
+  getTituloCard(): string {
+    if (this.operacao.isNovo) return 'Nova criança';
+    if (this.operacao.isEditar) return `Cadastro de: ${this.formulario.get('nomeCrianca')?.value}`;
+    if (this.operacao.isDetalhar) return `Detalhes de: ${this.formulario.get('nomeCrianca')?.value}`;
+    return '';
+  }
 }
