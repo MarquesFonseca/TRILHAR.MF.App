@@ -75,7 +75,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/trilhar/browser/
         server-dir: trilhar.iques.com.br/
-						
+        # protocol: ftps
         dangerous-clean-slate: true
         retries: 2   # Tentativas adicionais
         retry-delay: 30  # Atraso entre tentativas em segundos
