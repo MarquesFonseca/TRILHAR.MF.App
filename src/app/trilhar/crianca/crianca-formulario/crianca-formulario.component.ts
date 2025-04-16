@@ -292,10 +292,15 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
             if (matriculaAluno) {
               const turmaMatricula = this.turmas.find((t: any) => t.codigo === matriculaAluno.codigoTurma);
               if (turmaMatricula) {
-                this.childAutoCompleteComponent.limpar();
+                if(this.childAutoCompleteComponent) {
+                  this.childAutoCompleteComponent.limpar();
+
+                }
                 this.turmaSelecionado = turmaMatricula;
                 this.formulario.get('turmaMatricula')?.setValue(turmaMatricula, { emitEvent: false });
-                this.childAutoCompleteComponent.ngAfterViewInit();
+                if(this.childAutoCompleteComponent) {
+                  this.childAutoCompleteComponent.ngAfterViewInit();
+                }
                 this.cdr.detectChanges();
               }
             }
@@ -418,14 +423,18 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
         this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
         turmaMatricula?.setValue(this.turmaSelecionado, { emitEvent: false });
-        this.childAutoCompleteComponent.limpar();
-        this.childAutoCompleteComponent.ngAfterViewInit();
+        if(this.childAutoCompleteComponent) {
+          this.childAutoCompleteComponent.limpar();
+          this.childAutoCompleteComponent.ngAfterViewInit();
+        }
         this.cdr.detectChanges();
       }
       else {
         this.turmaSelecionado = null;//inicia null - resetando o valor
         turmaMatricula?.setValue(null, { emitEvent: false });//inicia null - resetando o valor
-        this.childAutoCompleteComponent.limpar();
+        if(this.childAutoCompleteComponent) {
+          this.childAutoCompleteComponent.limpar();
+        }
         this.cdr.detectChanges();
         this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada!';
       }
