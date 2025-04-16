@@ -54,7 +54,7 @@
               <button mat-button
                       color="primary"
                       class="action-button"
-                      [routerLink]="['/criancas/alterar', formulario.get('codigoCadastro')?.value]"
+                      [routerLink]="'/criancas/alterar/' + formulario.get('codigoCadastro')?.value"
                       routerLinkActive="active"
                       *ngIf="operacao.isDetalhar">
                 <mat-icon>edit</mat-icon>
