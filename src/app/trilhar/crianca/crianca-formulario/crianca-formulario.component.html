@@ -1,7 +1,7 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
   <h5 class="mb-0">
-    {{this.getTitle()}}
+    <!-- {{this.getTitle()}} -->
   </h5>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
       <li class="breadcrumb-item position-relative">
@@ -24,16 +24,54 @@
 
 <form [formGroup]="formulario">
     <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
-        <mat-card-header>
+        <!-- <mat-card-header>
           <mat-card-title>
             <h5 class="mb-0">
-              <!-- Textual Inputs -->
+              {{operacao.isNovo ? 'Nova criança' : operacao.isEditar ? 'Cadastro de: ' + formulario.get('nomeCrianca')?.value : operacao.isDetalhar ? 'Detalhes de: ' + formulario.get('nomeCrianca')?.value : ''}}
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
-            <a mat-button class="add-new-btn" routerLink="/criancas">
+            <a mat-button class="add-new-btn" [routerLink]="['/criancas/alterar', formulario.get('codigoCadastro')?.value]" *ngIf="operacao.isDetalhar">
+              <i class="ri-edit-2-line"></i>
+              Alterar
+            </a>
+            <a mat-button class="add-new-btn" routerLink="/criancas/listar" *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar">
+              <i class="ri-arrow-left-line"></i>
               Listar Crianças
             </a>
+          </mat-card-subtitle>
+        </mat-card-header> -->
+
+        <mat-card-header>
+          <mat-card-title>
+            <h5 class="mb-0">
+              {{ getTituloCard() }}
+            </h5>
+          </mat-card-title>
+          <mat-card-subtitle>
+            <!-- <div class="actions-container"> -->
+              <!-- Botão de Alterar (visível apenas no modo detalhar) -->
+              <button mat-button
+                      color="primary"
+                      class="action-button"
+                      [routerLink]="['/criancas/alterar', formulario.get('codigoCadastro')?.value]"
+                      routerLinkActive="active"
+                      *ngIf="operacao.isDetalhar">
+                <mat-icon>edit</mat-icon>
+                Alterar
+              </button>
+
+              <!-- Botão de Voltar (visível em todos os modos exceto listagem) -->
+              <button mat-button
+                      color="basic"
+                      class="action-button"
+                      routerLink="/criancas/"
+                      routerLinkActive="active"
+                      *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar">
+                <mat-icon>arrow_back</mat-icon>
+                Listar
+              </button>
+            <!-- </div> -->
           </mat-card-subtitle>
         </mat-card-header>
 
@@ -101,7 +139,7 @@
                             <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('idadeCrianca')?.value}}</mat-card-title>
                             <mat-card-subtitle style="margin-left: 10px;">Turma sugerida:</mat-card-subtitle>
                         </mat-card-title-group>
-                        <span style="color: red; font-size: 16px; margin-left: 10px;">{{turmaSugeridaDescricao}}</span>
+                        <span style="color: blue; font-size: 14px; margin-left: 10px;">{{turmaSugeridaDescricao}}</span>
                         <!-- <mat-card-content style="margin-left: 10px;">
                           <span>
                         </span>
@@ -219,7 +257,7 @@
                 <!-- Deficiência ou Situação Atípica -->
                 <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
                     <!-- <mat-checkbox formControlName="deficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-checkbox> -->
-                    <mat-slide-toggle formControlName="deficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="deficienciaOuSituacaoAtipica">Situação Atípica?</mat-slide-toggle>
                     <br />
                     <br />
                   </div>
@@ -227,7 +265,7 @@
                 <!-- Descrição da Deficiência -->
                 <div class="col-sm-8" *ngIf="formulario.get('deficienciaOuSituacaoAtipica')?.value">
                     <mat-form-field class="textarea">
-                        <mat-label>Descrição da Deficiência</mat-label>
+                        <mat-label>Descrição da Atipicidade</mat-label>
                         <input matInput formControlName="descricaoDeficiencia" [readonly]="operacao.disabled" placeholder="Descrição da deficiência">
                         <!-- <textarea matInput formControlName="descricaoDeficiencia"
                             placeholder="Descrição da deficiência"></textarea> -->

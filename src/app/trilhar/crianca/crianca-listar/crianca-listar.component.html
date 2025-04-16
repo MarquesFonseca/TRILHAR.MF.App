@@ -44,9 +44,15 @@
               </form>
         </mat-card-title>
         <mat-card-subtitle>
-            <a mat-button class="add-new-btn" routerLink="/criancas/incluir">
+            <!-- <a mat-button class="add-new-btn" routerLink="/criancas/incluir">
                 + Add Nova Criança
-            </a>
+            </a> -->
+            <!-- Botão de Alterar (visível apenas no modo detalhar) -->
+            <button mat-button color="primary" class="action-button"
+            routerLink="/criancas/incluir" routerLinkActive="active">
+            <i class="material-symbols-outlined">add_circle</i>
+            Nova Criança
+          </button>
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
