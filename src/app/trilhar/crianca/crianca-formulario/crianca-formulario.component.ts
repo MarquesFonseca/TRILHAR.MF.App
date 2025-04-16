@@ -239,7 +239,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
 
     if (this.operacao.isEditar || this.operacao.isDetalhar) {
-      this.criancaService.listarPorId(this.id).subscribe(resp => {
+      this.criancaService.listarPorCodigoCadastro(this.id).subscribe(resp => {
         this.formulario.get('codigo')?.setValue(resp.dados.codigo);
         this.formulario.get('codigoCadastro')?.setValue(resp.dados.codigoCadastro);
         this.formulario.get('nomeCrianca')?.setValue(resp.dados.nomeCrianca);
