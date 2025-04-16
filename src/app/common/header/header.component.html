@@ -12,11 +12,14 @@
                 <span class="bottom-bar d-block bg-black transition"></span>
             </div>
             <form class="search-box position-relative">
-                <i class="material-symbols-outlined">
+                <!-- <i class="material-symbols-outlined">
                     search
                 </i>
                 <input type="text" class="input-search d-block w-100 border-none outline-0"
-                    placeholder="Pesquise aqui...">
+                    placeholder="Pesquise aqui..."> -->
+                <div class="d-block w-100 border-none outline-0">
+
+                </div>
             </form>
         </div>
         <ul class="header-right-side d-flex align-items-center mt-0 mb-0 pl-0 list-unstyled">
@@ -64,14 +67,14 @@
                     </div>
                 </mat-menu>
             </li>
-            <li *ngIf="false">
+            <li *ngIf="true">
                 <button mat-button class="dark-swtich-btn" (click)="toggleTheme()">
                     <i class="material-symbols-outlined">
                         dark_mode
                     </i>
                 </button>
             </li>
-            <li *ngIf="false">
+            <li *ngIf="true">
                 <a routerLink="/calendar" mat-icon-button class="calendar-menu-btn p-0">
                     <i class="material-symbols-outlined">
                         calendar_today
@@ -216,7 +219,7 @@
                     </div>
                 </mat-menu>
             </li>
-            <li *ngIf="false">
+            <li *ngIf="true">
                 <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
                     <img src="images/admin.png" alt="profile-image">
                     <span class="status d-inline-block rounded-circle position-absolute"></span>

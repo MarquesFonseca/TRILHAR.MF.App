@@ -29,19 +29,41 @@
                 <mat-accordion>
 
                   <div *ngIf="!isProducao">
+                  </div>
 
                     <span class="sub-title text-body">
-                        MAIN
+                        MINISTÉRIO TRILHAR
                     </span>
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <i class="material-symbols-outlined">dashboard</i>
                                 <span class="title">Dashboard</span>
-                                <span class="daxa-badge">5</span>
+                                <span class="daxa-badge five">4</span>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
+                            <li class="sidemenu-item">
+                              <a routerLink="/criancas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Crianças
+                              </a>
+                            </li>
+                            <li class="sidemenu-item">
+                              <a routerLink="/turmas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Turmas
+                              </a>
+                            </li>
+                            <li class="sidemenu-item">
+                              <a routerLink="/matriculas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Matrículas
+                              </a>
+                            </li>
+                            <li class="sidemenu-item">
+                              <a routerLink="/frequencias/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                                  Frequências
+                              </a>
+                            </li>
+                            <!--
                             <li class="sidemenu-item">
                                 <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                     E-Commerce
@@ -67,10 +89,10 @@
                                     Help Desk <span class="daxa-badge">Hot</span>
                                 </a>
                             </li>
+                            -->
                         </ul>
                     </mat-expansion-panel>
 
-                  </div>
 
 
 
@@ -80,25 +102,21 @@
 
 
 
-                    <span class="sub-title text-body">
-                        Trilhar
-                    </span>
+
+                    <!-- <span class="sub-title text-body">
+                        TRILHAR
+                    </span> -->
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <i class="material-symbols-outlined">email</i>
+                                <i class="material-symbols-outlined">child_care</i>
                                 <span class="title">Crianças</span>
                                 <span class="daxa-badge two">
-                                    3
+                                    2
                                 </span>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
-                          <li class="sidemenu-item">
-                            <a routerLink="/criancas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                Dashboard
-                            </a>
-                          </li>
                           <li class="sidemenu-item">
                               <a routerLink="/criancas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                   Listar
@@ -109,18 +127,13 @@
                                   Novo
                               </a>
                           </li>
-                          <!-- <li class="sidemenu-item">
-                              <a routerLink="/crianca/alterar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                  Alterar
-                              </a>
-                          </li> -->
                         </ul>
                     </mat-expansion-panel>
                     <!-- ---------------------------------------------------- -->
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                       <mat-expansion-panel-header>
                           <mat-panel-title>
-                              <i class="material-symbols-outlined">email</i>
+                              <i class="material-symbols-outlined">groups</i>
                               <span class="title">Turmas</span>
                               <span class="daxa-badge two">
                                   3
@@ -134,11 +147,11 @@
                               </a>
                           </li>
                           <li class="sidemenu-item">
-                              <a routerLink="/turmas/incluir" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              <a routerLink="/turmas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                   Novo
                               </a>
                           </li>
-                          <li class="sidemenu-item">
+                          <li *ngIf="!isProducao" class="sidemenu-item">
                             <a routerLink="/turmas/limite" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                 Ajustar limites
                             </a>
@@ -149,7 +162,7 @@
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                       <mat-expansion-panel-header>
                           <mat-panel-title>
-                              <i class="material-symbols-outlined">email</i>
+                              <i class="material-symbols-outlined">assignment</i>
                               <span class="title">Matrículas</span>
                               <span class="daxa-badge two">
                                   1
@@ -157,7 +170,7 @@
                           </mat-panel-title>
                       </mat-expansion-panel-header>
                       <ul class="sidebar-sub-menu">
-                        <li class="sidemenu-item">
+                        <li class="sidemenu-item" *ngIf="!isProducao">
                           <a routerLink="/matriculas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                               Dashboard
                           </a>
@@ -168,7 +181,7 @@
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                       <mat-expansion-panel-header>
                           <mat-panel-title>
-                              <i class="material-symbols-outlined">email</i>
+                              <i class="material-symbols-outlined">event_available</i>
                               <span class="title">Frequências</span>
                               <span class="daxa-badge two">
                                   1
@@ -176,7 +189,7 @@
                           </mat-panel-title>
                       </mat-expansion-panel-header>
                       <ul class="sidebar-sub-menu">
-                        <li class="sidemenu-item">
+                        <li class="sidemenu-item" *ngIf="!isProducao">
                           <a routerLink="/frequencias/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                               Dashboard
                           </a>
