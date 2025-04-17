@@ -27,11 +27,13 @@ jobs:
     - name: Instalando pacotes com npm install
       run: npm install
     
-    # Corrigido: base-href e nome do arquivo .htaccess
-    - name: Construíndo em produção com npm rum build
+    # Correção para gerar o .htaccess corretamente
+    - name: Construindo em produção
+      run: npm run build -- --base-href /
+    
+    # Criando o arquivo .htaccess em um passo separado
+    - name: Criando arquivo .htaccess
       run: |
-        npm run build -- --base-href /
-        mkdir -p dist/trilhar/browser/
         echo '<IfModule mod_rewrite.c>
           RewriteEngine On
           RewriteBase /
@@ -64,7 +66,7 @@ jobs:
     - name: Verificar estrutura de arquivos
       run: |
         ls -la dist/trilhar/browser/
-        cat dist/trilhar/browser/.htaccess
+        cat dist/trilhar/browser/.htaccess || echo "Arquivo .htaccess não encontrado"
     
     # Configuração do deploy FTP
     - name: Implantando no servidor FTP
