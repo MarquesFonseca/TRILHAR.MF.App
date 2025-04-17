@@ -27,19 +27,19 @@ jobs:
     - name: Instalando pacotes com npm install
       run: npm install
     
-    # ATUALIZAÇÃO 1: Adiciona base-href e gera .htaccess automaticamente
+    # Corrigido: base-href e nome do arquivo .htaccess
     - name: Construíndo em produção com npm rum build
       run: |
-		npm run build -- --base-href /trilhar/
-		mkdir -p dist/trilhar/browser/  # Garante que a pasta existe
-		echo "<IfModule mod_rewrite.c>
-		  RewriteEngine On
-		  RewriteBase /trilhar/
-		  RewriteRule ^index\.html$ - [L]
-		  RewriteCond %{REQUEST_FILENAME} !-f
-		  RewriteCond %{REQUEST_FILENAME} !-d
-		  RewriteRule . /trilhar/index.html [L]
-		</IfModule>" > dist/trilhar/browser/.htacces
+        npm run build -- --base-href /
+        mkdir -p dist/trilhar/browser/
+        echo '<IfModule mod_rewrite.c>
+          RewriteEngine On
+          RewriteBase /
+          RewriteRule ^index\.html$ - [L]
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteRule . /index.html [L]
+        </IfModule>' > dist/trilhar/browser/.htaccess
     
     - name: Subindo artefatos para serem usados no próximo fluxo
       if: success()
@@ -60,13 +60,13 @@ jobs:
         name: deploy_dist
         path: dist
     
-    # ATUALIZAÇÃO 2: Verifica se os arquivos foram gerados corretamente (debug)
+    # Verificação dos arquivos (debug)
     - name: Verificar estrutura de arquivos
       run: |
-		ls -la dist/trilhar/browser/
-		cat dist/trilhar/browser/.htaccess
+        ls -la dist/trilhar/browser/
+        cat dist/trilhar/browser/.htaccess
     
-    # ATUALIZAÇÃO 3: Ajusta server-dir conforme estrutura do servidor
+    # Configuração do deploy FTP
     - name: Implantando no servidor FTP
       if: success()
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -78,5 +78,5 @@ jobs:
         server-dir: trilhar.iques.com.br/
         # protocol: ftps
         dangerous-clean-slate: true
-        retries: 2   # Tentativas adicionais
-        retry-delay: 30  # Atraso entre tentativas em segundos
+        retries: 2
+        retry-delay: 30
