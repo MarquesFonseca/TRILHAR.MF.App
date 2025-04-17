@@ -27,12 +27,33 @@ jobs:
     - name: Instalando pacotes com npm install
       run: npm install
     
-    # Correção para gerar o .htaccess corretamente
+    # Compilação com base-href
     - name: Construindo em produção
       run: npm run build -- --base-href /
     
-    # Criando o arquivo .htaccess em um passo separado
-    - name: Criando arquivo .htaccess
+    # Criando o arquivo web.config para IIS
+    - name: Criando arquivo web.config
+      run: |
+        echo '<?xml version="1.0" encoding="UTF-8"?>
+        <configuration>
+          <system.webServer>
+            <rewrite>
+              <rules>
+                <rule name="Angular Routes" stopProcessing="true">
+                  <match url=".*" />
+                  <conditions logicalGrouping="MatchAll">
+                    <add input="{REQUEST_FILENAME}" matchType="IsFile" negate="true" />
+                    <add input="{REQUEST_FILENAME}" matchType="IsDirectory" negate="true" />
+                  </conditions>
+                  <action type="Rewrite" url="/" />
+                </rule>
+              </rules>
+            </rewrite>
+          </system.webServer>
+        </configuration>' > dist/trilhar/browser/web.config
+    
+    # Mantendo o .htaccess como fallback
+    - name: Criando arquivo .htaccess como fallback
       run: |
         echo '<IfModule mod_rewrite.c>
           RewriteEngine On
@@ -66,6 +87,9 @@ jobs:
     - name: Verificar estrutura de arquivos
       run: |
         ls -la dist/trilhar/browser/
+        echo "Verificando arquivo web.config:"
+        cat dist/trilhar/browser/web.config || echo "Arquivo web.config não encontrado"
+        echo "Verificando arquivo .htaccess:"
         cat dist/trilhar/browser/.htaccess || echo "Arquivo .htaccess não encontrado"
     
     # Configuração do deploy FTP
