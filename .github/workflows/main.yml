@@ -28,11 +28,11 @@ jobs:
       run: npm install
     
     # Compilação com base-href
-    - name: Construindo em produção
+    - name: Construindo em produção - Compilação com base-href
       run: npm run build -- --base-href /
     
     # Criando o arquivo web.config para IIS
-    - name: Criando arquivo web.config
+    - name: Criando o arquivo web.config para IIS
       run: |
         echo '<?xml version="1.0" encoding="UTF-8"?>
         <configuration>
