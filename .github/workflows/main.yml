@@ -63,7 +63,10 @@ jobs:
           RewriteCond %{REQUEST_FILENAME} !-d
           RewriteRule . /index.html [L]
         </IfModule>' > dist/trilhar/browser/.htaccess
-    
+
+    - name: Criar app_offline.htm temporariamente
+      run: echo "<h1>Aplica&ccedil;&atilde;o temporariamente indispon&iacute;vel para manuten&ccedil;&atilde;o.</h1>" > ./dist/trilhar/browser/app_offline.htm
+
     - name: Subindo artefatos para serem usados no próximo fluxo
       if: success()
       uses: actions/upload-artifact@v4
