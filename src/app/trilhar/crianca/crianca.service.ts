@@ -10,7 +10,7 @@ import * as types from './crianca.types';
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
 })
 export class CriancaService {
-  private apiUrl = `${environment.API_TRILHAR}/aluno`; // URL da API
+  private apiUrl = `${environment.API_TRILHAR}/criancas`; // URL da API
 
   constructor(
     private http: HttpClient,
@@ -68,7 +68,7 @@ export class CriancaService {
     const params = this.buildHttpParams(filtro);
 
     this.loadingService.show(); // Exibe o indicador de carregamento
-    this.http.get(`${this.apiUrl}/listarPorFiltro`, { params }).subscribe({
+    this.http.get(`${this.apiUrl}/filtro`, { params }).subscribe({
       next: (resp: any) => {
         if (callback) {
           callback(resp); // Chama o callback apenas se ele estiver definido
@@ -90,7 +90,7 @@ export class CriancaService {
     this.loadingService.show();
     try {
       const response = await firstValueFrom(
-        this.http.get(`${this.apiUrl}/listarPorFiltro`, { params })
+        this.http.get(`${this.apiUrl}/filtro`, { params })
       );
       return response; // Retorna a resposta da API
     } catch (error: any) {
@@ -105,7 +105,7 @@ export class CriancaService {
   listarPorCodigoCadastro(codigoCadastro: string): Observable<any> {
     this.loadingService.show();
     return this.http
-      .get(`${this.apiUrl}/CodigoCadastro/${codigoCadastro}`)
+      .get(`${this.apiUrl}/codigo-cadastro/${codigoCadastro}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
@@ -113,7 +113,7 @@ export class CriancaService {
     this.loadingService.show(); // Exibe o indicador de carregamento
     try {
       const response = await firstValueFrom(
-        this.http.get(`${this.apiUrl}/CodigoCadastro/${codigoCadastro}`)
+        this.http.get(`${this.apiUrl}/codigo-cadastro/${codigoCadastro}`)
       );
       return response; // Retorna a resposta da API
     } catch (error: any) {
@@ -132,8 +132,8 @@ export class CriancaService {
     });
   }
 
-  Alterar(Entity: types.IAlunoEntity, callback?: any) {
-    this.http.put(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
+  Alterar(id: number, Entity: types.IAlunoEntity, callback?: any) {
+    this.http.put(`${this.apiUrl}/${id}`, Entity).subscribe((resp: any) => {
       this.mensagemService.showSuccess('Registro alterado com sucesso!');
       callback(resp);
     });

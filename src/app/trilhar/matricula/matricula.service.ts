@@ -10,7 +10,7 @@ import * as types from './matricula.types';
   providedIn: 'root',
 })
 export class MatriculaService {
-  private apiUrl = `${environment.API_TRILHAR}/matricula`; // URL da API
+  private apiUrl = `${environment.API_TRILHAR}/matriculas`; // URL da API
 
   constructor(
     private http: HttpClient,
@@ -21,7 +21,7 @@ export class MatriculaService {
   listarPorCodigoAlunoCodigoTurma(codigoAluno: string, codigoTurma: string): Observable<any> {
     this.loadingService.show();
     return this.http
-      .get(`${this.apiUrl}/listarPorCodigoAlunoCodigoTurma/${codigoAluno}/${codigoTurma}`)
+      .get(`${this.apiUrl}/aluno/${codigoAluno}/turma/${codigoTurma}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
@@ -29,7 +29,7 @@ export class MatriculaService {
     this.loadingService.show(); // Exibe o indicador de carregamento
     try {
       const response = await firstValueFrom(
-        this.http.get<any>(`${this.apiUrl}/listarPorCodigoAlunoCodigoTurma/${codigoAluno}/${codigoTurma}`)
+        this.http.get<any>(`${this.apiUrl}/aluno/${codigoAluno}/turma/${codigoTurma}`)
       );
       return response; // Retorna a resposta da API
     } catch (error: any) {
@@ -44,7 +44,7 @@ export class MatriculaService {
   listarPorCodigoAluno(codigoAluno: string): Observable<any> {
     this.loadingService.show();
     return this.http
-      .get(`${this.apiUrl}/listarPorCodigoAluno/${codigoAluno}`)
+      .get(`${this.apiUrl}/aluno/${codigoAluno}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
@@ -52,7 +52,7 @@ export class MatriculaService {
     this.loadingService.show(); // Exibe o indicador de carregamento
     try {
       const response = await firstValueFrom(
-        this.http.get<any>(`${this.apiUrl}/listarPorCodigoAluno/${codigoAluno}`)
+        this.http.get<any>(`${this.apiUrl}/aluno/${codigoAluno}`)
       );
       return response; // Retorna a resposta da API
     } catch (error: any) {
@@ -67,7 +67,7 @@ export class MatriculaService {
   listarPorCodigoTurma(codigoTurma: string): Observable<any> {
     this.loadingService.show();
     return this.http
-      .get(`${this.apiUrl}/listarPorCodigoTurma/${codigoTurma}`)
+      .get(`${this.apiUrl}/turma/${codigoTurma}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
@@ -75,7 +75,7 @@ export class MatriculaService {
     this.loadingService.show(); // Exibe o indicador de carregamento
     try {
       const response = await firstValueFrom(
-        this.http.get<any>(`${this.apiUrl}/listarPorCodigoTurma/${codigoTurma}`)
+        this.http.get<any>(`${this.apiUrl}/turma/${codigoTurma}`)
       );
       return response; // Retorna a resposta da API
     } catch (error: any) {
@@ -96,7 +96,7 @@ export class MatriculaService {
 
   listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
     this.loadingService.show();
-    this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
+    this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
         next: (resp: any) => {
             this.loadingService.hide();
             if (callback) {
@@ -125,8 +125,8 @@ export class MatriculaService {
     });
   }
 
-  Alterar(Entity: any, callback?: any) {
-    this.http.put(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
+  Alterar(Id: any, Entity: any, callback?: any) {
+    this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
       this.mensagemService.showSuccess('Registro alterado com sucesso!');
       callback(resp);
     });

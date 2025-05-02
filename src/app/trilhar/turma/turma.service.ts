@@ -10,7 +10,7 @@ import * as types from './turma.types';
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
 })
 export class TurmaService {
-  private apiUrl = `${environment.API_TRILHAR}/Turma`; // URL da API
+  private apiUrl = `${environment.API_TRILHAR}/turmas`; // URL da API
 
   constructor(
     private http: HttpClient,
@@ -71,7 +71,7 @@ export class TurmaService {
     });
   }
 
-  Alterar(Entity: any, Id: any, callback?: any) {
+  Alterar(Id: any, Entity: any, callback?: any) {
     this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
       this.mensagemService.showSuccess('Registro alterado com sucesso!');
       callback(resp);

@@ -48,6 +48,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   maxData: Date = new Date();
   turmaSugeridaDescricao: string = '';
   id: any;
+  isNovoIrmao: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -66,6 +67,10 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   override ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);
     this.maxData = utils.obterDataHoraBrasileira();
+    if (this.operacao.isNovo) {
+      this.id = this.activatedRoute.snapshot.params['id'];
+      this.isNovoIrmao = (this.operacao.isNovo && !!this.id);
+    }
     if (this.operacao.isEditar || this.operacao.isDetalhar) {
       this.id = this.activatedRoute.snapshot.params['id'];
     }
@@ -106,47 +111,64 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   }
 
   private handleConditionalFields(): void {
-    // this.formulario.get('dataNascimento')?.valueChanges.subscribe((value) => {
-    // const dataNascimento = this.formulario.get('dataNascimento');
-    // const idadeCrianca = this.formulario.get('idadeCrianca');
+    this.formulario.get('dataNascimento')?.valueChanges.subscribe((value) => {
+      const dataNascimento = this.formulario.get('dataNascimento');
+      const idadeCrianca = this.formulario.get('idadeCrianca');
 
-    // // if (this.formulario.get('dataNascimento')?.errors) {
-    // //   try {
-    // //     //const erros = this.formulario.get('DataNascimento')?.errors;
-    // //     var erros = dataNascimento?.errors;
-    // //     var valorTextoCampoDigitado =
-    // //       erros != null || erros != undefined
-    // //         ? erros['matDatepickerParse'].text
-    // //         : null;
-    // //     if (valorTextoCampoDigitado) {
-    // //       idadeCrianca?.setValue('');
-    // //       if (utils.validarData(valorTextoCampoDigitado)) {
-    // //         var data = utils.retornaDataByString(valorTextoCampoDigitado);
-    // //         const idadeFormatada = utils.preencheIdadeFormatada(data.toISOString());
-    // //         idadeCrianca?.setValue(idadeFormatada, { emitEvent: true, });
+      if (!utils.isNullOrEmpty(value)) {
+        if (utils.validarData(value)) {
+          var data = utils.retornaDataByString(value);
+          const dataNascimentoRetornada = utils.converterParaDataOutput(String(data));
+          this.onDataNascimentoSelecionada(dataNascimentoRetornada);
 
-    // //         this.formulario.get('turmaMatricula')?.setValue([{ id: 2, descricao: 'Lilas 2' }], { emitEvent: false, });
+        }
+      }
 
-    // //         this.formulario.get('dataNascimento')?.setValue(data);
-    // //         //dataNascimento?.setValue(data, { emitEvent: false });
-    // //       }
-    // //     }
-    // //   } catch (error) {
-    // //     idadeCrianca?.setValue('');
-    // //   }
-    // // }
-    // if (value) {
-    //   const idadeFormatada = utils.retornaIdadeFormatadaAnoMesDia(value);
-    //   idadeCrianca?.setValue(idadeFormatada, { emitEvent: false });
+      // if (this.formulario.get('dataNascimento')?.errors) {
+      //   try {
+      //     //const erros = this.formulario.get('dataNascimento')?.errors;
+      //     var erros = dataNascimento?.errors;
+      //     var valorTextoCampoDigitado =
+      //       erros != null || erros != undefined
+      //         ? erros['matDatepickerParse'].text
+      //         : null;
+      //     if (valorTextoCampoDigitado) {
+      //       idadeCrianca?.setValue('');
+      //       if (utils.validarData(valorTextoCampoDigitado)) {
+      //         var data = utils.retornaDataByString(valorTextoCampoDigitado);
 
-    //   const turmaSugerida = this.retornaTurmaSugerida(value, this.turmas);
-    //   this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
-    //   this.turmaSugeridaDescricao = `${this.turmaSelecionado.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
-    // }
-    // else {
-    //   idadeCrianca?.setValue('', { emitEvent: false });
-    // }
-    // });
+      //         const dataNascimentoRetornada = utils.converterParaDataOutput(valorTextoCampoDigitado);
+      //         this.onDataNascimentoSelecionada(dataNascimentoRetornada);
+      //       }
+      //     }
+      //   } catch (error) {
+      //     idadeCrianca?.setValue('');
+      //   }
+      // }
+      if (value) {
+
+        //idadeCrianca?.setValue('');
+        if (utils.validarData(value)) {
+          var data = utils.retornaDataByString(value);
+
+          const dataNascimentoRetornada = utils.converterParaDataOutput(String(data));
+          this.onDataNascimentoSelecionada(dataNascimentoRetornada);
+        }
+
+
+
+        // const idadeFormatada = utils.retornaIdadeFormatadaAnoMesDia(value);
+        // idadeCrianca?.setValue(idadeFormatada, { emitEvent: false });
+
+        // const turmaSugerida = this.retornaTurmaSugerida(value, this.turmas);
+        // this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
+        // this.turmaSugeridaDescricao = `${this.turmaSelecionado.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
+      }
+      // else {
+      //   idadeCrianca?.setValue('', { emitEvent: false });
+      // }
+
+    });
 
     this.formulario.get('telefone')?.valueChanges.subscribe((value) => {
       const telefone = this.formulario.get('telefone');
@@ -234,79 +256,107 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       //this.turmaSelecionado = this.turmas.find(u => u.id === 4) || null;
       // //this.formulario.get("DataNascimento")?.setValue('10/09/2025');
 
-
-
+      if(this.isNovoIrmao) {
+        this.criancaService.listarPorCodigoCadastro(this.id).subscribe(resp => {
+          if(resp.dados == null) {
+            this.mensagemService.showError('Nenhum registro encontrado!', 'error');
+            return;
+          }
+          if (!!resp.dados) {
+            this.formulario.get('codigo')?.setValue(0);
+            this.formulario.get('codigoCadastro')?.setValue('');
+            this.formulario.get('nomeCrianca')?.setValue('');
+            this.formulario.get('dataNascimento')?.setValue(null);
+            this.formulario.get('nomeMae')?.setValue(resp.dados.nomeMae);
+            this.formulario.get('nomePai')?.setValue(resp.dados.nomePai);
+            this.formulario.get('outroResponsavel')?.setValue(resp.dados.outroResponsavel);
+            this.formulario.get('telefone')?.setValue(utils.retirarFormatacao(resp.dados.telefone));
+            this.formulario.get('telefone')?.markAsTouched();
+            this.formulario.get('telefone')?.markAsDirty();
+            this.formulario.get('enderecoEmail')?.setValue(resp.dados.enderecoEmail);
+            this.formulario.get('alergia')?.setValue(false);
+            this.formulario.get('descricaoAlergia')?.setValue('');
+            this.formulario.get('restricaoAlimentar')?.setValue(false);
+            this.formulario.get('descricaoRestricaoAlimentar')?.setValue('');
+            this.formulario.get('deficienciaOuSituacaoAtipica')?.setValue(false);
+            this.formulario.get('descricaoDeficiencia')?.setValue('');
+            this.formulario.get('batizado')?.setValue(false);
+            this.formulario.get('dataBatizado')?.setValue(null);
+            this.formulario.get('igrejaBatizado')?.setValue('');
+            this.formulario.get('ativo')?.setValue(true);
+          }
+        });
+      }
     }
 
     if (this.operacao.isEditar || this.operacao.isDetalhar) {
-      this.criancaService.listarPorCodigoCadastro(this.id).subscribe(resp => {
-        this.formulario.get('codigo')?.setValue(resp.dados.codigo);
-        this.formulario.get('codigoCadastro')?.setValue(resp.dados.codigoCadastro);
-        this.formulario.get('nomeCrianca')?.setValue(resp.dados.nomeCrianca);
-        //if (this.operacao.disabled) { this.formulario.controls["nomeCrianca"].disable(); }
-        this.formulario.get('dataNascimento')?.setValue(resp.dados.dataNascimento);
-        //if (this.operacao.disabled) { this.formulario.controls["dataNascimento"].disable(); }
-        const dataNascimentoRetornada = utils.converterParaDataOutput(resp.dados.dataNascimento);
-        this.onDataNascimentoSelecionada(dataNascimentoRetornada);
-        //if (this.operacao.disabled) { this.formulario.controls["turmaMatricula"].disable(); }
-        this.formulario.get('nomeMae')?.setValue(resp.dados.nomeMae);
-        //if (this.operacao.disabled) { this.formulario.controls["nomeMae"].disable(); }
-        this.formulario.get('nomePai')?.setValue(resp.dados.nomePai);
-        //if (this.operacao.disabled) { this.formulario.controls["nomePai"].disable(); }
-        this.formulario.get('outroResponsavel')?.setValue(resp.dados.outroResponsavel);
-        //if (this.operacao.disabled) { this.formulario.controls["outroResponsavel"].disable(); }
-        this.formulario.get('telefone')?.setValue(resp.dados.telefone);
-        //if (this.operacao.disabled) { this.formulario.controls["telefone"].disable(); }
-        this.formulario.get('enderecoEmail')?.setValue(resp.dados.enderecoEmail);
-        //if (this.operacao.disabled) { this.formulario.controls["enderecoEmail"].disable(); }
-        this.formulario.get('alergia')?.setValue(resp.dados.alergia);
-        if (this.operacao.disabled) { this.formulario.controls["alergia"].disable(); }
-        this.formulario.get('descricaoAlergia')?.setValue(resp.dados.descricaoAlergia);
-        //if (this.operacao.disabled) { this.formulario.controls["descricaoAlergia"].disable(); }
-        this.formulario.get('restricaoAlimentar')?.setValue(resp.dados.restricaoAlimentar);
-        if (this.operacao.disabled) { this.formulario.controls["restricaoAlimentar"].disable(); }
-        this.formulario.get('descricaoRestricaoAlimentar')?.setValue(resp.dados.descricaoRestricaoAlimentar);
-        //if (this.operacao.disabled) { this.formulario.controls["descricaoRestricaoAlimentar"].disable(); }
-        this.formulario.get('deficienciaOuSituacaoAtipica')?.setValue(resp.dados.deficienciaOuSituacaoAtipica);
-        if (this.operacao.disabled) { this.formulario.controls["deficienciaOuSituacaoAtipica"].disable(); }
-        this.formulario.get('descricaoDeficiencia')?.setValue(resp.dados.descricaoDeficiencia);
-        //if (this.operacao.disabled) { this.formulario.controls["descricaoDeficiencia"].disable(); }
-        this.formulario.get('batizado')?.setValue(resp.dados.batizado);
-        if (this.operacao.disabled) { this.formulario.controls["batizado"].disable(); }
-        this.formulario.get('dataBatizado')?.setValue(resp.dados.dataBatizado);
-        //if (this.operacao.disabled) { this.formulario.controls["dataBatizado"].disable(); }
-        this.formulario.get('igrejaBatizado')?.setValue(resp.dados.igrejaBatizado);
-        //if (this.operacao.disabled) { this.formulario.controls["igrejaBatizado"].disable(); }
-        this.formulario.get('ativo')?.setValue(resp.dados.ativo);
-        if (this.operacao.disabled) { this.formulario.controls["ativo"].disable(); }
-        this.formulario.get('codigoUsuarioLogado')?.setValue(resp.dados.codigoUsuarioLogado);
-        //if (this.operacao.disabled) { this.formulario.controls["codigoUsuarioLogado"].disable(); }
-        this.formulario.get('dataAtualizacao')?.setValue(resp.dados.dataAtualizacao);
-        //if (this.operacao.disabled) { this.formulario.controls["dataAtualizacao"].disable(); }
-        this.formulario.get('dataCadastro')?.setValue(resp.dados.dataCadastro);
-        //if (this.operacao.disabled) { this.formulario.controls["dataCadastro"].disable(); }
+      this.criancaService.listarPorCodigoCadastro(this.id).subscribe(crianca => {
+        if (crianca.dados == null) {
+          this.mensagemService.showError('Nenhum registro encontrado!', 'error');
+          return;
+        }
+        if (!!crianca.dados) {
+          this.formulario.get('codigo')?.setValue(crianca.dados.codigo);
+          this.formulario.get('codigoCadastro')?.setValue(crianca.dados.codigoCadastro);
+          this.formulario.get('nomeCrianca')?.setValue(crianca.dados.nomeCrianca);
+          this.formulario.get('dataNascimento')?.setValue(crianca.dados.dataNascimento);
 
-        this.matriculaService.listarPorCodigoAluno(resp.dados.codigo).subscribe((res: any) => {
-          if (res) {
-            const matriculaAluno = res.dados.find((m: any) => m.ativo === true);
-            if (matriculaAluno) {
-              const turmaMatricula = this.turmas.find((t: any) => t.codigo === matriculaAluno.codigoTurma);
-              if (turmaMatricula) {
-                if(this.childAutoCompleteComponent) {
-                  this.childAutoCompleteComponent.limpar();
+          // const dataNascimentoRetornada = utils.converterParaDataOutput(crianca.dados.dataNascimento);
+          // this.onDataNascimentoSelecionada(dataNascimentoRetornada);
 
-                }
-                this.turmaSelecionado = turmaMatricula;
-                this.formulario.get('turmaMatricula')?.setValue(turmaMatricula, { emitEvent: false });
-                if(this.childAutoCompleteComponent) {
-                  this.childAutoCompleteComponent.ngAfterViewInit();
-                }
-                this.cdr.detectChanges();
-              }
-            }
+          this.formulario.get('nomeMae')?.setValue(crianca.dados.nomeMae);
+          this.formulario.get('nomePai')?.setValue(crianca.dados.nomePai);
+          this.formulario.get('outroResponsavel')?.setValue(crianca.dados.outroResponsavel);
+          this.formulario.get('telefone')?.setValue(utils.retirarFormatacao(crianca.dados.telefone));
+          this.formulario.get('enderecoEmail')?.setValue(crianca.dados.enderecoEmail);
+          this.formulario.get('alergia')?.setValue(crianca.dados.alergia);
+          if (this.operacao.disabled) { this.formulario.controls["alergia"].disable(); }
+          this.formulario.get('descricaoAlergia')?.setValue(crianca.dados.descricaoAlergia);
+          this.formulario.get('restricaoAlimentar')?.setValue(crianca.dados.restricaoAlimentar);
+          if (this.operacao.disabled) { this.formulario.controls["restricaoAlimentar"].disable(); }
+          this.formulario.get('descricaoRestricaoAlimentar')?.setValue(crianca.dados.descricaoRestricaoAlimentar);
+          this.formulario.get('deficienciaOuSituacaoAtipica')?.setValue(crianca.dados.deficienciaOuSituacaoAtipica);
+          if (this.operacao.disabled) { this.formulario.controls["deficienciaOuSituacaoAtipica"].disable(); }
+          this.formulario.get('descricaoDeficiencia')?.setValue(crianca.dados.descricaoDeficiencia);
+          this.formulario.get('batizado')?.setValue(crianca.dados.batizado);
+          if (this.operacao.disabled) { this.formulario.controls["batizado"].disable(); }
+          this.formulario.get('dataBatizado')?.setValue(crianca.dados.dataBatizado);
+          this.formulario.get('igrejaBatizado')?.setValue(crianca.dados.igrejaBatizado);
+          this.formulario.get('ativo')?.setValue(crianca.dados.ativo);
+          if (this.operacao.disabled) { this.formulario.controls["ativo"].disable(); }
+          this.formulario.get('codigoUsuarioLogado')?.setValue(crianca.dados.codigoUsuarioLogado);
+          this.formulario.get('dataAtualizacao')?.setValue(crianca.dados.dataAtualizacao);
+          this.formulario.get('dataCadastro')?.setValue(crianca.dados.dataCadastro);
 
-          }
-        });
+          // this.matriculaService.listarPorCodigoAluno(String(crianca.dados.codigo)).subscribe((mat: any) => {
+          //   if (mat.dados != null) {
+          //     const matriculaAluno = mat.dados.find((m: any) => m.ativo === true);
+          //     if (matriculaAluno) {
+          //       const turmaMatricula = this.turmas.find((t: any) => t.codigo === matriculaAluno.codigoTurma);
+          //       if (turmaMatricula) {
+          //         if (this.childAutoCompleteComponent) {
+          //           this.childAutoCompleteComponent.limpar();
+          //         }
+          //         this.turmaSelecionado = turmaMatricula;
+          //         this.formulario.get('turmaMatricula')?.setValue(turmaMatricula, { emitEvent: false });
+          //         if (this.childAutoCompleteComponent) {
+          //           this.childAutoCompleteComponent.ngAfterViewInit();
+          //         }
+          //         this.cdr.detectChanges();
+          //       }
+          //     }
+          //   }
+          //   // else {
+          //   //   this.turmaSelecionado = null;//inicia null - resetando o valor
+          //   //   this.formulario.get('turmaMatricula')?.setValue(null, { emitEvent: false });//inicia null - resetando o valor
+          //   //   if(this.childAutoCompleteComponent) {
+          //   //     //this.childAutoCompleteComponent.limpar();
+          //   //   }
+          //   //   this.cdr.detectChanges();
+          //   //   //this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada!';
+          //   // }
+          // });
+        }
       });
     }
 
@@ -319,6 +369,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
     const valoresForm = this.formulario.getRawValue();
     var filtro: criancasTypes.IAlunoEntity = valoresForm;
+    filtro.telefone = utils.retirarFormatacao(valoresForm.telefone);
     filtro.dataCadastro = utils.obterDataHoraBrasileira();
     filtro.dataAtualizacao = utils.obterDataHoraBrasileira();
     filtro.codigoUsuarioLogado = 0;
@@ -328,19 +379,24 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
         if (res) {
           const codigoAluno = res.dados;
           const { turmaMatricula } = this.formulario.value;
-          var filtroMatricula = {
-            "codigo": 0,
-            "codigoAluno": codigoAluno,
-            "codigoTurma": turmaMatricula.codigo,
-            "ativo": true,
-            "codigoUsuarioLogado": 0,
-            "dataAtualizacao": utils.obterDataHoraBrasileira(),
-            "dataCadastro": utils.obterDataHoraBrasileira()
-          }
-          this.matriculaService.Incluir(filtroMatricula, (res: any) => {
-            if (res) {
-              var url = `criancas/detalhar/${codigoAluno}`;
-              this.finalizarAcao(url);
+
+          this.criancaService.listarPorCodigoCadastro(String(codigoAluno)).subscribe(crianca => {
+            if (crianca) {
+              var filtroMatricula = {
+                "codigo": 0,
+                "codigoAluno": codigoAluno,
+                "codigoTurma": turmaMatricula.codigo,
+                "ativo": true,
+                "codigoUsuarioLogado": 0,
+                "dataAtualizacao": utils.obterDataHoraBrasileira(),
+                "dataCadastro": utils.obterDataHoraBrasileira()
+              }
+              this.matriculaService.Incluir(filtroMatricula, (res: any) => {
+                if (res) {
+                  var url = `criancas/detalhar/${crianca.dados.codigoCadastro}`;
+                  this.finalizarAcao(url);
+                }
+              });
             }
           });
         }
@@ -348,27 +404,33 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
 
     if (this.operacao.isEditar) {
-      this.criancaService.Alterar(filtro, (res: any) => {
+      this.criancaService.Alterar(this.id, filtro, async (res: any) => {
         if (res) {
           const codigoAluno = filtro.codigo;
           const { turmaMatricula } = this.formulario.value;
 
-          var filtroMatricula = {
-            "codigo": 0,
-            "codigoAluno": codigoAluno,
-            "codigoTurma": turmaMatricula.codigo,
-            "ativo": true,
-            "codigoUsuarioLogado": 0,
-            "dataAtualizacao": utils.obterDataHoraBrasileira(),
-            "dataCadastro": utils.obterDataHoraBrasileira()
+          var criancaAlterada = await this.criancaService.listarPorIdPromise(String(codigoAluno));
+          if (criancaAlterada) {
+            if (this.turmaSelecionado) {
+              var filtroMatricula = {
+                "codigo": 0,
+                "codigoAluno": codigoAluno,
+                "codigoTurma": turmaMatricula.codigo,
+                "ativo": true,
+                "codigoUsuarioLogado": 0,
+                "dataAtualizacao": utils.obterDataHoraBrasileira(),
+                "dataCadastro": utils.obterDataHoraBrasileira()
+              }
+
+              this.matriculaService.Alterar(filtroMatricula, (mat: any) => {
+                // if (mat) {
+                // }
+              });
+            }
+            var url = `criancas/detalhar/${criancaAlterada.dados.codigoCadastro}`;
+            this.finalizarAcao(url);
           }
 
-          this.matriculaService.Alterar(filtroMatricula, (res: any) => {
-            if (res) {
-              var url = `criancas/detalhar/${codigoAluno}`;
-              this.finalizarAcao(url);
-            }
-          });
         }
       });
     }
@@ -415,6 +477,15 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
       const turmaSugerida = this.retornaTurmaSugerida(dataNascimentoSelecionada.data, this.turmas);
 
+      if (turmaSugerida == null) {
+        this.turmaSelecionado = null;//inicia null - resetando o valor
+        turmaMatricula?.setValue(null, { emitEvent: false });//inicia null - resetando o valor
+        if(this.childAutoCompleteComponent) {
+          this.childAutoCompleteComponent.limpar();
+        }
+        this.cdr.detectChanges();
+        this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada!';
+      }
       if (turmaSugerida != null) {
         this.turmaSugeridaDescricao =
           `${turmaSugerida.descricaoAnoSemestreLetivo} -
@@ -428,15 +499,6 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           this.childAutoCompleteComponent.ngAfterViewInit();
         }
         this.cdr.detectChanges();
-      }
-      else {
-        this.turmaSelecionado = null;//inicia null - resetando o valor
-        turmaMatricula?.setValue(null, { emitEvent: false });//inicia null - resetando o valor
-        if(this.childAutoCompleteComponent) {
-          this.childAutoCompleteComponent.limpar();
-        }
-        this.cdr.detectChanges();
-        this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada!';
       }
     }
     else {

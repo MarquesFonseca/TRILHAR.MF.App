@@ -50,6 +50,17 @@
           </mat-card-title>
           <mat-card-subtitle>
             <!-- <div class="actions-container"> -->
+              <!-- Botão de Adicionar Irmão (visível apenas no modo detalhar) -->
+              <button mat-button
+                      color="primary"
+                      class="action-button"
+                      [routerLink]="'/criancas/incluir/' + formulario.get('codigoCadastro')?.value"
+                      routerLinkActive="active"
+                      *ngIf="operacao.isDetalhar">
+                <mat-icon>new</mat-icon>
+                Incluir Irmão
+              </button>
+
               <!-- Botão de Alterar (visível apenas no modo detalhar) -->
               <button mat-button
                       color="primary"
