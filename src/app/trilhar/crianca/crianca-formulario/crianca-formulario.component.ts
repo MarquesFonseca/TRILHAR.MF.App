@@ -17,7 +17,7 @@ import * as utils from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import * as criancasTypes from '../crianca.types';
 import * as turmaTypes from '../../turma/turma.types';
-import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
+//import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
 
 @Component({
   selector: 'app-criancas-formulario',
