@@ -1,4 +1,4 @@
-import { CommonModule, NgIf, ViewportScroller } from '@angular/common';
+import { CommonModule,  ViewportScroller } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -27,7 +27,6 @@ import * as turmaTypes from '../../turma/turma.types';
     RouterLink,
     ReactiveFormsModule,
     MaterialModule,
-    NgIf,
     NgxMaskDirective,
     AutoCompleteComponent,
     CalendarioComponent,
