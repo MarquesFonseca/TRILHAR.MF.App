@@ -93,7 +93,7 @@
                 <!-- Código Cadastro -->
                 <div class="col-sm-3" *ngIf="operacao.isDetalhar || operacao.isEditar">
                 <!-- <div class="col-sm-2"> -->
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Código Cadastro</mat-label>
                         <input matInput formControlName="codigoCadastro" [readonly]="true" placeholder="Código Cadastro">
                         <app-mensagem-erro ngSkipHydration
@@ -108,7 +108,7 @@
                 <div [ngClass]="{
                   'col-sm-12': operacao.isNovo,
                   'col-sm-9': operacao.isDetalhar || operacao.isEditar }">
-                  <mat-form-field class="mb-25">
+                  <mat-form-field class="mb-25" appearance="outline">
                       <mat-label>Nome da Criança</mat-label>
                       <input matInput formControlName="nomeCrianca" [readonly]="operacao.disabled" placeholder="Nome da criança">
                       <app-mensagem-erro ngSkipHydration
@@ -127,8 +127,8 @@
                       [field]="'dataNascimento'"
                       [label]="'Data de Nascimento'"
                       [maxDate]="maxData"
-                      (itemSelecionado)="onDataNascimentoSelecionada($event)"
-                      [readonly]="operacao.disabled">
+                      [readonly]="operacao.disabled"
+                      (itemSelecionado)="onDataNascimentoSelecionada($event)">
                     </app-calendario>
                     <app-mensagem-erro ngSkipHydration
                       [control]="formulario.get('dataNascimento')"
@@ -181,7 +181,7 @@
 
                 <!-- Nome da Mãe -->
                 <div class="col-sm-4">
-                  <mat-form-field class="mb-25">
+                  <mat-form-field class="mb-25" appearance="outline">
                     <mat-label>Nome da Mãe</mat-label>
                     <input matInput formControlName="nomeMae" [readonly]="operacao.disabled" placeholder="Nome da mãe">
                   </mat-form-field>
@@ -189,7 +189,7 @@
 
                 <!-- Nome do Pai -->
                 <div class="col-sm-4">
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Nome do Pai</mat-label>
                         <input matInput formControlName="nomePai" [readonly]="operacao.disabled" placeholder="Nome do pai">
                     </mat-form-field>
@@ -197,7 +197,7 @@
 
                 <!-- Outro Responsável -->
                 <div class="col-sm-4">
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Outro Responsável</mat-label>
                         <input matInput formControlName="outroResponsavel" [readonly]="operacao.disabled" placeholder="Outro responsável">
                     </mat-form-field>
@@ -205,7 +205,7 @@
 
                 <!-- Telefone -->
                 <div class="col-sm-4">
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Telefone celular</mat-label>
                         <input matInput formControlName="telefone" mask="(00)00000-0000" [readonly]="operacao.disabled" placeholder="(99)99999-9999"
                             maxlength="14">
@@ -217,7 +217,7 @@
 
                 <!-- Endereço de Email -->
                 <div class="col-sm-8">
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Email</mat-label>
                         <input matInput formControlName="enderecoEmail" [readonly]="operacao.disabled" placeholder="email@exemplo.com">
                         <mat-error *ngIf="formulario.get('enderecoEmail')?.hasError('emailInvalid')">
@@ -235,7 +235,7 @@
                 </div>
                 <!-- Descrição da Alergia -->
                 <div class="col-sm-8" *ngIf="formulario.get('alergia')?.value">
-                    <mat-form-field class="textarea">
+                    <mat-form-field class="textarea" appearance="outline">
                         <mat-label>Descrição da Alergia</mat-label>
                         <input matInput formControlName="descricaoAlergia" [readonly]="operacao.disabled" placeholder="Descrição da alergia">
                         <!-- <textarea matInput formControlName="DescricaoAlergia"
@@ -255,7 +255,7 @@
 
                 <!-- Descrição da Restrição Alimentar -->
                 <div class="col-sm-8" *ngIf="formulario.get('restricaoAlimentar')?.value">
-                    <mat-form-field class="textarea">
+                    <mat-form-field class="textarea" appearance="outline">
                         <mat-label>Descrição da Restrição Alimentar</mat-label>
                         <input matInput formControlName="descricaoRestricaoAlimentar" [readonly]="operacao.disabled" placeholder="Descrição da restrição alimentar">
                         <!-- <textarea matInput formControlName="descricaoRestricaoAlimentar"
@@ -275,7 +275,7 @@
 
                 <!-- Descrição da Deficiência -->
                 <div class="col-sm-8" *ngIf="formulario.get('deficienciaOuSituacaoAtipica')?.value">
-                    <mat-form-field class="textarea">
+                    <mat-form-field class="textarea" appearance="outline">
                         <mat-label>Descrição da Atipicidade</mat-label>
                         <input matInput formControlName="descricaoDeficiencia" [readonly]="operacao.disabled" placeholder="Descrição da deficiência">
                         <!-- <textarea matInput formControlName="descricaoDeficiencia"
@@ -295,7 +295,7 @@
 
                 <!-- Data do Batizado -->
                 <div class="col-sm-4" *ngIf="formulario.get('batizado')?.value">
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Data do Batizado</mat-label>
                         <input matInput [matDatepicker]="batizadoPicker" formControlName="dataBatizado" [readonly]="operacao.disabled" >
                         <mat-datepicker-toggle matSuffix [for]="batizadoPicker"></mat-datepicker-toggle>
@@ -305,7 +305,7 @@
 
                 <!-- Igreja do Batizado -->
                 <div class="col-sm-8" *ngIf="formulario.get('batizado')?.value">
-                    <mat-form-field class="mb-25">
+                    <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Igreja do Batizado</mat-label>
                         <input matInput formControlName="igrejaBatizado" [readonly]="operacao.disabled" placeholder="Igreja do batizado">
                     </mat-form-field>

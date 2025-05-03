@@ -221,8 +221,11 @@ export function formatarEspacoDireita(str: string, max: number) {
 }
 
 export function retirarFormatacao(campoTexto: string) {
-  campoTexto = campoTexto.replace(/(\.|\/|\-|\_)/g, '');
-  campoTexto = campoTexto.trim();
+  if (!campoTexto) return '';
+
+  // Remove todos os caracteres que não sejam números
+  campoTexto = campoTexto.replace(/[^0-9]/g, '');
+
   return campoTexto;
 }
 
