@@ -150,7 +150,7 @@
                             <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('idadeCrianca')?.value}}</mat-card-title>
                             <mat-card-subtitle style="margin-left: 10px;">Turma sugerida:</mat-card-subtitle>
                         </mat-card-title-group>
-                        <span style="color: blue; font-size: 14px; margin-left: 10px;">{{turmaSugeridaDescricao}}</span>
+                        <span style="color: blue; font-size: 12px; margin-left: 10px;">{{turmaSugeridaDescricao}}</span>
                         <!-- <mat-card-content style="margin-left: 10px;">
                           <span>
                         </span>
@@ -167,7 +167,7 @@
                       [field]="'turmaMatricula'"
                       [itens]="turmas"
                       [propriedadeMostrar]="'descricaoAnoSemestreLetivo'"
-                      [label]="'Turma matriculada'"
+                      [label]="'Selecione uma turma para matrícular'"
                       [valorInicial]="turmaSelecionado"
                       (itemSelecionado)="onTurmaSelecionado($event)"
                       [readonly]="operacao.disabled">
@@ -266,12 +266,36 @@
                 </div>
 
                 <!-- Deficiência ou Situação Atípica -->
+                <!-- <pre>original</pre> -->
                 <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
-                    <!-- <mat-checkbox formControlName="deficienciaOuSituacaoAtipica">Deficiência ou Situação Atípica?</mat-checkbox> -->
                     <mat-slide-toggle formControlName="deficienciaOuSituacaoAtipica">Situação Atípica?</mat-slide-toggle>
                     <br />
                     <br />
-                  </div>
+                </div>
+
+                <!-- Deficiência ou Situação Atípica -->
+                <!-- <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
+
+                  <app-toggle-status
+                  [formGroup]="formulario"
+                  formControlName="deficienciaOuSituacaoAtipica"
+                  label="Situação Atípica?"
+                  [operacao]="operacao"
+                  positiveLabel="Sim"
+                  negativeLabel="Não">
+                  </app-toggle-status>
+                  <br />
+                  <br />
+                </div> -->
+
+                <!-- Deficiência ou Situação Atípica -->
+                <!-- <pre>original</pre>
+                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
+                    <mat-slide-toggle formControlName="deficienciaOuSituacaoAtipica">Situação Atípica?</mat-slide-toggle>
+                    <br />
+                    <br />
+                </div>
+              </div>
 
                 <!-- Descrição da Deficiência -->
                 <div class="col-sm-8" *ngIf="formulario.get('deficienciaOuSituacaoAtipica')?.value">
