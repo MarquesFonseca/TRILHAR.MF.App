@@ -94,8 +94,8 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   // }
 
   override ngOnInit() {
-    var filtro = this.montaFiltro(1, 10);
-    this.carregarAlunos(filtro);
+    //var filtro = this.montaFiltro(1, 10);
+    //this.carregarAlunos(filtro);
   }
 
   override preencheFiltro(): void {
