@@ -196,7 +196,7 @@ import { EcommercePageComponent } from './pages/ecommerce-page/ecommerce-page.co
 import { TeamMembersComponent } from './pages/users-page/team-members/team-members.component';
 
 // Crianças
-import { CriancaDashboardComponent } from './trilhar/crianca/crianca-dashboard/crianca-dashboard.component';
+// import { CriancaDashboardComponent } from './trilhar/crianca/crianca-dashboard/crianca-dashboard.component';
 import { CriancaListarComponent } from './trilhar/crianca/crianca-listar/crianca-listar.component';
 import { CriancaFormularioComponent } from './trilhar/crianca/crianca-formulario/crianca-formulario.component';
 
@@ -214,7 +214,7 @@ import { FrequenciaCheckinDiaComponent } from './trilhar/frequencia/frequencia-c
 
 export const routes: Routes = [
     // {path: '', component: EcommerceComponent},
-    {path: '', component: CriancaDashboardComponent},
+    {path: '', component: CriancaListarComponent},
     {path: 'crm', component: CrmComponent},
     {path: 'project-management', component: ProjectManagementComponent},
     {path: 'lms', component: LmsComponent},
@@ -233,7 +233,7 @@ export const routes: Routes = [
             {path: 'incluir/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Nova Irmão", breadcrumb: "Incluir", } },
             {path: 'alterar/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Alterar Criança", breadcrumb: "Alterar", } },
             {path: 'detalhar/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Detalhar Criança", breadcrumb: "Detalhar", } },
-            {path: 'dashboard', component: CriancaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
+            //{path: 'dashboard', component: CriancaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
         ]
     },
     {
