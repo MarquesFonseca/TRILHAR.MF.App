@@ -27,32 +27,23 @@
     [class.rtl-enabled]="themeService.isRTLEnabled()"
 >
     <mat-card-header>
-        <mat-card-title>
-            <form class="search-box position-relative">
-                <i class="material-symbols-outlined">
-                    search
-                </i>
-                <!-- (keyup)="applyFilter()" -->
-                <input type="text"
-                       class="input-search d-block w-100 border-none outline-0"
-                       placeholder="Pesquisar código de cadastro..."
-                       [(ngModel)]="searchText"
-                       name="search"
-                       #input>
-                <!-- <button type="button" (click)="applyFilter()">Buscar</button> -->
-                <button mat-flat-button class="search-btn" (click)="applyFilter()">Buscar</button>
-              </form>
-        </mat-card-title>
-        <mat-card-subtitle>
-            <!-- <a mat-button class="add-new-btn" routerLink="/criancas/incluir">
-                + Add Nova Criança
-            </a> -->
-            <!-- Botão de Alterar (visível apenas no modo detalhar) -->
-            <button mat-button color="primary" class="action-button" routerLink="/criancas/incluir" routerLinkActive="active">
-              <i class="material-symbols-outlined">add_circle</i>
-              Nova Criança
-            </button>
-        </mat-card-subtitle>
+      <mat-card-title style="width: 100%;">
+        <form class="search-box position-relative">
+          <i class="material-symbols-outlined">
+            search
+          </i>
+          <input type="text" class="input-search d-block w-100 border-none outline-0"
+            placeholder="Pesquisar código de cadastro..." [(ngModel)]="searchText" name="search" #input>
+          <button mat-flat-button class="search-btn" (click)="applyFilter()">Buscar</button>
+        </form>
+      </mat-card-title>
+      <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 8px;">
+        <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
+          routerLink="/criancas/incluir" routerLinkActive="active">
+          <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+          <span style="vertical-align: middle; margin-left: 4px;">Nova Criança</span>
+        </button>
+      </div>
     </mat-card-header>
     <mat-card-content>
         <div class="events-table">
