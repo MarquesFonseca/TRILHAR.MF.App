@@ -194,14 +194,23 @@ import { EProductsListComponent } from './pages/ecommerce-page/e-products-list/e
 import { EProductsGridComponent } from './pages/ecommerce-page/e-products-grid/e-products-grid.component';
 import { EcommercePageComponent } from './pages/ecommerce-page/ecommerce-page.component';
 import { TeamMembersComponent } from './pages/users-page/team-members/team-members.component';
+
+// Crianças
+import { CriancaDashboardComponent } from './trilhar/crianca/crianca-dashboard/crianca-dashboard.component';
 import { CriancaListarComponent } from './trilhar/crianca/crianca-listar/crianca-listar.component';
 import { CriancaFormularioComponent } from './trilhar/crianca/crianca-formulario/crianca-formulario.component';
+
+// Turmas
 import { TurmaListarComponent } from './trilhar/turma/turma-listar/turma-listar.component';
 import { TurmaFormularioComponent } from './trilhar/turma/turma-formulario/turma-formulario.component';
 import { TurmaAtualizarLimiteMaximoComponent } from './trilhar/turma/turma-atualizar-limite-maximo/turma-atualizar-limite-maximo.component';
-import { CriancaDashboardComponent } from './trilhar/crianca/crianca-dashboard/crianca-dashboard.component';
+
+// Matriculas
 import { MatriculaDashboardComponent } from './trilhar/matricula/matricula-dashboard/matricula-dashboard.component';
+
+//Frequencias
 import { FrequenciaDashboardComponent } from './trilhar/frequencia/frequencia-dashboard/frequencia-dashboard.component';
+import { FrequenciaCheckinDiaComponent } from './trilhar/frequencia/frequencia-checkin-dia/frequencia-checkin-dia.component';
 
 export const routes: Routes = [
     // {path: '', component: EcommerceComponent},
@@ -221,6 +230,7 @@ export const routes: Routes = [
             {path: '', component: CriancaListarComponent, data: { rota: "criancas", titulo: "Listar Crianças", breadcrumb: "Listar", } },
             {path: 'listar', component: CriancaListarComponent, data: { rota: "criancas", titulo: "Listar Crianças", breadcrumb: "Listar", } },
             {path: 'incluir', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Nova Criança", breadcrumb: "Incluir", } },
+            {path: 'incluir/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Nova Irmão", breadcrumb: "Incluir", } },
             {path: 'alterar/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Alterar Criança", breadcrumb: "Alterar", } },
             {path: 'detalhar/:id', component: CriancaFormularioComponent, data: { rota: "criancas", titulo: "Detalhar Criança", breadcrumb: "Detalhar", } },
             {path: 'dashboard', component: CriancaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
@@ -235,18 +245,19 @@ export const routes: Routes = [
           {path: 'alterar/:id', component: TurmaFormularioComponent, data: { rota: "turmas", titulo: "Alterar Turma", breadcrumb: "Alterar", },},
           {path: 'detalhar/:id', component: TurmaFormularioComponent, data: { rota: "turmas", titulo: "Detalhar Turma", breadcrumb: "Detalhar", },},
           {path: 'limite', component: TurmaAtualizarLimiteMaximoComponent, data: { rota: "turmas", titulo: "Limitar Turma", breadcrumb: "Limitar", },},
-      ]
-    },
-    {
-      path: 'matriculas',
-      children: [
+        ]
+      },
+      {
+        path: 'matriculas',
+        children: [
           {path: 'dashboard', component: MatriculaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
-      ]
-    },
-    {
-      path: 'frequencias',
-      children: [
+        ]
+      },
+      {
+        path: 'frequencias',
+        children: [
           {path: 'dashboard', component: FrequenciaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
+          {path: 'checkin-dia', component: FrequenciaCheckinDiaComponent, data: { rota: "checkin-dia", titulo: "Resultado checkin no dia", breadcrumb: "Checkin dia", },},
       ]
     },
     {

@@ -1,13 +1,18 @@
-<mat-form-field class="w-100" appearance="fill">
+<mat-form-field class="w-100" appearance="outline">
   <mat-label>{{ label }}</mat-label>
   <input matInput
+  appDateMask
   [matDatepicker]="picker"
   [formControl]="controle"
   (dateChange)="onSelecionar($event)"
+  (blur)="onBlur($event)"
+  (input)="onInput($event)"
   [min]="minDate"
   [max]="maxDate"
-  [readonly]="readonly">
-  <!-- <mat-hint>DD/MM/YYYY</mat-hint> -->
+  [readonly]="readonly"
+  placeholder="DD/MM/YYYY">
+  <!-- <mat-hint>Digite no formato DD/MM/YYYY ou clique no calendário</mat-hint> -->
+  <!-- <mat-error *ngIf="controle?.hasError('matDatepickerParse')">Data inválida</mat-error> -->
   <mat-datepicker-toggle matIconSuffix [for]="picker" [disabled]="disabled || readonly"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
+  <mat-datepicker #picker [disabled]="readonly || disabled"></mat-datepicker>
 </mat-form-field>

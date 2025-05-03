@@ -10,7 +10,7 @@ import * as types from './frequencia.types';
   providedIn: 'root',
 })
 export class FrequenciaService {
-  private apiUrl = `${environment.API_TRILHAR}/frequencia`; // URL da API
+  private apiUrl = `${environment.API_TRILHAR}/frequencias`; // URL da API
 
   constructor(
     private http: HttpClient,
@@ -27,7 +27,7 @@ export class FrequenciaService {
 
   // listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
   //   this.loadingService.show();
-  //   this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
+  //   this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
   //       next: (resp: any) => {
   //           this.loadingService.hide();
   //           if (callback) {
@@ -48,7 +48,7 @@ export class FrequenciaService {
   listarPorFiltroPromise(filtro: any): Promise<any> {
     this.loadingService.show();
     return new Promise((resolve, reject) => {
-      this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).subscribe({
+      this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
         next: (resp: any) => {
           this.loadingService.hide();
           resolve(resp); // Resolve a Promise com os dados da resposta
@@ -64,7 +64,7 @@ export class FrequenciaService {
 
   listarPorFiltro(filtro: any): Observable<any> {
     this.loadingService.show();
-    return this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro).pipe(
+    return this.http.post(`${this.apiUrl}/filtro`, filtro).pipe(
         finalize(() => this.loadingService.hide()) // Garante que o loading sempre será escondido
     );
 }
@@ -80,7 +80,7 @@ export class FrequenciaService {
     });
   }
 
-  Alterar(Entity: types.FrequenciaModel, Id: any, callback?: any) {
+  Alterar(Id: any, Entity: types.FrequenciaModel, callback?: any) {
     this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
       this.mensagemService.showSuccess('Registro alterado com sucesso!');
       callback(resp);

@@ -96,7 +96,7 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
     try {
       const res = await this.criancaService.listarPorFiltroPromise(filtro);
       if (res?.dados) {
-        this.dadosCriancas = res.dados.map((aluno: any) => ({
+        this.dadosCriancas = res.dados.dados.map((aluno: any) => ({
           Codigo: aluno.codigo.toString(),
           CodigoCadastro: aluno.codigoCadastro,
           NomeCrianca: aluno.nomeCrianca,
@@ -127,10 +127,10 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
         this.calcularEstatisticas();
 
         // Criar gráficos
-        setTimeout(() => {
+        //setTimeout(() => {
           this.criarGraficos();
           this.carregando = false;
-        }, 1000);
+        //}, 1000);
       } else {
         console.error('Resposta inválida:', res);
         this.erro = 'Falha ao carregar os dados.';

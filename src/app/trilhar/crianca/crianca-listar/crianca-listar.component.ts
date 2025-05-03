@@ -134,8 +134,8 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   var res = await this.criancaService.listarPorFiltroPromise(filtro);
   if (res?.dados) {
     this.totalItems = res.totalItens;
-    var alunoOutput: types.IAlunoOutput[] = res.dados;
-    alunoOutput = alunoOutput.map(aluno => ({
+    var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
+    var temp = alunoOutput.map(aluno => ({
       ...aluno,
       Action: {
           view: 'visibility',
@@ -143,6 +143,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
           delete: 'delete',
       },
     }));
+    alunoOutput = temp;
     this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
     }
   }
