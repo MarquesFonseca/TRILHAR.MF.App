@@ -1,6 +1,6 @@
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { CommonModule, NgIf, isPlatformBrowser } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseFormComponent } from '../../../shared/formulario/baseForms';
@@ -19,8 +19,7 @@ Chart.register(...registerables);
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MaterialModule,
-    NgIf,
+    MaterialModule
   ],
   templateUrl: './crianca-dashboard.component.html',
   styleUrl: './crianca-dashboard.component.scss'
@@ -127,10 +126,10 @@ export class CriancaDashboardComponent extends BaseFormComponent implements OnIn
         this.calcularEstatisticas();
 
         // Criar gráficos
-        //setTimeout(() => {
+        setTimeout(() => {
           this.criarGraficos();
           this.carregando = false;
-        //}, 1000);
+        }, 500);
       } else {
         console.error('Resposta inválida:', res);
         this.erro = 'Falha ao carregar os dados.';
