@@ -45,29 +45,29 @@ export class FrequenciaService {
   //   });
   // }
 
-  listarPorFiltroPromise(filtro: any): Promise<any> {
-    this.loadingService.show();
-    return new Promise((resolve, reject) => {
-      this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
-        next: (resp: any) => {
-          this.loadingService.hide();
-          resolve(resp); // Resolve a Promise com os dados da resposta
-        },
-        error: (err: any) => {
-          this.loadingService.hide();
-          console.error('Erro ao listar por filtro:', err);
-          reject(err); // Rejeita a Promise em caso de erro
-        }
-      });
-    });
-  }
+  // listarPorFiltroPromise(filtro: any): Promise<any> {
+  //   this.loadingService.show();
+  //   return new Promise((resolve, reject) => {
+  //     this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
+  //       next: (resp: any) => {
+  //         this.loadingService.hide();
+  //         resolve(resp); // Resolve a Promise com os dados da resposta
+  //       },
+  //       error: (err: any) => {
+  //         this.loadingService.hide();
+  //         console.error('Erro ao listar por filtro:', err);
+  //         reject(err); // Rejeita a Promise em caso de erro
+  //       }
+  //     });
+  //   });
+  // }
 
-  listarPorFiltro(filtro: any): Observable<any> {
-    this.loadingService.show();
-    return this.http.post(`${this.apiUrl}/filtro`, filtro).pipe(
-        finalize(() => this.loadingService.hide()) // Garante que o loading sempre será escondido
-    );
-}
+  // listarPorFiltro(filtro: any): Observable<any> {
+  //   this.loadingService.show();
+  //   return this.http.post(`${this.apiUrl}/filtro`, filtro).pipe(
+  //       finalize(() => this.loadingService.hide()) // Garante que o loading sempre será escondido
+  //   );
+  // }
 
   async listarTodosPromise(): Promise<any> {
     return this.http.get<any>(`${this.apiUrl}`).toPromise();

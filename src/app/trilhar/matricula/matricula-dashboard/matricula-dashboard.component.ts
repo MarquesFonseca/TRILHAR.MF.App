@@ -73,7 +73,7 @@ export class MatriculaDashboardComponent extends BaseFormComponent implements On
     }
 
   override ngOnInit(): void {
-    this.carregarDados();
+    //this.carregarDados();
   }
 
   override preencheFormulario(): void {
@@ -93,50 +93,50 @@ export class MatriculaDashboardComponent extends BaseFormComponent implements On
     this.erro = null;
 
     var filtro = this.montaFiltro(0, 0);
-    this.matriculaService.listarPorFiltro(filtro, (res: any) => {
-      if (res?.dados) {
-        var dadosMapeados = res.dados.map((aluno: any) => ({
-          Codigo: aluno.codigo.toString(),
-          CodigoCadastro: aluno.codigoCadastro,
-          NomeCrianca: aluno.nomeCrianca,
-          DataNascimento: aluno.dataNascimento,
-          NomeMae: aluno.nomeMae,
-          NomePai: aluno.nomePai,
-          OutroResponsavel: aluno.outroResponsavel,
-          Telefone: aluno.telefone,
-          EnderecoEmail: aluno.enderecoEmail,
-          Alergia: aluno.alergia,
-          DescricaoAlergia: aluno.descricaoAlergia,
-          RestricaoAlimentar: aluno.restricaoAlimentar,
-          DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
-          DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
-          DescricaoDeficiencia: aluno.descricaoDeficiencia,
-          Batizado: aluno.batizado,
-          DataBatizado: aluno.dataBatizado,
-          IgrejaBatizado: aluno.igrejaBatizado,
-          Ativo: aluno.ativo,
-          CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
-          DataAtualizacao: aluno.dataAtualizacao,
-          DataCadastro: aluno.dataCadastro,
-        }));
+    // this.matriculaService.listarPorFiltro(filtro, (res: any) => {
+    //   if (res?.dados) {
+    //     var dadosMapeados = res.dados.map((aluno: any) => ({
+    //       Codigo: aluno.codigo.toString(),
+    //       CodigoCadastro: aluno.codigoCadastro,
+    //       NomeCrianca: aluno.nomeCrianca,
+    //       DataNascimento: aluno.dataNascimento,
+    //       NomeMae: aluno.nomeMae,
+    //       NomePai: aluno.nomePai,
+    //       OutroResponsavel: aluno.outroResponsavel,
+    //       Telefone: aluno.telefone,
+    //       EnderecoEmail: aluno.enderecoEmail,
+    //       Alergia: aluno.alergia,
+    //       DescricaoAlergia: aluno.descricaoAlergia,
+    //       RestricaoAlimentar: aluno.restricaoAlimentar,
+    //       DescricaoRestricaoAlimentar: aluno.descricaoRestricaoAlimentar,
+    //       DeficienciaOuSituacaoAtipica: aluno.deficienciaOuSituacaoAtipica,
+    //       DescricaoDeficiencia: aluno.descricaoDeficiencia,
+    //       Batizado: aluno.batizado,
+    //       DataBatizado: aluno.dataBatizado,
+    //       IgrejaBatizado: aluno.igrejaBatizado,
+    //       Ativo: aluno.ativo,
+    //       CodigoUsuarioLogado: aluno.codigoUsuarioLogado,
+    //       DataAtualizacao: aluno.dataAtualizacao,
+    //       DataCadastro: aluno.dataCadastro,
+    //     }));
 
-        this.dadosCriancas = dadosMapeados;
-        this.totalCriancas = this.dadosCriancas.length;
+    //     this.dadosCriancas = dadosMapeados;
+    //     this.totalCriancas = this.dadosCriancas.length;
 
-        // Calcular estatísticas
-        this.calcularEstatisticas();
+    //     // Calcular estatísticas
+    //     this.calcularEstatisticas();
 
-        // Criar gráficos
-        setTimeout(() => {
-          this.criarGraficos();
-          this.carregando = false;
-        }, 500);
-      } else {
-        console.error('Resposta inválida:', res);
-        this.erro = 'Falha ao carregar os dados.';
-        this.carregando = false;
-      }
-    });
+    //     // Criar gráficos
+    //     setTimeout(() => {
+    //       this.criarGraficos();
+    //       this.carregando = false;
+    //     }, 500);
+    //   } else {
+    //     console.error('Resposta inválida:', res);
+    //     this.erro = 'Falha ao carregar os dados.';
+    //     this.carregando = false;
+    //   }
+    // });
   }
 
   montaFiltro(page: number, pageSize: number) {

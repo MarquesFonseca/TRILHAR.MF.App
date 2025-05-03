@@ -94,25 +94,25 @@ export class MatriculaService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
-    this.loadingService.show();
-    this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
-        next: (resp: any) => {
-            this.loadingService.hide();
-            if (callback) {
-                callback(resp); // Invoca o callback com os dados da resposta
-            }
-        },
-        error: (err: any) => {
-            this.loadingService.hide();
-            console.error('Erro ao listar por filtro:', err);
-            // Aqui você pode adicionar lógica para mostrar mensagens de erro
-            if (callback) {
-                callback(null); // Invoca o callback com `null` para indicar erro
-            }
-        }
-    });
-}
+  // listarPorFiltro(filtro: any, callback?: (resp: any) => void) {
+  //   this.loadingService.show();
+  //   this.http.post(`${this.apiUrl}/filtro`, filtro).subscribe({
+  //       next: (resp: any) => {
+  //           this.loadingService.hide();
+  //           if (callback) {
+  //               callback(resp); // Invoca o callback com os dados da resposta
+  //           }
+  //       },
+  //       error: (err: any) => {
+  //           this.loadingService.hide();
+  //           console.error('Erro ao listar por filtro:', err);
+  //           // Aqui você pode adicionar lógica para mostrar mensagens de erro
+  //           if (callback) {
+  //               callback(null); // Invoca o callback com `null` para indicar erro
+  //           }
+  //       }
+  //   });
+  // }
 
   async listarTodosPromise(): Promise<any> {
     return this.http.get<any>(`${this.apiUrl}`).toPromise();
