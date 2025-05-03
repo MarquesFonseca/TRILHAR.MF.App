@@ -42,48 +42,31 @@
           </mat-card-subtitle>
         </mat-card-header> -->
 
-        <mat-card-header>
-          <mat-card-title>
-            <h5 class="mb-0">
+        <mat-card-header style="flex-direction: column; align-items: flex-start;">
+          <mat-card-title style="width: 100%;">
+            <h5 class="mb-0" style="margin: 0;">
               {{ getTituloCard() }}
             </h5>
           </mat-card-title>
-          <mat-card-subtitle>
-            <!-- <div class="actions-container"> -->
-              <!-- Botão de Adicionar Irmão (visível apenas no modo detalhar) -->
-              <button mat-button
-                      color="primary"
-                      class="action-button"
-                      [routerLink]="'/criancas/incluir/' + formulario.get('codigoCadastro')?.value"
-                      routerLinkActive="active"
-                      *ngIf="operacao.isDetalhar">
-                <mat-icon>new</mat-icon>
-                Incluir Irmão
-              </button>
 
-              <!-- Botão de Alterar (visível apenas no modo detalhar) -->
-              <button mat-button
-                      color="primary"
-                      class="action-button"
-                      [routerLink]="'/criancas/alterar/' + formulario.get('codigoCadastro')?.value"
-                      routerLinkActive="active"
-                      *ngIf="operacao.isDetalhar">
-                <mat-icon>edit</mat-icon>
-                Alterar
-              </button>
+          <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 8px;">
+            <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
+              [routerLink]="'/criancas/incluir/' + formulario.get('codigoCadastro')?.value" routerLinkActive="active">
+              <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+              <span style="vertical-align: middle; margin-left: 4px;">Incluir Irmão</span>
+            </button>
 
-              <!-- Botão de Voltar (visível em todos os modos exceto listagem) -->
-              <button mat-button
-                      color="basic"
-                      class="action-button"
-                      routerLink="/criancas/"
-                      routerLinkActive="active"
-                      *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar">
-                <mat-icon>arrow_back</mat-icon>
-                Listar
-              </button>
-            <!-- </div> -->
-          </mat-card-subtitle>
+            <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
+              [routerLink]="'/criancas/alterar/' + formulario.get('codigoCadastro')?.value" routerLinkActive="active">
+              <i class="material-symbols-outlined" style="vertical-align: middle;">edit</i>
+              <span style="vertical-align: middle; margin-left: 4px;">Alterar</span>
+            </button>
+
+            <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;" routerLink="/criancas/listar" routerLinkActive="active">
+              <i class="material-symbols-outlined" style="vertical-align: middle;">arrow_back</i>
+              <span style="vertical-align: middle; margin-left: 4px;">Listar</span>
+            </button>
+          </div>
         </mat-card-header>
 
 
@@ -91,7 +74,7 @@
             <div class="row">
 
                 <!-- Código Cadastro -->
-                <div class="col-sm-3" *ngIf="operacao.isDetalhar || operacao.isEditar">
+                <div class="col-sm-3" *ngIf="operacao.isDetalhar">
                 <!-- <div class="col-sm-2"> -->
                     <mat-form-field class="mb-25" appearance="outline">
                         <mat-label>Código Cadastro</mat-label>
@@ -106,8 +89,8 @@
 
                 <!-- Nome da Criança -->
                 <div [ngClass]="{
-                  'col-sm-12': operacao.isNovo,
-                  'col-sm-9': operacao.isDetalhar || operacao.isEditar }">
+                  'col-sm-12': operacao.isNovo || operacao.isEditar,
+                  'col-sm-9': operacao.isDetalhar }">
                   <mat-form-field class="mb-25" appearance="outline">
                       <mat-label>Nome da Criança</mat-label>
                       <input matInput formControlName="nomeCrianca" [readonly]="operacao.disabled" placeholder="Nome da criança">
