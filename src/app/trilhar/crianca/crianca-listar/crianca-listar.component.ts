@@ -85,12 +85,17 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     var lkjlll = this.getTitle();
   }
 
-  override async ngOnInit() {
-    // Depois, com um pequeno delay, definimos os valores iniciais
-    setTimeout(async () => {
-      var filtro = this.montaFiltro(1, 10);
-      await this.carregarAlunos(filtro);
-    }, 100);
+  // override async ngOnInit() {
+  //   // Depois, com um pequeno delay, definimos os valores iniciais
+  //   setTimeout(async () => {
+  //     var filtro = this.montaFiltro(1, 10);
+  //     await this.carregarAlunosPromise(filtro);
+  //   }, 100);
+  // }
+
+  override ngOnInit() {
+    var filtro = this.montaFiltro(1, 10);
+    this.carregarAlunos(filtro);
   }
 
   override preencheFiltro(): void {
@@ -130,40 +135,41 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     this.selection = new SelectionModel<types.IAlunoOutput>(true, []);
   }
 
-  async carregarAlunos(filtro: types.IAlunoInput): Promise<void> {
-  var res = await this.criancaService.listarPorFiltroPromise(filtro);
-  if (res?.dados) {
-    this.totalItems = res.dados.totalItens;
-    var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
-    var temp = alunoOutput.map(aluno => ({
-      ...aluno,
-      Action: {
-          view: 'visibility',
-          edit: 'edit',
-          delete: 'delete',
-      },
-    }));
-    alunoOutput = temp;
-    this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
-    }
+  carregarAlunos(filtro: types.IAlunoInput): void {
+    this.criancaService.listarPorFiltro(filtro, (res: any) => {
+      if (res?.dados) {
+        this.totalItems = res.dados.totalItens;
+        var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
+        var temp = alunoOutput.map(aluno => ({
+          ...aluno,
+          Action: {
+            view: 'visibility',
+            edit: 'edit',
+            delete: 'delete',
+          },
+        }));
+        alunoOutput = temp;
+        this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
+      }
+    });
   }
 
-  async carregarAlunosPromise(): Promise<void> {
-    var alunos = await this.criancaService.listarTodosPromise();
-
-    if(alunos.length > 0)  {
-      this.totalItems = alunos.totalItens;
-    var alunoOutput: types.IAlunoOutput[] = alunos.dados;
-    alunoOutput = alunoOutput.map(aluno => ({
-      ...aluno,
+  async carregarAlunosPromise(filtro: types.IAlunoInput): Promise<void> {
+    var res = await this.criancaService.listarPorFiltroPromise(filtro);
+    if (res?.dados) {
+      this.totalItems = res.dados.totalItens;
+      var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
+      var temp = alunoOutput.map(aluno => ({
+        ...aluno,
         Action: {
-          view: 'visibility',
-          edit: 'edit',
-          delete: 'delete',
+            view: 'visibility',
+            edit: 'edit',
+            delete: 'delete',
         },
-    }));
-    this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
-    }
+      }));
+      alunoOutput = temp;
+      this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
+      }
   }
 
   ngAfterViewInit() {
