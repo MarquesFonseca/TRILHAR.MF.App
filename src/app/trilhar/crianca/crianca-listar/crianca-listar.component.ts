@@ -133,7 +133,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   async carregarAlunos(filtro: types.IAlunoInput): Promise<void> {
   var res = await this.criancaService.listarPorFiltroPromise(filtro);
   if (res?.dados) {
-    this.totalItems = res.totalItens;
+    this.totalItems = res.dados.totalItens;
     var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
     var temp = alunoOutput.map(aluno => ({
       ...aluno,
