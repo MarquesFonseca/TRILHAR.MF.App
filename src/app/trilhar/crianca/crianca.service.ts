@@ -84,19 +84,47 @@ export class CriancaService {
     });
   }
 
+  // async listarPorFiltroPromise(filtro: types.IAlunoInput): Promise<any> {
+  //   const params = this.buildHttpParams(filtro);
+
+  //   this.loadingService.show();
+  //   try {
+  //     const response = await firstValueFrom(
+  //       this.http.get(`${this.apiUrl}/filtro`, { params })
+  //     );
+  //     return response; // Retorna a resposta da API
+  //   } catch (error: any) {
+  //     this.mensagemService.showError('Erro ao listar por filtro', error);
+  //     console.error('Erro ao listar por filtro:', error);
+  //     throw error; // Propaga o erro
+  //   } finally {
+  //     this.loadingService.hide();
+  //   }
+  // }
+
   async listarPorFiltroPromise(filtro: types.IAlunoInput): Promise<any> {
     const params = this.buildHttpParams(filtro);
 
+    // Criando os headers com no-cache
+    const headers = new HttpHeaders({
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    });
+
     this.loadingService.show();
+
     try {
       const response = await firstValueFrom(
-        this.http.get(`${this.apiUrl}/filtro`, { params })
+        this.http.get(`${this.apiUrl}/filtro`, {
+          params,
+          headers // Adicionando os headers
+        })
       );
-      return response; // Retorna a resposta da API
+      return response;
     } catch (error: any) {
       this.mensagemService.showError('Erro ao listar por filtro', error);
       console.error('Erro ao listar por filtro:', error);
-      throw error; // Propaga o erro
+      throw error;
     } finally {
       this.loadingService.hide();
     }
