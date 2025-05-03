@@ -17,6 +17,7 @@ import * as utils from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import * as criancasTypes from '../crianca.types';
 import * as turmaTypes from '../../turma/turma.types';
+import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
 
 @Component({
   selector: 'app-criancas-formulario',
@@ -30,7 +31,8 @@ import * as turmaTypes from '../../turma/turma.types';
     NgxMaskDirective,
     AutoCompleteComponent,
     CalendarioComponent,
-    MensagemErroComponent
+    MensagemErroComponent,
+    //ToggleStatusComponent,
   ],
   providers: [provideNgxMask()],
 
@@ -363,6 +365,10 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           dataNascimento: new Date(crianca.dados.dataNascimento),
           idadeCrianca: utils.retornaIdadeFormatadaAnoMesDia(new Date(crianca.dados.dataNascimento))
         }, { emitEvent: false });
+
+        const turmaSugerida = this.retornaTurmaSugerida(new Date(crianca.dados.dataNascimento), this.turmas);
+        this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
+        this.turmaSugeridaDescricao = `${this.turmaSelecionado.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
       }
 
       // Depois, processa a matrícula e turma
@@ -434,7 +440,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
 
     if (this.operacao.isEditar) {
-      this.criancaService.Alterar(this.id, filtro, async (res: any) => {
+      this.criancaService.Alterar(valoresForm.codigo, filtro, async (res: any) => {
         if (res) {
           const codigoAluno = filtro.codigo;
           const { turmaMatricula } = this.formulario.value;
@@ -528,7 +534,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     this.turmaSelecionado = null;
     this.formulario.get('turmaMatricula')?.setValue(null, { emitEvent: false });
     this.childAutoCompleteComponent?.limpar();
-    this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada!';
+    //this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada!';
     this.cdr.detectChanges();
   }
 
