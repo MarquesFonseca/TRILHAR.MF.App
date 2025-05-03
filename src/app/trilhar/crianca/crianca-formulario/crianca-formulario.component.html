@@ -50,19 +50,22 @@
           </mat-card-title>
 
           <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 8px;">
-            <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
+            <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
               [routerLink]="'/criancas/incluir/' + formulario.get('codigoCadastro')?.value" routerLinkActive="active">
               <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
               <span style="vertical-align: middle; margin-left: 4px;">Incluir Irmão</span>
             </button>
 
-            <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
+            <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
+              style="display: flex; align-items: center;"
               [routerLink]="'/criancas/alterar/' + formulario.get('codigoCadastro')?.value" routerLinkActive="active">
               <i class="material-symbols-outlined" style="vertical-align: middle;">edit</i>
               <span style="vertical-align: middle; margin-left: 4px;">Alterar</span>
             </button>
 
-            <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;" routerLink="/criancas/listar" routerLinkActive="active">
+            <button *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar" mat-button color="primary"
+              class="action-button" style="display: flex; align-items: center;" routerLink="/criancas/listar"
+              routerLinkActive="active">
               <i class="material-symbols-outlined" style="vertical-align: middle;">arrow_back</i>
               <span style="vertical-align: middle; margin-left: 4px;">Listar</span>
             </button>
