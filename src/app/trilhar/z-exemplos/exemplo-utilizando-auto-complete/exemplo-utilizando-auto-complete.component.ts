@@ -51,7 +51,7 @@ export class ExemploUtilizandoAutoCompleteComponent implements OnInit {
 
   ngOnInit() {
     // Primeiro carregamos os dados necessários
-    this.carregarDados();
+    //this.carregarDados();
 
     // Depois, com um pequeno delay, definimos os valores iniciais
     setTimeout(() => {

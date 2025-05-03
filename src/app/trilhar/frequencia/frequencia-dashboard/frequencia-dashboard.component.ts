@@ -219,53 +219,53 @@ export class FrequenciaDashboardComponent extends BaseFormComponent implements O
     var dadosSimulados: types.FrequenciaData[] = [];
     var filtro = this.montaFiltro(0, 0);
     try {
-      const res = await this.frequenciaService.listarPorFiltroPromise(filtro);
-      if (res?.dados) {
-          var dadosMapeados = res.dados.map((freq: any) => ({
-            Codigo: freq.codigo.toString(),
-            DataFrequencia: freq.dataFrequencia,
-            Presenca: freq.presenca,
-            CodigoUsuarioLogado: freq.codigoUsuarioLogado,
-            DataAtualizacao: freq.dataAtualizacao,
-            DataCadastro: freq.dataCadastro,
-            CodigoAluno: freq.codigoAluno,
-            AlunoCodigoCadastro: freq.alunoAlunoCadastro,
-            AlunoNomeCrianca: freq.alunoNomeCrianca,
-            AlunoDataNascimento: freq.alunoDataNascimento,
-            AlunoNomeMae: freq.alunoNomeMae,
-            AlunoNomePai: freq.alunoNomePai,
-            AlunoOutroResponsavel: freq.alunoOutroResponsavel,
-            AlunoTelefone: freq.alunoTelefone,
-            AlunoEnderecoEmail: freq.alunoEnderecoEmail,
-            AlunoAlergia: freq.alunoAlergia,
-            AlunoDescricaoAlergia: freq.alunoDescricaoAlergia,
-            AlunoRestricaoAlimentar: freq.alunoRestricaoAlimentar,
-            AlunoDescricaoRestricaoAlimentar:
-              freq.alunoDescricaoRestricaoAlimentar,
-            AlunoDeficienciaOuSituacaoAtipica:
-              freq.alunoDeficienciaOuSituacaoAtipica,
-            AlunoDescricaoDeficiencia: freq.alunoDescricaoDeficiencia,
-            AlunoBatizado: freq.alunoBatizado,
-            AlunoDataBatizado: freq.alunoDataBatizado,
-            AlunoIgrejaBatizado: freq.alunoIgrejaBatizado,
-            AlunoAtivo: freq.alunoAtivo,
-            CodigoTurma: freq.codigoTurma,
-            TurmaDescricao: freq.turmaDescricao,
-            TurmaIdadeInicialAluno: freq.turmaIdadeInicialAluno,
-            TurmaIdadeFinalAluno: freq.turmaIdadeFinalAluno,
-            TurmaAnoLetivo: freq.turmaAnoLetivo,
-            TurmaSemestreLetivo: freq.turmaSemestreLetivo,
-            TurmaLimiteMaximo: freq.turmaLimiteMaximo,
-            TurmaAtivo: freq.turmaAtivo,
-          }));
+      // const res = await this.frequenciaService.listarPorFiltroPromise(filtro);
+      // if (res?.dados) {
+      //     var dadosMapeados = res.dados.map((freq: any) => ({
+      //       Codigo: freq.codigo.toString(),
+      //       DataFrequencia: freq.dataFrequencia,
+      //       Presenca: freq.presenca,
+      //       CodigoUsuarioLogado: freq.codigoUsuarioLogado,
+      //       DataAtualizacao: freq.dataAtualizacao,
+      //       DataCadastro: freq.dataCadastro,
+      //       CodigoAluno: freq.codigoAluno,
+      //       AlunoCodigoCadastro: freq.alunoAlunoCadastro,
+      //       AlunoNomeCrianca: freq.alunoNomeCrianca,
+      //       AlunoDataNascimento: freq.alunoDataNascimento,
+      //       AlunoNomeMae: freq.alunoNomeMae,
+      //       AlunoNomePai: freq.alunoNomePai,
+      //       AlunoOutroResponsavel: freq.alunoOutroResponsavel,
+      //       AlunoTelefone: freq.alunoTelefone,
+      //       AlunoEnderecoEmail: freq.alunoEnderecoEmail,
+      //       AlunoAlergia: freq.alunoAlergia,
+      //       AlunoDescricaoAlergia: freq.alunoDescricaoAlergia,
+      //       AlunoRestricaoAlimentar: freq.alunoRestricaoAlimentar,
+      //       AlunoDescricaoRestricaoAlimentar:
+      //         freq.alunoDescricaoRestricaoAlimentar,
+      //       AlunoDeficienciaOuSituacaoAtipica:
+      //         freq.alunoDeficienciaOuSituacaoAtipica,
+      //       AlunoDescricaoDeficiencia: freq.alunoDescricaoDeficiencia,
+      //       AlunoBatizado: freq.alunoBatizado,
+      //       AlunoDataBatizado: freq.alunoDataBatizado,
+      //       AlunoIgrejaBatizado: freq.alunoIgrejaBatizado,
+      //       AlunoAtivo: freq.alunoAtivo,
+      //       CodigoTurma: freq.codigoTurma,
+      //       TurmaDescricao: freq.turmaDescricao,
+      //       TurmaIdadeInicialAluno: freq.turmaIdadeInicialAluno,
+      //       TurmaIdadeFinalAluno: freq.turmaIdadeFinalAluno,
+      //       TurmaAnoLetivo: freq.turmaAnoLetivo,
+      //       TurmaSemestreLetivo: freq.turmaSemestreLetivo,
+      //       TurmaLimiteMaximo: freq.turmaLimiteMaximo,
+      //       TurmaAtivo: freq.turmaAtivo,
+      //     }));
 
-          //this.processarDados(dadosMapeados);
-          dadosSimulados = dadosMapeados;
-        } else {
-          this.erro = 'Falha ao carregar os dados.';
-        }
-        this.carregando = false;
-        this.processarDados(dadosSimulados);
+      //     //this.processarDados(dadosMapeados);
+      //     dadosSimulados = dadosMapeados;
+      //   } else {
+      //     this.erro = 'Falha ao carregar os dados.';
+      //   }
+      //   this.carregando = false;
+      //   this.processarDados(dadosSimulados);
       } catch (error) {
         console.error('Erro ao carregar crianças:', error);
         this.erro = 'Falha ao carregar os dados.';
