@@ -66,9 +66,19 @@ export class CriancaService {
 
   listarPorFiltro(filtro: types.IAlunoInput, callback?: (resp: any) => void): void {
     const params = this.buildHttpParams(filtro);
+    // Criando os headers com no-cache
+    const headers = new HttpHeaders({
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
 
     this.loadingService.show(); // Exibe o indicador de carregamento
-    this.http.get(`${this.apiUrl}/filtro`, { params }).subscribe({
+    this.http.get(`${this.apiUrl}/filtro`, {
+          params,
+          headers // Adicionando os headers
+        }
+      ).subscribe({
       next: (resp: any) => {
         if (callback) {
           callback(resp); // Chama o callback apenas se ele estiver definido
