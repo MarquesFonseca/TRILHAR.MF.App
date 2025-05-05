@@ -247,4 +247,27 @@ export abstract class BaseFormComponent extends Base implements OnInit {
     return messageFn ? messageFn(errorValue) : 'Erro desconhecido';
   }
 
+  // Para navegação com parâmetros
+  // Exemplo: this.navegar(event, '/caminho', [param1, param2]);
+  //(click)="navegar($event, '/criancas/listar')">
+  //(click)="navegar($event, '/criancas/incluir', [formulario.get('codigoCadastro')?.value])"
+  public navegar(event: Event, caminho: string, parametros?: any[]): void {
+    event.preventDefault();
+
+    if (parametros && parametros.length > 0) {
+      // Se há parâmetros, usa o array completo [caminho, param1, param2, ...]
+      this.router.navigate([caminho, ...parametros]);
+    } else {
+      // Se não há parâmetros, navega apenas para o caminho
+      this.router.navigate([caminho]);
+    }
+  }
+
+  // Para navegação com query params
+  // Exemplo: this.navegarComQuery(event, '/caminho', { param1: 'valor1', param2: 'valor2' });
+  public navegarComQuery(event: Event, caminho: string, queryParams: any): void {
+    event.preventDefault();
+    this.router.navigate([caminho], { queryParams });
+  }
+
 }
