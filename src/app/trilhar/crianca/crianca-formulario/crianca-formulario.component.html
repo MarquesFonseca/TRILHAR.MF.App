@@ -20,44 +20,42 @@
           {{this.getOperacao()}}
       </li>
   </ol>
+  <!-- Botões -->
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; border: 0px solid red;">
+    <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
+      style="display: flex; align-items: center;"
+      (click)="navegar($event, '/criancas/incluir', [formulario.get('codigoCadastro')?.value])" routerLinkActive="active">
+      <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+      <span style="vertical-align: middle; margin-left: 4px;">Incluir Irmão</span>
+    </button>
+
+    <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
+      style="display: flex; align-items: center;"
+      (click)="navegar($event, '/criancas/alterar', [formulario.get('codigoCadastro')?.value])" routerLinkActive="active">
+      <i class="material-symbols-outlined" style="vertical-align: middle;">edit</i>
+      <span style="vertical-align: middle; margin-left: 4px;">Alterar</span>
+    </button>
+
+    <button *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar" mat-button color="primary"
+      class="action-button" style="display: flex; align-items: center;"
+      (click)="navegar($event, '/criancas')" routerLinkActive="active" >
+      <i class="material-symbols-outlined" style="vertical-align: middle;">arrow_back</i>
+      <span style="vertical-align: middle; margin-left: 4px;">Listar</span>
+    </button>
+  </div>
 </div>
 
 <form [formGroup]="formulario">
     <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
+    <!-- <mat-card class="daxa-card events-card mb-25 border-radius bg-white border-none d-block" [class.rtl-enabled]="themeService.isRTLEnabled()"></mat-card> -->
 
       <div style="padding-top: 0px; padding-bottom: 0px; border: 0px solid red;">
-
         <!-- Título -->
-        <div style="border-bottom: 1px dashed #808080; padding-bottom: 16px; ">
+        <div style="border-bottom: 0px dashed #808080; padding-bottom: 16px; ">
           <h5 class="mb-0" style="margin: 0;">
             {{ getTituloCard() }}
           </h5>
         </div>
-
-        <!-- Botões -->
-        <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; border: 0px solid red;">
-          <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
-            style="display: flex; align-items: center;"
-            (click)="navegar($event, '/criancas/incluir', [formulario.get('codigoCadastro')?.value])" routerLinkActive="active">
-            <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
-            <span style="vertical-align: middle; margin-left: 4px;">Incluir Irmão</span>
-          </button>
-
-          <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
-            style="display: flex; align-items: center;"
-            (click)="navegar($event, '/criancas/alterar', [formulario.get('codigoCadastro')?.value])" routerLinkActive="active">
-            <i class="material-symbols-outlined" style="vertical-align: middle;">edit</i>
-            <span style="vertical-align: middle; margin-left: 4px;">Alterar</span>
-          </button>
-
-          <button *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar" mat-button color="primary"
-            class="action-button" style="display: flex; align-items: center;"
-            (click)="navegar($event, '/criancas/listar')" routerLinkActive="active" >
-            <i class="material-symbols-outlined" style="vertical-align: middle;">arrow_back</i>
-            <span style="vertical-align: middle; margin-left: 4px;">Listar</span>
-          </button>
-        </div>
-
       </div>
 
       <mat-card-content>

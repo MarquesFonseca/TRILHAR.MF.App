@@ -50,6 +50,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   turmaSugeridaDescricao: string = '';
   id: any;
   isNovoIrmao: boolean = false;
+  nomeCriancaOriginal = '';
 
   constructor(
     private fb: FormBuilder,
@@ -317,6 +318,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           return;
         }
         if (!!crianca.dados) {
+          this.nomeCriancaOriginal = crianca.dados.nomeCrianca || '';
           this.formulario.get('codigo')?.setValue(crianca.dados.codigo);
           this.formulario.get('codigoCadastro')?.setValue(crianca.dados.codigoCadastro || ' ');
           this.formulario.get('nomeCrianca')?.setValue(crianca.dados.nomeCrianca || ' ');
@@ -598,9 +600,10 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   }
 
   getTituloCard(): string {
+    const { codigoCadastro, nomeCrianca } = this.formulario.value;
     if (this.operacao.isNovo) return 'Nova criança';
-    if (this.operacao.isEditar) return `Cadastro de: ${this.formulario.get('nomeCrianca')?.value}`;
-    if (this.operacao.isDetalhar) return `Detalhes de: ${this.formulario.get('nomeCrianca')?.value}`;
+    if (this.operacao.isEditar) return `Alterando: #${codigoCadastro} - ${this.nomeCriancaOriginal}`;
+    if (this.operacao.isDetalhar) return `Detalhando: #${codigoCadastro} - ${this.nomeCriancaOriginal}`;
     return '';
   }
 }
