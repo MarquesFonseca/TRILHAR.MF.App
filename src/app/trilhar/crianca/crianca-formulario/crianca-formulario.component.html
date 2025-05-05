@@ -1,8 +1,8 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
-  <h5 class="mb-0">
-    <!-- {{this.getTitle()}} -->
-  </h5>
+  <!-- <h5 class="mb-0">
+    {{this.getTitle()}}
+  </h5> -->
   <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
       <li class="breadcrumb-item position-relative">
           <a routerLink="/criancas/dashboard" class="d-inline-block position-relative">
@@ -24,338 +24,325 @@
 
 <form [formGroup]="formulario">
     <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
-        <!-- <mat-card-header>
-          <mat-card-title>
-            <h5 class="mb-0">
-              {{operacao.isNovo ? 'Nova criança' : operacao.isEditar ? 'Cadastro de: ' + formulario.get('nomeCrianca')?.value : operacao.isDetalhar ? 'Detalhes de: ' + formulario.get('nomeCrianca')?.value : ''}}
-            </h5>
-          </mat-card-title>
-          <mat-card-subtitle>
-            <a mat-button class="add-new-btn" [routerLink]="['/criancas/alterar', formulario.get('codigoCadastro')?.value]" *ngIf="operacao.isDetalhar">
-              <i class="ri-edit-2-line"></i>
-              Alterar
-            </a>
-            <a mat-button class="add-new-btn" routerLink="/criancas/listar" *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar">
-              <i class="ri-arrow-left-line"></i>
-              Listar Crianças
-            </a>
-          </mat-card-subtitle>
-        </mat-card-header> -->
 
-        <mat-card-header style="flex-direction: column; align-items: flex-start;">
-          <mat-card-title style="width: 100%;">
-            <h5 class="mb-0" style="margin: 0;">
-              {{ getTituloCard() }}
-            </h5>
-          </mat-card-title>
+      <div style="padding-top: 0px; padding-bottom: 0px; border: 0px solid red;">
 
-          <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 8px;">
-            <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
-              [routerLink]="'/criancas/incluir/' + formulario.get('codigoCadastro')?.value" routerLinkActive="active">
-              <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
-              <span style="vertical-align: middle; margin-left: 4px;">Incluir Irmão</span>
-            </button>
+        <!-- Título -->
+        <div style="border-bottom: 1px dashed #808080; padding-bottom: 16px; ">
+          <h5 class="mb-0" style="margin: 0;">
+            {{ getTituloCard() }}
+          </h5>
+        </div>
 
-            <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
-              style="display: flex; align-items: center;"
-              [routerLink]="'/criancas/alterar/' + formulario.get('codigoCadastro')?.value" routerLinkActive="active">
-              <i class="material-symbols-outlined" style="vertical-align: middle;">edit</i>
-              <span style="vertical-align: middle; margin-left: 4px;">Alterar</span>
-            </button>
+        <!-- Botões -->
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; border: 0px solid red;">
+          <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
+            style="display: flex; align-items: center;"
+            (click)="navegar($event, '/criancas/incluir', [formulario.get('codigoCadastro')?.value])" routerLinkActive="active">
+            <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+            <span style="vertical-align: middle; margin-left: 4px;">Incluir Irmão</span>
+          </button>
 
-            <button *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar" mat-button color="primary"
-              class="action-button" style="display: flex; align-items: center;" routerLink="/criancas/listar"
-              routerLinkActive="active">
-              <i class="material-symbols-outlined" style="vertical-align: middle;">arrow_back</i>
-              <span style="vertical-align: middle; margin-left: 4px;">Listar</span>
-            </button>
-          </div>
-        </mat-card-header>
+          <button *ngIf="operacao.isDetalhar" mat-button color="primary" class="action-button"
+            style="display: flex; align-items: center;"
+            (click)="navegar($event, '/criancas/alterar', [formulario.get('codigoCadastro')?.value])" routerLinkActive="active">
+            <i class="material-symbols-outlined" style="vertical-align: middle;">edit</i>
+            <span style="vertical-align: middle; margin-left: 4px;">Alterar</span>
+          </button>
 
+          <button *ngIf="operacao.isNovo || operacao.isEditar || operacao.isDetalhar" mat-button color="primary"
+            class="action-button" style="display: flex; align-items: center;"
+            (click)="navegar($event, '/criancas/listar')" routerLinkActive="active" >
+            <i class="material-symbols-outlined" style="vertical-align: middle;">arrow_back</i>
+            <span style="vertical-align: middle; margin-left: 4px;">Listar</span>
+          </button>
+        </div>
 
-        <mat-card-content>
-            <div class="row">
+      </div>
 
-                <!-- Código Cadastro -->
-                <div class="col-sm-3" *ngIf="operacao.isDetalhar">
-                <!-- <div class="col-sm-2"> -->
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Código Cadastro</mat-label>
-                        <input matInput formControlName="codigoCadastro" [readonly]="true" placeholder="Código Cadastro">
-                        <app-mensagem-erro ngSkipHydration
-                          [control]="formulario.get('codigoCadastro')"
-                          [field]="'codigoCadastro'">
-                        </app-mensagem-erro>
-                      </mat-form-field>
-                    <!-- <pre>{{formulario.get('codigoCadastro')?.errors | json}}</pre> -->
-                </div>
+      <mat-card-content>
+          <div class="row">
 
-                <!-- Nome da Criança -->
-                <div [ngClass]="{
-                  'col-sm-12': operacao.isNovo || operacao.isEditar,
-                  'col-sm-9': operacao.isDetalhar }">
+              <!-- Código Cadastro -->
+              <div class="col-sm-3" *ngIf="operacao.isDetalhar">
+              <!-- <div class="col-sm-2"> -->
                   <mat-form-field class="mb-25" appearance="outline">
-                      <mat-label>Nome da Criança</mat-label>
-                      <input matInput formControlName="nomeCrianca" [readonly]="operacao.disabled" placeholder="Nome da criança">
+                      <mat-label>Código Cadastro</mat-label>
+                      <input matInput formControlName="codigoCadastro" [readonly]="true" placeholder="Código Cadastro">
                       <app-mensagem-erro ngSkipHydration
-                        [control]="formulario.get('nomeCrianca')"
-                        [field]="'nomeCrianca'">
+                        [control]="formulario.get('codigoCadastro')"
+                        [field]="'codigoCadastro'">
                       </app-mensagem-erro>
                     </mat-form-field>
-                  <!-- <pre>{{formulario.get('nomeCrianca')?.errors | json}}</pre> -->
+                  <!-- <pre>{{formulario.get('codigoCadastro')?.errors | json}}</pre> -->
               </div>
 
-                <!-- Data de Nascimento -->
-                <div class="col-md-3">
-                  <div class="mb-25">
-                    <app-calendario ngSkipHydration
-                      [formGroup]="formulario"
-                      [field]="'dataNascimento'"
-                      [label]="'Data de Nascimento'"
-                      [maxDate]="maxData"
-                      [readonly]="operacao.disabled"
-                      (itemSelecionado)="onDataNascimentoSelecionada($event)">
-                    </app-calendario>
+              <!-- Nome da Criança -->
+              <div [ngClass]="{
+                'col-sm-12': operacao.isNovo || operacao.isEditar,
+                'col-sm-9': operacao.isDetalhar }">
+                <mat-form-field class="mb-25" appearance="outline">
+                    <mat-label>Nome da Criança</mat-label>
+                    <input matInput formControlName="nomeCrianca" [readonly]="operacao.disabled" placeholder="Nome da criança">
                     <app-mensagem-erro ngSkipHydration
-                      [control]="formulario.get('dataNascimento')"
-                      [field]="'dataNascimento'">
+                      [control]="formulario.get('nomeCrianca')"
+                      [field]="'nomeCrianca'">
                     </app-mensagem-erro>
-                  </div>
-                </div>
-
-                <!-- Idade da criança -->
-                <!-- <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12"> -->
-                <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                  <!-- <mat-card>
-                    <mat-card-content class="fw-medium">{{formulario.get('idadeCrianca')?.value}}</mat-card-content>
-                  </mat-card> -->
-
-                  <mat-card class="mb-25">
-                    <mat-card-header class="mb-15">
-                        <mat-card-title-group>
-                            <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('idadeCrianca')?.value}}</mat-card-title>
-                            <mat-card-subtitle style="margin-left: 10px;">Turma sugerida:</mat-card-subtitle>
-                        </mat-card-title-group>
-                        <span style="color: blue; font-size: 12px; margin-left: 10px;">{{turmaSugeridaDescricao}}</span>
-                        <!-- <mat-card-content style="margin-left: 10px;">
-                          <span>
-                        </span>
-                        </mat-card-content> -->
-                    </mat-card-header>
-                  </mat-card>
-                </div>
-
-                <!-- Matriculado na Turma -->
-                <div class="col-sm-12">
-                  <div class="mb-25">
-                    <app-auto-complete ngSkipHydration
-                      [formGroup]="formulario"
-                      [field]="'turmaMatricula'"
-                      [itens]="turmas"
-                      [propriedadeMostrar]="'descricaoAnoSemestreLetivo'"
-                      [label]="'Selecione uma turma para matrícular'"
-                      [valorInicial]="turmaSelecionado"
-                      (itemSelecionado)="onTurmaSelecionado($event)"
-                      [readonly]="operacao.disabled">
-                    </app-auto-complete>
-                    <app-mensagem-erro ngSkipHydration
-                      [control]="formulario.get('turmaMatricula')"
-                      [field]="'turmaMatricula'">
-                    </app-mensagem-erro>
-                  </div>
-                </div>
-
-                <!-- Nome da Mãe -->
-                <div class="col-sm-4">
-                  <mat-form-field class="mb-25" appearance="outline">
-                    <mat-label>Nome da Mãe</mat-label>
-                    <input matInput formControlName="nomeMae" [readonly]="operacao.disabled" placeholder="Nome da mãe">
                   </mat-form-field>
-                </div>
-
-                <!-- Nome do Pai -->
-                <div class="col-sm-4">
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Nome do Pai</mat-label>
-                        <input matInput formControlName="nomePai" [readonly]="operacao.disabled" placeholder="Nome do pai">
-                    </mat-form-field>
-                </div>
-
-                <!-- Outro Responsável -->
-                <div class="col-sm-4">
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Outro Responsável</mat-label>
-                        <input matInput formControlName="outroResponsavel" [readonly]="operacao.disabled" placeholder="Outro responsável">
-                    </mat-form-field>
-                </div>
-
-                <!-- Telefone -->
-                <div class="col-sm-4">
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Telefone celular</mat-label>
-                        <input matInput formControlName="telefone" mask="(00)00000-0000" [readonly]="operacao.disabled" placeholder="(99)99999-9999"
-                            maxlength="14">
-                        <mat-error *ngIf="formulario.get('telefone')?.hasError('telefoneInvalid')">
-                            Formato de telefone inválido.
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
-                <!-- Endereço de Email -->
-                <div class="col-sm-8">
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Email</mat-label>
-                        <input matInput formControlName="enderecoEmail" [readonly]="operacao.disabled" placeholder="email@exemplo.com">
-                        <mat-error *ngIf="formulario.get('enderecoEmail')?.hasError('emailInvalid')">
-                            Formato de e-mail inválido.
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-
-                <!-- Alergia -->
-                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('alergia')?.value, 'col-sm-12': !formulario.get('alergia')?.value}">
-                  <!-- <mat-checkbox formControlName="Alergia">Alergia?</mat-checkbox> -->
-                  <mat-slide-toggle formControlName="alergia">Alergia?</mat-slide-toggle>
-                  <br />
-                  <br />
-                </div>
-                <!-- Descrição da Alergia -->
-                <div class="col-sm-8" *ngIf="formulario.get('alergia')?.value">
-                    <mat-form-field class="textarea" appearance="outline">
-                        <mat-label>Descrição da Alergia</mat-label>
-                        <input matInput formControlName="descricaoAlergia" [readonly]="operacao.disabled" placeholder="Descrição da alergia">
-                        <!-- <textarea matInput formControlName="DescricaoAlergia"
-                            placeholder="Descrição da alergia"></textarea> -->
-                    </mat-form-field>
-                    <br />
-                    <br />
-                </div>
-
-                <!-- Restrição Alimentar -->
-                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('restricaoAlimentar')?.value, 'col-sm-12': !formulario.get('restricaoAlimentar')?.value}">
-                  <!-- <mat-checkbox formControlName="restricaoAlimentar">Restrição Alimentar?</mat-checkbox> -->
-                  <mat-slide-toggle formControlName="restricaoAlimentar">Restrição Alimentar?</mat-slide-toggle>
-                  <br />
-                  <br />
-                </div>
-
-                <!-- Descrição da Restrição Alimentar -->
-                <div class="col-sm-8" *ngIf="formulario.get('restricaoAlimentar')?.value">
-                    <mat-form-field class="textarea" appearance="outline">
-                        <mat-label>Descrição da Restrição Alimentar</mat-label>
-                        <input matInput formControlName="descricaoRestricaoAlimentar" [readonly]="operacao.disabled" placeholder="Descrição da restrição alimentar">
-                        <!-- <textarea matInput formControlName="descricaoRestricaoAlimentar"
-                            placeholder="Descrição da restrição alimentar"></textarea> -->
-                    </mat-form-field>
-                    <br />
-                    <br />
-                </div>
-
-                <!-- Deficiência ou Situação Atípica -->
-                <!-- <pre>original</pre> -->
-                <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
-                    <mat-slide-toggle formControlName="deficienciaOuSituacaoAtipica">Situação Atípica?</mat-slide-toggle>
-                    <br />
-                    <br />
-                </div>
-
-                <!-- Deficiência ou Situação Atípica -->
-                <!-- <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
-
-                  <app-toggle-status
-                  [formGroup]="formulario"
-                  formControlName="deficienciaOuSituacaoAtipica"
-                  label="Situação Atípica?"
-                  [operacao]="operacao"
-                  positiveLabel="Sim"
-                  negativeLabel="Não">
-                  </app-toggle-status>
-                  <br />
-                  <br />
-                </div> -->
-
-                 <!-- Descrição da Deficiência -->
-                <div class="col-sm-8" *ngIf="formulario.get('deficienciaOuSituacaoAtipica')?.value">
-                    <mat-form-field class="textarea" appearance="outline">
-                        <mat-label>Descrição da Atipicidade</mat-label>
-                        <input matInput formControlName="descricaoDeficiencia" [readonly]="operacao.disabled" placeholder="Descrição da deficiência">
-                        <!-- <textarea matInput formControlName="descricaoDeficiencia"
-                            placeholder="Descrição da deficiência"></textarea> -->
-                    </mat-form-field>
-                    <br />
-                    <br />
-                </div>
-
-                <!-- Batizado -->
-                <div class="col-sm-12">
-                    <!-- <mat-checkbox formControlName="batizado">já batizado por imersão ou aspersão?</mat-checkbox> -->
-                    <mat-slide-toggle formControlName="batizado">já batizado por imersão ou aspersão?</mat-slide-toggle>
-                    <br />
-                    <br />
-                </div>
-
-                <!-- Data do Batizado -->
-                <div class="col-sm-4" *ngIf="formulario.get('batizado')?.value">
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Data do Batizado</mat-label>
-                        <input matInput [matDatepicker]="batizadoPicker" formControlName="dataBatizado" [readonly]="operacao.disabled" >
-                        <mat-datepicker-toggle matSuffix [for]="batizadoPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #batizadoPicker></mat-datepicker>
-                    </mat-form-field>
-                </div>
-
-                <!-- Igreja do Batizado -->
-                <div class="col-sm-8" *ngIf="formulario.get('batizado')?.value">
-                    <mat-form-field class="mb-25" appearance="outline">
-                        <mat-label>Igreja do Batizado</mat-label>
-                        <input matInput formControlName="igrejaBatizado" [readonly]="operacao.disabled" placeholder="Igreja do batizado">
-                    </mat-form-field>
-                    <br />
-                    <br />
-                </div>
-
-                <!-- Status Ativo -->
-                <div class="col-sm-12">
-                    <!-- <mat-checkbox formControlName="Ativo">Situação: Ativo/Inativo</mat-checkbox> -->
-                    <mat-slide-toggle formControlName="ativo">{{ formulario.get('ativo')?.value == true ? 'Situação: Ativo' : 'Situação: Inativo'}}</mat-slide-toggle>
-
-                    <!-- <mat-slide-toggle [disabled]="true" [checked]="formulario.get('Ativo')?.value">
-                      Teste marques
-                    </mat-slide-toggle> -->
-                    <br />
-                    <br />
-                </div>
-
-                <br />
-                <br />
-                <br />
-                <br />
-
-                <!-- Botão de Salvar -->
-                <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-lg-12">
-                    <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <h5 class="mb-0">
-                                    Ações
-                                </h5>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content class="example-buttons">
-                            <button mat-flat-button class="daxa" (click)="salvar()">Salvar</button>
-                            <button mat-flat-button color="warn" (click)="limpar()" style="margin-left: 20px;">Limpar</button>
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-
-                <div *ngIf="!isProducao" class="row mt-3">
-                  <div class="col-12">
-                    <h3>Valores do Formulário:</h3>
-                    <pre>{{ formulario.value | json }}</pre>
-                  </div>
-                </div>
+                <!-- <pre>{{formulario.get('nomeCrianca')?.errors | json}}</pre> -->
             </div>
-        </mat-card-content>
+
+              <!-- Data de Nascimento -->
+              <div class="col-md-3">
+                <div class="mb-25">
+                  <app-calendario ngSkipHydration
+                    [formGroup]="formulario"
+                    [field]="'dataNascimento'"
+                    [label]="'Data de Nascimento'"
+                    [maxDate]="maxData"
+                    [readonly]="operacao.disabled"
+                    (itemSelecionado)="onDataNascimentoSelecionada($event)">
+                  </app-calendario>
+                  <app-mensagem-erro ngSkipHydration
+                    [control]="formulario.get('dataNascimento')"
+                    [field]="'dataNascimento'">
+                  </app-mensagem-erro>
+                </div>
+              </div>
+
+              <!-- Idade da criança -->
+              <!-- <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12"> -->
+              <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                <!-- <mat-card>
+                  <mat-card-content class="fw-medium">{{formulario.get('idadeCrianca')?.value}}</mat-card-content>
+                </mat-card> -->
+
+                <mat-card class="mb-25">
+                  <mat-card-header class="mb-15">
+                      <mat-card-title-group>
+                          <mat-card-title class="fw-medium mb-10" style="margin-left: 10px;">{{formulario.get('idadeCrianca')?.value}}</mat-card-title>
+                          <mat-card-subtitle style="margin-left: 10px;">Turma sugerida:</mat-card-subtitle>
+                      </mat-card-title-group>
+                      <span style="color: blue; font-size: 12px; margin-left: 10px;">{{turmaSugeridaDescricao}}</span>
+                      <!-- <mat-card-content style="margin-left: 10px;">
+                        <span>
+                      </span>
+                      </mat-card-content> -->
+                  </mat-card-header>
+                </mat-card>
+              </div>
+
+              <!-- Matriculado na Turma -->
+              <div class="col-sm-12">
+                <div class="mb-25">
+                  <app-auto-complete ngSkipHydration
+                    [formGroup]="formulario"
+                    [field]="'turmaMatricula'"
+                    [itens]="turmas"
+                    [propriedadeMostrar]="'descricaoAnoSemestreLetivo'"
+                    [label]="'Selecione uma turma para matrícular'"
+                    [valorInicial]="turmaSelecionado"
+                    (itemSelecionado)="onTurmaSelecionado($event)"
+                    [readonly]="operacao.disabled">
+                  </app-auto-complete>
+                  <app-mensagem-erro ngSkipHydration
+                    [control]="formulario.get('turmaMatricula')"
+                    [field]="'turmaMatricula'">
+                  </app-mensagem-erro>
+                </div>
+              </div>
+
+              <!-- Nome da Mãe -->
+              <div class="col-sm-4">
+                <mat-form-field class="mb-25" appearance="outline">
+                  <mat-label>Nome da Mãe</mat-label>
+                  <input matInput formControlName="nomeMae" [readonly]="operacao.disabled" placeholder="Nome da mãe">
+                </mat-form-field>
+              </div>
+
+              <!-- Nome do Pai -->
+              <div class="col-sm-4">
+                  <mat-form-field class="mb-25" appearance="outline">
+                      <mat-label>Nome do Pai</mat-label>
+                      <input matInput formControlName="nomePai" [readonly]="operacao.disabled" placeholder="Nome do pai">
+                  </mat-form-field>
+              </div>
+
+              <!-- Outro Responsável -->
+              <div class="col-sm-4">
+                  <mat-form-field class="mb-25" appearance="outline">
+                      <mat-label>Outro Responsável</mat-label>
+                      <input matInput formControlName="outroResponsavel" [readonly]="operacao.disabled" placeholder="Outro responsável">
+                  </mat-form-field>
+              </div>
+
+              <!-- Telefone -->
+              <div class="col-sm-4">
+                  <mat-form-field class="mb-25" appearance="outline">
+                      <mat-label>Telefone celular</mat-label>
+                      <input matInput formControlName="telefone" mask="(00)00000-0000" [readonly]="operacao.disabled" placeholder="(99)99999-9999"
+                          maxlength="14">
+                      <mat-error *ngIf="formulario.get('telefone')?.hasError('telefoneInvalid')">
+                          Formato de telefone inválido.
+                      </mat-error>
+                  </mat-form-field>
+              </div>
+
+              <!-- Endereço de Email -->
+              <div class="col-sm-8">
+                  <mat-form-field class="mb-25" appearance="outline">
+                      <mat-label>Email</mat-label>
+                      <input matInput formControlName="enderecoEmail" [readonly]="operacao.disabled" placeholder="email@exemplo.com">
+                      <mat-error *ngIf="formulario.get('enderecoEmail')?.hasError('emailInvalid')">
+                          Formato de e-mail inválido.
+                      </mat-error>
+                  </mat-form-field>
+              </div>
+
+              <!-- Alergia -->
+              <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('alergia')?.value, 'col-sm-12': !formulario.get('alergia')?.value}">
+                <!-- <mat-checkbox formControlName="Alergia">Alergia?</mat-checkbox> -->
+                <mat-slide-toggle formControlName="alergia">Alergia?</mat-slide-toggle>
+                <br />
+                <br />
+              </div>
+              <!-- Descrição da Alergia -->
+              <div class="col-sm-8" *ngIf="formulario.get('alergia')?.value">
+                  <mat-form-field class="textarea" appearance="outline">
+                      <mat-label>Descrição da Alergia</mat-label>
+                      <input matInput formControlName="descricaoAlergia" [readonly]="operacao.disabled" placeholder="Descrição da alergia">
+                      <!-- <textarea matInput formControlName="DescricaoAlergia"
+                          placeholder="Descrição da alergia"></textarea> -->
+                  </mat-form-field>
+                  <br />
+                  <br />
+              </div>
+
+              <!-- Restrição Alimentar -->
+              <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('restricaoAlimentar')?.value, 'col-sm-12': !formulario.get('restricaoAlimentar')?.value}">
+                <!-- <mat-checkbox formControlName="restricaoAlimentar">Restrição Alimentar?</mat-checkbox> -->
+                <mat-slide-toggle formControlName="restricaoAlimentar">Restrição Alimentar?</mat-slide-toggle>
+                <br />
+                <br />
+              </div>
+
+              <!-- Descrição da Restrição Alimentar -->
+              <div class="col-sm-8" *ngIf="formulario.get('restricaoAlimentar')?.value">
+                  <mat-form-field class="textarea" appearance="outline">
+                      <mat-label>Descrição da Restrição Alimentar</mat-label>
+                      <input matInput formControlName="descricaoRestricaoAlimentar" [readonly]="operacao.disabled" placeholder="Descrição da restrição alimentar">
+                      <!-- <textarea matInput formControlName="descricaoRestricaoAlimentar"
+                          placeholder="Descrição da restrição alimentar"></textarea> -->
+                  </mat-form-field>
+                  <br />
+                  <br />
+              </div>
+
+              <!-- Deficiência ou Situação Atípica -->
+              <!-- <pre>original</pre> -->
+              <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
+                  <mat-slide-toggle formControlName="deficienciaOuSituacaoAtipica">Situação Atípica?</mat-slide-toggle>
+                  <br />
+                  <br />
+              </div>
+
+              <!-- Deficiência ou Situação Atípica -->
+              <!-- <div class="col-sm-4" [ngClass]="{'col-sm-4': formulario.get('deficienciaOuSituacaoAtipica')?.value, 'col-sm-12': !formulario.get('deficienciaOuSituacaoAtipica')?.value}">
+
+                <app-toggle-status
+                [formGroup]="formulario"
+                formControlName="deficienciaOuSituacaoAtipica"
+                label="Situação Atípica?"
+                [operacao]="operacao"
+                positiveLabel="Sim"
+                negativeLabel="Não">
+                </app-toggle-status>
+                <br />
+                <br />
+              </div> -->
+
+                <!-- Descrição da Deficiência -->
+              <div class="col-sm-8" *ngIf="formulario.get('deficienciaOuSituacaoAtipica')?.value">
+                  <mat-form-field class="textarea" appearance="outline">
+                      <mat-label>Descrição da Atipicidade</mat-label>
+                      <input matInput formControlName="descricaoDeficiencia" [readonly]="operacao.disabled" placeholder="Descrição da deficiência">
+                      <!-- <textarea matInput formControlName="descricaoDeficiencia"
+                          placeholder="Descrição da deficiência"></textarea> -->
+                  </mat-form-field>
+                  <br />
+                  <br />
+              </div>
+
+              <!-- Batizado -->
+              <div class="col-sm-12">
+                  <!-- <mat-checkbox formControlName="batizado">já batizado por imersão ou aspersão?</mat-checkbox> -->
+                  <mat-slide-toggle formControlName="batizado">já batizado por imersão ou aspersão?</mat-slide-toggle>
+                  <br />
+                  <br />
+              </div>
+
+              <!-- Data do Batizado -->
+              <div class="col-sm-4" *ngIf="formulario.get('batizado')?.value">
+                  <mat-form-field class="mb-25" appearance="outline">
+                      <mat-label>Data do Batizado</mat-label>
+                      <input matInput [matDatepicker]="batizadoPicker" formControlName="dataBatizado" [readonly]="operacao.disabled" >
+                      <mat-datepicker-toggle matSuffix [for]="batizadoPicker"></mat-datepicker-toggle>
+                      <mat-datepicker #batizadoPicker></mat-datepicker>
+                  </mat-form-field>
+              </div>
+
+              <!-- Igreja do Batizado -->
+              <div class="col-sm-8" *ngIf="formulario.get('batizado')?.value">
+                  <mat-form-field class="mb-25" appearance="outline">
+                      <mat-label>Igreja do Batizado</mat-label>
+                      <input matInput formControlName="igrejaBatizado" [readonly]="operacao.disabled" placeholder="Igreja do batizado">
+                  </mat-form-field>
+                  <br />
+                  <br />
+              </div>
+
+              <!-- Status Ativo -->
+              <div class="col-sm-12">
+                  <!-- <mat-checkbox formControlName="Ativo">Situação: Ativo/Inativo</mat-checkbox> -->
+                  <mat-slide-toggle formControlName="ativo">{{ formulario.get('ativo')?.value == true ? 'Situação: Ativo' : 'Situação: Inativo'}}</mat-slide-toggle>
+
+                  <!-- <mat-slide-toggle [disabled]="true" [checked]="formulario.get('Ativo')?.value">
+                    Teste marques
+                  </mat-slide-toggle> -->
+                  <br />
+                  <br />
+              </div>
+
+              <br />
+              <br />
+              <br />
+              <br />
+
+              <!-- Botão de Salvar -->
+              <div *ngIf="operacao.isNovo || operacao.isEditar" class="col-lg-12">
+                  <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">
+                      <mat-card-header>
+                          <mat-card-title>
+                              <h5 class="mb-0">
+                                  Ações
+                              </h5>
+                          </mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content class="example-buttons">
+                          <button mat-flat-button class="daxa" (click)="salvar()">Salvar</button>
+                          <button mat-flat-button color="warn" (click)="limpar()" style="margin-left: 20px;">Limpar</button>
+                      </mat-card-content>
+                  </mat-card>
+              </div>
+
+              <div *ngIf="!isProducao" class="row mt-3">
+                <div class="col-12">
+                  <h3>Valores do Formulário:</h3>
+                  <pre>{{ formulario.value | json }}</pre>
+                </div>
+              </div>
+          </div>
+      </mat-card-content>
     </mat-card>
 
     <!-- <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block">

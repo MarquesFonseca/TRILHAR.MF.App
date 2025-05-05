@@ -34,6 +34,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   displayedColumns: string[] = [
     //'select',
     //'codigo',
+    'acoes',
     'codigoCadastro',
     'ativo',
     'nomeCrianca',
@@ -55,7 +56,6 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     //'codigoUsuarioLogado',
     'dataAtualizacao',
     'dataCadastro',
-    'acoes',
   ];
   dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
   selection = new SelectionModel<types.IAlunoOutput>(true, []);

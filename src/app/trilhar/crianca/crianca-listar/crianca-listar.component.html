@@ -1,8 +1,8 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
-  <h5 class="mb-0">
+  <!-- <h5 class="mb-0">
     {{this.getTitle()}}
-  </h5>
+  </h5> -->
   <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
       <li class="breadcrumb-item position-relative">
           <a routerLink="/criancas/dashboard" class="d-inline-block position-relative">
@@ -20,12 +20,42 @@
           {{this.getOperacao()}}
       </li>
   </ol>
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; border: 0px solid red;">
+    <button mat-button color="primary" class="action-button"
+      style="display: flex; align-items: center;"
+      routerLink="/criancas/incluir/" routerLinkActive="active">
+      <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+      <span style="vertical-align: middle; margin-left: 4px;">Incluir Novo</span>
+    </button>
+  </div>
 </div>
 
-<mat-card
-    class="daxa-card events-card mb-25 border-radius bg-white border-none d-block"
-    [class.rtl-enabled]="themeService.isRTLEnabled()"
->
+<mat-card class="daxa-card events-card mb-25 border-radius bg-white border-none d-block" [class.rtl-enabled]="themeService.isRTLEnabled()">
+
+
+
+    <div style="padding-top: 0px; padding-bottom: 0px; border: 0px solid red;">
+
+      <!-- Título -->
+      <div style="border-bottom: 1px dashed #808080; padding-bottom: 16px; ">
+        <h5 class="mb-0" style="margin: 0;">
+          {{this.getTitle()}}
+        </h5>
+      </div>
+
+      <!-- Botões -->
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; border: 0px solid red;">
+        <button mat-button color="primary" class="action-button"
+          style="display: flex; align-items: center;"
+          (click)="navegar($event, '/criancas/incluir')"  routerLinkActive="active">
+          <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+          <span style="vertical-align: middle; margin-left: 4px;">Incluir Novo</span>
+        </button>
+      </div>
+
+    </div>
+
+
     <mat-card-header>
       <mat-card-title style="width: 100%;">
         <form class="search-box position-relative">
@@ -37,14 +67,11 @@
           <button mat-flat-button class="search-btn" (click)="applyFilter()">Buscar</button>
         </form>
       </mat-card-title>
-      <div style="width: 100%; display: flex; justify-content: flex-end; margin-top: 8px;">
-        <button mat-button color="primary" class="action-button" style="display: flex; align-items: center;"
-          routerLink="/criancas/incluir" routerLinkActive="active">
-          <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
-          <span style="vertical-align: middle; margin-left: 4px;">Nova Criança</span>
-        </button>
-      </div>
     </mat-card-header>
+
+
+
+
     <mat-card-content>
         <div class="events-table">
             <div class="table-responsive">
@@ -82,6 +109,31 @@
                             {{element.codigo}}
                         </td>
                     </ng-container> -->
+
+                    <ng-container matColumnDef="acoes">
+                      <th mat-header-cell *matHeaderCellDef>
+
+                      </th>
+                      <td mat-cell *matCellDef="let element">
+                          <div class="action-info">
+                              <a mat-button (click)="navegar($event, '/criancas/detalhar', [element.codigoCadastro])" matTooltip="Ver Criança" matTooltipPosition="above">
+                                  <i class="material-symbols-outlined">
+                                      {{element.Action.view}}
+                                  </i>
+                              </a>
+                              <!-- <a mat-button [routerLink]="['/criancas/alterar', element.codigoCadastro]" matTooltip="Editar Criança" matTooltipPosition="above">
+                                  <i class="material-symbols-outlined">
+                                      {{element.Action.edit}}
+                                  </i>
+                              </a> -->
+                              <!-- <button type="button" mat-button matTooltip="Remover Criança" matTooltipPosition="above">
+                                  <i class="material-symbols-outlined">
+                                      {{element.Action.delete}}
+                                  </i>
+                              </button> -->
+                          </div>
+                      </td>
+                  </ng-container>
 
                     <!-- Ativo -->
                     <ng-container matColumnDef="ativo">
@@ -330,7 +382,7 @@
                     </ng-container>
 
                     <!-- Action Column -->
-                    <ng-container matColumnDef="acoes">
+                    <!-- <ng-container matColumnDef="acoes">
                         <th mat-header-cell *matHeaderCellDef>
                             Ações
                         </th>
@@ -346,14 +398,14 @@
                                         {{element.Action.edit}}
                                     </i>
                                 </a>
-                                <!-- <button type="button" mat-button matTooltip="Remover Criança" matTooltipPosition="above">
+                                <button type="button" mat-button matTooltip="Remover Criança" matTooltipPosition="above">
                                     <i class="material-symbols-outlined">
                                         {{element.Action.delete}}
                                     </i>
-                                </button> -->
+                                </button>
                             </div>
                         </td>
-                    </ng-container>
+                    </ng-container> -->
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
