@@ -81,8 +81,8 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
     });
-    var ljlj = this.getOperacao();
-    var lkjlll = this.getTitle();
+    //var ljlj = this.getOperacao();
+    //var lkjlll = this.getTitle();
   }
 
   // override async ngOnInit() {
@@ -94,8 +94,8 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   // }
 
   override ngOnInit() {
-    //var filtro = this.montaFiltro(1, 10);
-    //this.carregarAlunos(filtro);
+    var filtro = this.montaFiltro(1, 10);
+    this.carregarAlunos(filtro);
   }
 
   override preencheFiltro(): void {
