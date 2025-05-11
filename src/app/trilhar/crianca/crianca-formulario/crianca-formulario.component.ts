@@ -438,7 +438,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           const { turmaMatricula } = this.formulario.value;
 
           if (!!turmaMatricula) { //se a turma for selecionada
-            this.alterarMatriculaRegistro(codigoAluno, turmaMatricula.codigo);
+            this.alterarMatriculaRegistro(codigoAluno, turmaMatricula.codigo, turmaMatricula.codigo);
           }
           var url = `criancas/detalhar/${input.codigoCadastro}`;
           this.finalizarAcao(url);
@@ -461,9 +461,9 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     this.matriculaService.Incluir(inputMatricula, (mat: any) => { });
   }
 
-  private alterarMatriculaRegistro(codigoAluno: any, codigoTurma: any) {
+  private alterarMatriculaRegistro(codigoAluno: any, codigoTurma: any, codigoMatricula: any) {
     var filtroMatricula = {
-      "codigo": 0,
+      "codigo": codigoMatricula,
       "codigoAluno": codigoAluno,
       "codigoTurma": codigoTurma,
       "ativo": true,
@@ -472,10 +472,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       "dataCadastro": utils.obterDataHoraBrasileira()
     }
 
-    this.matriculaService.Alterar(filtroMatricula, (mat: any) => {
-      // if (mat) {
-      // }
-    });
+    this.matriculaService.Alterar(filtroMatricula, (mat: any) => { });
   }
 
   private adicionarFrequenciaRegistro(aluno: any, turmaMatricula: any) {
