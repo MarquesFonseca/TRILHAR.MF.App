@@ -17,6 +17,8 @@ import * as utils from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import * as criancasTypes from '../crianca.types';
 import * as turmaTypes from '../../turma/turma.types';
+import { FrequenciaService } from '../../frequencia/frequencia.service';
+import { FrequenciaInput } from '../../frequencia/frequencia.types';
 //import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
 
 @Component({
@@ -57,6 +59,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     private criancaService: CriancaService,
     private turmaService: TurmaService,
     private matriculaService: MatriculaService,
+    private frequenciaService: FrequenciaService,
     private viewportScroller: ViewportScroller,
     private cdr: ChangeDetectorRef,
     private mensagemService: MensagemService,
@@ -64,6 +67,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     public override activatedRoute: ActivatedRoute,
   ) {
     super(router, activatedRoute);
+    if(!this.isProducao) console.clear();
   }
 
   override ngOnInit() {
@@ -314,7 +318,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     if (this.operacao.isEditar || this.operacao.isDetalhar) {
       this.criancaService.listarPorCodigoCadastro(this.id).subscribe(crianca => {
         if (crianca.dados == null) {
-          this.mensagemService.showError('Nenhum registro encontrado!', 'error');
+          //this.mensagemService.showError('Nenhum registro encontrado!', 'error');
           return;
         }
         if (!!crianca.dados) {
@@ -395,82 +399,102 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
 
     const valoresForm = this.formulario.getRawValue();
-    var filtro: criancasTypes.IAlunoEntity = valoresForm;
-    filtro.codigoCadastro = filtro.codigoCadastro?.toString()?.trim() ?? '';
-    filtro.nomeCrianca = filtro.nomeCrianca?.toString()?.trim() ?? '';
-    filtro.nomeMae = filtro.nomeMae?.toString()?.trim() ?? '';
-    filtro.nomePai = filtro.nomePai?.toString()?.trim() ?? '';
-    filtro.outroResponsavel = filtro.outroResponsavel?.toString()?.trim() ?? '';
-    filtro.enderecoEmail = filtro.enderecoEmail?.toString()?.trim() ?? '';
-    filtro.descricaoAlergia = filtro.descricaoAlergia?.toString()?.trim() ?? '';
-    filtro.descricaoRestricaoAlimentar = filtro.descricaoRestricaoAlimentar?.toString()?.trim() ?? '';
-    filtro.descricaoDeficiencia = filtro.descricaoDeficiencia?.toString()?.trim() ?? '';
-    filtro.igrejaBatizado = filtro.igrejaBatizado?.toString()?.trim() ?? '';
-    filtro.telefone = utils.retirarFormatacao(valoresForm.telefone);
-    filtro.dataCadastro = utils.obterDataHoraBrasileira();
-    filtro.dataAtualizacao = utils.obterDataHoraBrasileira();
-    filtro.codigoUsuarioLogado = 0;
+    var input: criancasTypes.IAlunoEntity = valoresForm;
+    input.codigoCadastro = input.codigoCadastro?.toString()?.trim() ?? '';
+    input.nomeCrianca = input.nomeCrianca?.toString()?.trim() ?? '';
+    input.nomeMae = input.nomeMae?.toString()?.trim() ?? '';
+    input.nomePai = input.nomePai?.toString()?.trim() ?? '';
+    input.outroResponsavel = input.outroResponsavel?.toString()?.trim() ?? '';
+    input.enderecoEmail = input.enderecoEmail?.toString()?.trim() ?? '';
+    input.descricaoAlergia = input.descricaoAlergia?.toString()?.trim() ?? '';
+    input.descricaoRestricaoAlimentar = input.descricaoRestricaoAlimentar?.toString()?.trim() ?? '';
+    input.descricaoDeficiencia = input.descricaoDeficiencia?.toString()?.trim() ?? '';
+    input.igrejaBatizado = input.igrejaBatizado?.toString()?.trim() ?? '';
+    input.telefone = utils.retirarFormatacao(valoresForm.telefone);
+    input.dataCadastro = utils.obterDataHoraBrasileira();
+    input.dataAtualizacao = input.dataCadastro;
+    input.codigoUsuarioLogado = 0;
 
     if (this.operacao.isNovo) {
-      this.criancaService.Incluir(filtro, (res: any) => {
-        if (res) {
-          const codigoAluno = res.dados;
+      this.criancaService.Incluir(input, (res: any) => {
+        if (res.dados) {
+          const aluno = res.dados;
           const { turmaMatricula } = this.formulario.value;
 
-          this.criancaService.listarPorId(String(codigoAluno)).subscribe(crianca => {
-            if (crianca) {
-              var filtroMatricula = {
-                "codigo": 0,
-                "codigoAluno": codigoAluno,
-                "codigoTurma": turmaMatricula.codigo,
-                "ativo": true,
-                "codigoUsuarioLogado": 0,
-                "dataAtualizacao": utils.obterDataHoraBrasileira(),
-                "dataCadastro": utils.obterDataHoraBrasileira()
-              }
-              this.matriculaService.Incluir(filtroMatricula, (res: any) => {
-                if (res) {
-                  var url = `criancas/detalhar/${crianca.dados.codigoCadastro}`;
-                  this.finalizarAcao(url);
-                }
-              });
-            }
-          });
+          if (!!turmaMatricula) { //se a turma for selecionada
+            this.adicionarMatriculaRegistro(aluno, turmaMatricula);
+            this.adicionarFrequenciaRegistro(aluno, turmaMatricula);
+          }
+          var url = `criancas/detalhar/${aluno.codigoCadastro}`;
+          this.finalizarAcao(url);
         }
       });
     }
 
     if (this.operacao.isEditar) {
-      this.criancaService.Alterar(valoresForm.codigo, filtro, async (res: any) => {
+      this.criancaService.Alterar(valoresForm.codigo, input, async (res: any) => {
         if (res) {
-          const codigoAluno = filtro.codigo;
+          const codigoAluno = input.codigo;
           const { turmaMatricula } = this.formulario.value;
 
-          var criancaAlterada = await this.criancaService.listarPorIdPromise(String(codigoAluno));
-          if (criancaAlterada) {
-            if (this.turmaSelecionado) {
-              var filtroMatricula = {
-                "codigo": 0,
-                "codigoAluno": codigoAluno,
-                "codigoTurma": turmaMatricula.codigo,
-                "ativo": true,
-                "codigoUsuarioLogado": 0,
-                "dataAtualizacao": utils.obterDataHoraBrasileira(),
-                "dataCadastro": utils.obterDataHoraBrasileira()
-              }
-
-              this.matriculaService.Alterar(filtroMatricula, (mat: any) => {
-                // if (mat) {
-                // }
-              });
-            }
-            var url = `criancas/detalhar/${criancaAlterada.dados.codigoCadastro}`;
-            this.finalizarAcao(url);
+          if (!!turmaMatricula) { //se a turma for selecionada
+            this.alterarMatriculaRegistro(codigoAluno, turmaMatricula.codigo);
           }
-
+          var url = `criancas/detalhar/${input.codigoCadastro}`;
+          this.finalizarAcao(url);
         }
+
       });
     }
+  }
+
+  private adicionarMatriculaRegistro(aluno: any, turmaMatricula: any) {
+    var inputMatricula = {
+      "codigo": 0,
+      "codigoAluno": aluno.codigo,
+      "codigoTurma": turmaMatricula.codigo,
+      "ativo": true,
+      "codigoUsuarioLogado": 0,
+      "dataAtualizacao": utils.obterDataHoraBrasileira(),
+      "dataCadastro": utils.obterDataHoraBrasileira()
+    };
+    this.matriculaService.Incluir(inputMatricula, (mat: any) => { });
+  }
+
+  private alterarMatriculaRegistro(codigoAluno: any, codigoTurma: any) {
+    var filtroMatricula = {
+      "codigo": 0,
+      "codigoAluno": codigoAluno,
+      "codigoTurma": codigoTurma,
+      "ativo": true,
+      "codigoUsuarioLogado": 0,
+      "dataAtualizacao": utils.obterDataHoraBrasileira(),
+      "dataCadastro": utils.obterDataHoraBrasileira()
+    }
+
+    this.matriculaService.Alterar(filtroMatricula, (mat: any) => {
+      // if (mat) {
+      // }
+    });
+  }
+
+  private adicionarFrequenciaRegistro(aluno: any, turmaMatricula: any) {
+    var inputFrequencia: FrequenciaInput = {
+      "codigo": 0,
+      "dataFrequencia": utils.obterDataHoraBrasileira(),
+      "codigoAluno": aluno.codigo,
+      "codigoTurma": turmaMatricula.codigo,
+      "presenca": true,
+      "turmaDescricao": turmaMatricula.descricao,
+      "turmaIdadeInicialAluno": turmaMatricula.idadeInicialAluno,
+      "turmaIdadeFinalAluno": turmaMatricula.idadeFinalAluno,
+      "turmaAnoLetivo": turmaMatricula.anoLetivo,
+      "turmaSemestreLetivo": turmaMatricula.semestreLetivo,
+      "codigoUsuarioLogado": turmaMatricula.codigoUsuarioLogado,
+      "dataAtualizacao": utils.obterDataHoraBrasileira(),
+      "dataCadastro": utils.obterDataHoraBrasileira()
+    }
+    this.frequenciaService.Incluir(inputFrequencia, (res: any) => { });
   }
 
   private carregarDadosTurma(anoSelecionado: string, semestreSelecionado: string) {

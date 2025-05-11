@@ -120,14 +120,14 @@ export class MatriculaService {
 
   Incluir(Entity: any, callback?: any) {
     this.http.post(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
-      this.mensagemService.showSuccess('Registro incluído com sucesso!');
+      this.mensagemService.showSuccess('Matrícula incluída com sucesso!');
       callback(resp);
     });
   }
 
   Alterar(Id: any, Entity: any, callback?: any) {
     this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
-      this.mensagemService.showSuccess('Registro alterado com sucesso!');
+      this.mensagemService.showSuccess('Matrícula alterada com sucesso!');
       callback(resp);
     });
   }
