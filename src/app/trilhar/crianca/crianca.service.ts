@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { finalize, firstValueFrom, Observable } from 'rxjs';
+import { catchError, finalize, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LoadingService } from '../../services/loading.service';
 import { MensagemService } from '../../services/mensagem.service';
@@ -142,37 +142,64 @@ export class CriancaService {
 
   listarPorCodigoCadastro(codigoCadastro: string): Observable<any> {
     this.loadingService.show();
+
     return this.http
       .get(`${this.apiUrl}/codigo-cadastro/${codigoCadastro}`)
-      .pipe(finalize(() => this.loadingService.hide()));
+      .pipe(
+        finalize(() => this.loadingService.hide()),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            const mensagem = error.error?.detail || 'Registro não encontrado.';
+            this.mensagemService.showError(mensagem, error);
+          } else if (error.status === 400) {
+            const erros = error.error?.erros || ['Erro de validação.'];
+            this.mensagemService.showError(erros.join('\n'), error);
+          } else {
+            this.mensagemService.showError('Erro inesperado.', error);
+          }
+
+          //return throwError(() => error); // dispara erro para quem consome
+          return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
+        })
+      );
   }
 
   async listarPorCodigoCadastroPromise(codigoCadastro: string): Promise<any> {
-    this.loadingService.show(); // Exibe o indicador de carregamento
+    this.loadingService.show();
+
     try {
       const response = await firstValueFrom(
         this.http.get(`${this.apiUrl}/codigo-cadastro/${codigoCadastro}`)
       );
-      return response; // Retorna a resposta da API
+      return response;
     } catch (error: any) {
-      this.mensagemService.showError('Erro ao buscar por Codigo do Cadastro', error);
-      console.error('Erro ao buscar por Codigo do Cadastro:', error);
-      throw error; // Propaga o erro
+      if (error.status === 404) {
+        const mensagem = error.error?.detail || 'Registro não encontrado.';
+        this.mensagemService.showError(mensagem, error);
+      } else if (error.status === 400) {
+        const erros = error.error?.erros || ['Erro de validação.'];
+        this.mensagemService.showError(erros.join('\n'), error);
+      } else {
+        this.mensagemService.showError('Erro inesperado.', error);
+      }
+
+      console.error('Erro ao buscar por Código do Cadastro:', error);
+      return null; // 👈 Equivalente ao `of(null)`
     } finally {
-      this.loadingService.hide(); // Oculta o indicador de carregamento
+      this.loadingService.hide();
     }
   }
 
   Incluir(Entity: types.IAlunoEntity, callback?: any) {
     this.http.post(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
-      this.mensagemService.showSuccess('Registro incluído com sucesso!');
+      this.mensagemService.showSuccess('Criança incluída com sucesso!');
       callback(resp);
     });
   }
 
   Alterar(id: number, Entity: types.IAlunoEntity, callback?: any) {
     this.http.put(`${this.apiUrl}/${id}`, Entity).subscribe((resp: any) => {
-      this.mensagemService.showSuccess('Registro alterado com sucesso!');
+      this.mensagemService.showSuccess('Criança alterada com sucesso!');
       callback(resp);
     });
   }

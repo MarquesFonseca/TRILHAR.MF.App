@@ -80,6 +80,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     super(router, activatedRoute);
     this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
+      if(!this.isProducao) console.clear();
     });
     //var ljlj = this.getOperacao();
     //var lkjlll = this.getTitle();
