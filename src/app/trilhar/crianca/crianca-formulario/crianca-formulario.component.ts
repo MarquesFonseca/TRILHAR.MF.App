@@ -53,6 +53,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   id: any;
   isNovoIrmao: boolean = false;
   nomeCriancaOriginal = '';
+  criancaAtual: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -322,6 +323,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           return;
         }
         if (!!crianca.dados) {
+          this.criancaAtual = crianca.dados;
           this.nomeCriancaOriginal = crianca.dados.nomeCrianca || '';
           this.formulario.get('codigo')?.setValue(crianca.dados.codigo);
           this.formulario.get('codigoCadastro')?.setValue(crianca.dados.codigoCadastro || ' ');
@@ -417,7 +419,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
     if (this.operacao.isNovo) {
       this.criancaService.Incluir(input, (res: any) => {
-        if (res.dados) {
+        if (!!res.dados) {
           const aluno = res.dados;
           const { turmaMatricula } = this.formulario.value;
 
@@ -433,13 +435,26 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
     if (this.operacao.isEditar) {
       this.criancaService.Alterar(valoresForm.codigo, input, async (res: any) => {
-        if (res) {
+        if (!!res) {
           const codigoAluno = input.codigo;
+          const matriculaAluno = this.criancaAtual.matricula;
           const { turmaMatricula } = this.formulario.value;
 
           if (!!turmaMatricula) { //se a turma for selecionada
-            this.alterarMatriculaRegistro(codigoAluno, turmaMatricula.codigo, turmaMatricula.codigo);
+            // var matriculaAluno = this.criancaAtual.matricula.find((m: any) => m.ativo === true);
+            if (!!this.criancaAtual.matricula) {
+              this.alterarMatriculaRegistro(matriculaAluno.codigo, codigoAluno, turmaMatricula.codigo);
+            }
+            else {
+              this.alterarMatriculaRegistro(0, codigoAluno, turmaMatricula.codigo);
+            }
           }
+
+          if (!turmaMatricula) { //se a turma NÃO for selecionada = null
+            //remover a matricula do aluno'
+            this.alterarMatriculaRegistro(0, codigoAluno, 0);
+          }
+
           var url = `criancas/detalhar/${input.codigoCadastro}`;
           this.finalizarAcao(url);
         }
@@ -461,7 +476,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     this.matriculaService.Incluir(inputMatricula, (mat: any) => { });
   }
 
-  private alterarMatriculaRegistro(codigoAluno: any, codigoTurma: any, codigoMatricula: any) {
+  private alterarMatriculaRegistro(codigoMatricula: any, codigoAluno: any, codigoTurma: any) {
     var filtroMatricula = {
       "codigo": codigoMatricula,
       "codigoAluno": codigoAluno,
@@ -472,7 +487,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       "dataCadastro": utils.obterDataHoraBrasileira()
     }
 
-    this.matriculaService.Alterar(filtroMatricula, (mat: any) => { });
+    this.matriculaService.Alterar(codigoMatricula, filtroMatricula, (mat: any) => { });
   }
 
   private adicionarFrequenciaRegistro(aluno: any, turmaMatricula: any) {
