@@ -395,7 +395,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     });
   }
 
-  override salvar(): void {
+  async salvar(): Promise<void> {
     if (!this.verificaFormulario()) {
       return;
     }
@@ -417,53 +417,87 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     input.dataAtualizacao = input.dataCadastro;
     input.codigoUsuarioLogado = 0;
 
-    if (this.operacao.isNovo) {
-      this.criancaService.Incluir(input, (res: any) => {
-        if (!!res.dados) {
-          const aluno = res.dados;
-          const { turmaMatricula } = this.formulario.value;
+    try {
+      if (this.operacao.isNovo) {
+        const res = await this.criancaService.IncluirPromise(input);
 
-          if (!!turmaMatricula) { //se a turma for selecionada
-            this.adicionarMatriculaRegistro(aluno, turmaMatricula);
-            this.adicionarFrequenciaRegistro(aluno, turmaMatricula);
+          if (!!res.dados) {
+            const aluno = res.dados;
+            const turmaSelecionada = valoresForm.turmaMatricula;
+
+            if (!!turmaSelecionada) { //se a turma for selecionada
+              await this.adicionarMatriculaRegistro(aluno, turmaSelecionada);
+              await this.adicionarFrequenciaRegistro(aluno, turmaSelecionada);
+            }
+            var url = `criancas/detalhar/${aluno.codigoCadastro}`;
+            this.finalizarAcao(url);
           }
-          var url = `criancas/detalhar/${aluno.codigoCadastro}`;
-          this.finalizarAcao(url);
-        }
-      });
+      }
+    } catch (error) {
+      this.mensagemService.showError('Erro ao inserir novo registro', error);
     }
 
-    if (this.operacao.isEditar) {
-      this.criancaService.Alterar(valoresForm.codigo, input, async (res: any) => {
+    try {
+      if (this.operacao.isEditar) {
+        const res = await this.criancaService.AlterarPromise(valoresForm.codigo, input);
+
         if (!!res) {
           const codigoAluno = input.codigo;
-          const matriculaAluno = this.criancaAtual.matricula;
-          const { turmaMatricula } = this.formulario.value;
+          const matriculaAtual = this.criancaAtual.matricula;
+          const turmaSelecionada = valoresForm.turmaMatricula;
 
-          if (!!turmaMatricula) { //se a turma for selecionada
-            // var matriculaAluno = this.criancaAtual.matricula.find((m: any) => m.ativo === true);
-            if (!!this.criancaAtual.matricula) {
-              this.alterarMatriculaRegistro(matriculaAluno.codigo, codigoAluno, turmaMatricula.codigo);
-            }
-            else {
-              this.alterarMatriculaRegistro(0, codigoAluno, turmaMatricula.codigo);
-            }
-          }
+          // Decidir o que fazer com a matrícula baseado nas situações
+          await this.gerenciarMatricula(codigoAluno, matriculaAtual, turmaSelecionada);
 
-          if (!turmaMatricula) { //se a turma NÃO for selecionada = null
-            //remover a matricula do aluno'
-            this.alterarMatriculaRegistro(0, codigoAluno, 0);
-          }
-
-          var url = `criancas/detalhar/${input.codigoCadastro}`;
+          const url = `criancas/detalhar/${input.codigoCadastro}`;
           this.finalizarAcao(url);
         }
-
-      });
+      }
+    } catch (error) {
+      this.mensagemService.showError('Erro ao alterar registro', error);
     }
   }
 
-  private adicionarMatriculaRegistro(aluno: any, turmaMatricula: any) {
+  private async gerenciarMatricula(codigoAluno: number, matriculaAtual: any, turmaSelecionada: any): Promise<void> {
+    // SITUAÇÃO 1: Aluno não possui matrícula (matriculaAtual é null) e continua sem turma
+    if (!matriculaAtual && !turmaSelecionada) {
+      console.log('Situação 1: Aluno continua sem matrícula');
+      // Não fazer nada - aluno não tinha matrícula e continua sem
+      return;
+    }
+
+    // SITUAÇÃO 2: Aluno não possui matrícula (matriculaAtual é null) e agora selecionou turma
+    if (!matriculaAtual && turmaSelecionada) {
+      console.log('Situação 2: Novo aluno sendo matriculado pela primeira vez');
+      await this.alterarMatriculaRegistro(0, codigoAluno, turmaSelecionada.codigo);
+      return;
+    }
+
+    // A partir daqui, sabemos que matriculaAtual existe
+
+    // SITUAÇÃO 3: Aluno possuía matrícula e agora selecionou uma turma diferente
+    if (matriculaAtual && turmaSelecionada && matriculaAtual.codigoTurma !== turmaSelecionada.codigo) {
+      console.log('Situação 3: Aluno mudando de turma');
+      await this.alterarMatriculaRegistro(0, codigoAluno, turmaSelecionada.codigo);
+      return;
+    }
+
+    // SITUAÇÃO 4: Aluno possuía matrícula, mas agora não tem turma selecionada (remover matrícula)
+    if (matriculaAtual && !turmaSelecionada) {
+      console.log('Situação 4: Removendo matrícula do aluno');
+      await this.alterarMatriculaRegistro(matriculaAtual.codigo, codigoAluno, 0);
+      return;
+    }
+
+    // SITUAÇÃO 5: Aluno mantém a mesma turma
+    if (matriculaAtual && turmaSelecionada && matriculaAtual.codigoTurma === turmaSelecionada.codigo) {
+      console.log('Situação 5: Aluno mantém a mesma turma, nenhuma alteração necessária');
+      // Não fazer nada - aluno continua na mesma turma
+      return;
+    }
+  }
+
+  private async adicionarMatriculaRegistro(aluno: any, turmaMatricula: any): Promise<any> {
     var inputMatricula = {
       "codigo": 0,
       "codigoAluno": aluno.codigo,
@@ -473,10 +507,10 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       "dataAtualizacao": utils.obterDataHoraBrasileira(),
       "dataCadastro": utils.obterDataHoraBrasileira()
     };
-    this.matriculaService.Incluir(inputMatricula, (mat: any) => { });
+    return await this.matriculaService.IncluirPromise(inputMatricula);
   }
 
-  private alterarMatriculaRegistro(codigoMatricula: any, codigoAluno: any, codigoTurma: any) {
+  private async alterarMatriculaRegistro(codigoMatricula: any, codigoAluno: any, codigoTurma: any) {
     var filtroMatricula = {
       "codigo": codigoMatricula,
       "codigoAluno": codigoAluno,
@@ -487,10 +521,10 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       "dataCadastro": utils.obterDataHoraBrasileira()
     }
 
-    this.matriculaService.Alterar(codigoMatricula, filtroMatricula, (mat: any) => { });
+    return await this.matriculaService.AlterarPromise(codigoMatricula, filtroMatricula);
   }
 
-  private adicionarFrequenciaRegistro(aluno: any, turmaMatricula: any) {
+  private async adicionarFrequenciaRegistro(aluno: any, turmaMatricula: any) {
     var inputFrequencia: FrequenciaInput = {
       "codigo": 0,
       "dataFrequencia": utils.obterDataHoraBrasileira(),
@@ -506,7 +540,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       "dataAtualizacao": utils.obterDataHoraBrasileira(),
       "dataCadastro": utils.obterDataHoraBrasileira()
     }
-    this.frequenciaService.Incluir(inputFrequencia, (res: any) => { });
+    return await this.frequenciaService.IncluirPromise(inputFrequencia);
   }
 
   private carregarDadosTurma(anoSelecionado: string, semestreSelecionado: string) {
