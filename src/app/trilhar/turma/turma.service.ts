@@ -65,16 +65,64 @@ export class TurmaService {
   }
 
   Incluir(Entity: any, callback?: any) {
-    this.http.post(`${this.apiUrl}`, Entity).subscribe((resp: any) => {
-      this.mensagemService.showSuccess('Registro incluído com sucesso!');
-      callback(resp);
+    this.http.post(`${this.apiUrl}`, Entity).subscribe({
+      next: (resp: any) => {
+        this.mensagemService.showSuccess('Turma incluída com sucesso!');
+        if (callback) callback(resp);
+      },
+      error: (error: any) => {
+        this.mensagemService.showError('Erro ao incluir turma', error);
+        if (callback) callback(null);
+      }
     });
   }
 
-  Alterar(Id: any, Entity: any, callback?: any) {
-    this.http.put(`${this.apiUrl}/${Id}`, Entity).subscribe((resp: any) => {
-      this.mensagemService.showSuccess('Registro alterado com sucesso!');
-      callback(resp);
+  async IncluirPromise(Entity: any): Promise<any> {
+    this.loadingService.show();
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post(`${this.apiUrl}`, Entity)
+      );
+
+      this.mensagemService.showSuccess('Turma incluída com sucesso!');
+      return response;
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao incluir turma', error);
+      throw error; // Re-throw para que o chamador possa lidar com o erro se necessário
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
+  Alterar(id: number, Entity: any, callback?: any) {
+    this.http.put(`${this.apiUrl}/${id}`, Entity).subscribe({
+      next: (resp: any) => {
+        this.mensagemService.showSuccess('Turma alterada com sucesso!');
+        if (callback) callback(resp);
+      },
+      error: (error: any) => {
+        this.mensagemService.showError('Erro ao alterar turma', error);
+        if (callback) callback(null);
+      }
     });
+  }
+
+  async AlterarPromise(id: number, Entity: any): Promise<any> {
+    this.loadingService.show();
+
+    try {
+      const response = await firstValueFrom(
+        this.http.put(`${this.apiUrl}/${id}`, Entity)
+      );
+
+      this.mensagemService.showSuccess('Turma alterada com sucesso!');
+      return response;
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao alterar turma', error);
+      throw error;
+    } finally {
+      this.loadingService.hide();
+    }
   }
 }
