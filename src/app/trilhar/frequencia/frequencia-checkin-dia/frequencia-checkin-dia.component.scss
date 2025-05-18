@@ -1,0 +1,22 @@
+/* Adicione ao seu arquivo de estilos */
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-table th {
+  text-align: left;
+  padding: 16px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+}
+
+.mat-table td {
+  padding: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.mat-table tr:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
