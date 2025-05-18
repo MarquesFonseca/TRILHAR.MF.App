@@ -38,13 +38,13 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   // alternado
   isToggled = false;
 
-  displayedColumns: string[] = [
-    'turmaDescricaoFormatada',
-    'qtd',
-    'turmaLimiteMaximo',
-    'qtdRestanteFormatada'
-  ];
-  dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
+  // displayedColumns: string[] = [
+  //   'turmaDescricaoFormatada',
+  //   'qtd',
+  //   'turmaLimiteMaximo',
+  //   'qtdRestanteFormatada'
+  // ];
+  // dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
 
   descricaoTuramaSelecionda: string = '';
   maxData: Date = new Date();
@@ -94,7 +94,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
 
   carregarTurmasAgrupadasPorData(data: string): void {
     this.turmasAgrupadas = [];
-    this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
+    //this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
     this.frequenciasPresentesTurmaEData = [];
     this.frequenciasAusentesTurmaEData = [];
     this.descricaoTuramaSelecionda = '';
@@ -140,7 +140,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
             turmaLimiteMaximo: somaTotalLimiteMaximo,
             qtd: somaTotalQtd
           });
-          this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
+          //this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
         },
         error: (err) => {
           console.error('Erro ao carregar turmas agrupadas:', err);
@@ -169,7 +169,12 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   }
 
   ngOnDestroy(): void {
-    this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
+    //this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
+    this.turmasAgrupadas = [];
+    this.frequenciasPresentesTurmaEData = [];
+    this.frequenciasAusentesTurmaEData = [];
+    this.descricaoTuramaSelecionda = '';
+    this.formulario.reset();
     this.subscriptions.unsubscribe();
   }
 
