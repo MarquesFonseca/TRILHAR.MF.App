@@ -38,14 +38,6 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   // alternado
   isToggled = false;
 
-  // displayedColumns: string[] = [
-  //   'turmaDescricaoFormatada',
-  //   'qtd',
-  //   'turmaLimiteMaximo',
-  //   'qtdRestanteFormatada'
-  // ];
-  // dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
-
   descricaoTuramaSelecionda: string = '';
   maxData: Date = new Date();
   turmasAgrupadas: any[] = [];
@@ -59,10 +51,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   constructor(
     public themeService: CustomizerSettingsService,
     private fb: FormBuilder,
-    private criancaService: CriancaService,
     private frequenciaService: FrequenciaService,
-    private mensagemService: MensagemService,
-    private loadingService: LoadingService,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
   ) {
@@ -94,7 +83,6 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
 
   carregarTurmasAgrupadasPorData(data: string): void {
     this.turmasAgrupadas = [];
-    //this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
     this.frequenciasPresentesTurmaEData = [];
     this.frequenciasAusentesTurmaEData = [];
     this.descricaoTuramaSelecionda = '';
@@ -140,7 +128,6 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
             turmaLimiteMaximo: somaTotalLimiteMaximo,
             qtd: somaTotalQtd
           });
-          //this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
         },
         error: (err) => {
           console.error('Erro ao carregar turmas agrupadas:', err);
@@ -158,7 +145,12 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     try {
       var ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data);
       this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
-      this.frequenciasAusentesTurmaEData = ret.dados.filter((x: any) => x.presenca == false && x.alunoAtivo == true);
+      this.frequenciasAusentesTurmaEData = ret.dados
+        .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
+        .sort((a: any, b: any) => {
+          // Ordenação por nome de forma ascendente (A-Z)
+          return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+        });
     } catch (err) {
       console.error('Erro:', err);
     }
@@ -169,7 +161,6 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   }
 
   ngOnDestroy(): void {
-    //this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
     this.turmasAgrupadas = [];
     this.frequenciasPresentesTurmaEData = [];
     this.frequenciasAusentesTurmaEData = [];
