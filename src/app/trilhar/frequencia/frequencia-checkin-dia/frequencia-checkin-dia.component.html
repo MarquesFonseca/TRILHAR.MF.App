@@ -27,78 +27,52 @@
 
   <mat-card-content>
     <div class="row">
-      <div class="col-md-7" style="border-right: 2px solid #5D5D5D;">
-        <mat-card-header>
-          <mat-card-title>
-            <h5 class="mb-0">
-              <!-- Nome da Turma Seleciondada -->
-            </h5>
-          </mat-card-title>
-        </mat-card-header>
-
+      <div class="col-md-7" style="border-right: 2px solid #747474;">
         <form [formGroup]="formulario">
           <div class="col-md-4">
-           <app-calendario ngSkipHydration
-                [formGroup]="formulario"
-                [field]="'data'"
-                [label]="'Selecione uma data'"
-                [maxDate]="maxData"
-                (itemSelecionado)="onDataSelecionada($event)">
-              </app-calendario>
+            <app-calendario ngSkipHydration [formGroup]="formulario" [field]="'data'" [label]="'Selecione uma data'"
+              [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)">
+            </app-calendario>
           </div>
         </form>
         <br>
-
-        <div class="events-table">
+        <div class="events-table" *ngIf="turmasAgrupadas.length > 0">
           <div class="table-responsive">
-            <table mat-table [dataSource]="dataSourceTurmasAgrupadas">
-              <!-- Nome da Turma -->
-              <ng-container matColumnDef="turmaDescricaoFormatada">
-                <th mat-header-cell *matHeaderCellDef>
-                  Turma
-                </th>
-                <td mat-cell *matCellDef="let element"
-                  (click)="carregarFrequenciasTurma(element.codigoTurma, element.turmaDescricaoFormatada, element.dataFrequencia)"
-                  style="cursor: pointer;">
-                  {{element.turmaDescricao}}
-                </td>
-              </ng-container>
-
-              <!-- Quantidade -->
-              <ng-container matColumnDef="qtd">
-                <th mat-header-cell *matHeaderCellDef>
-                  Quant.
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <div [align]="'center'">{{ element.qtd }}</div>
-                </td>
-              </ng-container>
-
-              <!-- Limite Máximo -->
-              <ng-container matColumnDef="turmaLimiteMaximo">
-                <th mat-header-cell *matHeaderCellDef>
-                  Lim. máx.
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  <div [align]="'center'">{{ element.turmaLimiteMaximo }}</div>
-                </td>
-              </ng-container>
-
-              <!-- Quantidade Restantes -->
-              <ng-container matColumnDef="qtdRestanteFormatada">
-                <th mat-header-cell *matHeaderCellDef>
-                  Quant. Rest.
-                </th>
-                <td mat-cell *matCellDef="let element" [ngClass]="{
-                    'text-danger': element.qtdRestanteFormatada > 0,
-                    'text-success': element.qtdRestanteFormatada <= 0
-                  }">
-                  <div [align]="'center'">{{ element.qtdRestanteFormatada }}</div>
-                </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <table class="mat-table">
+              <!-- Cabeçalho da tabela -->
+              <thead class="mat-header">
+                <tr class="mat-header-row">
+                  <th class="mat-header-cell">Turma</th>
+                  <th class="mat-header-cell">Quant.</th>
+                  <th class="mat-header-cell">Lim. máx.</th>
+                  <th class="mat-header-cell">Quant. Rest.</th>
+                </tr>
+              </thead>
+              <!-- Corpo da tabela -->
+              <tbody>
+                <tr *ngFor="let item of turmasAgrupadas">
+                  <td
+                    (click)="carregarFrequenciasTurma(item.codigoTurma, item.turmaDescricaoFormatada, item.dataFrequencia)"
+                    style="cursor: pointer;">
+                    {{item.turmaDescricao}}
+                  </td>
+                  <td>
+                    <div [align]="'center'">{{ item.qtd }}</div>
+                  </td>
+                  <td>
+                    <div [align]="'center'">{{ item.turmaLimiteMaximo }}</div>
+                  </td>
+                  <td [ngClass]="{
+                            'text-danger': item.qtdRestanteFormatada > 0,
+                            'text-success': item.qtdRestanteFormatada <= 0 }">
+                    <div [align]="'center'">{{ item.qtdRestanteFormatada }}</div>
+                  </td>
+                </tr>
+                <!-- Mensagem quando não há dados -->
+                <tr *ngIf="turmasAgrupadas.length === 0">
+                  <td colspan="4" class="text-center">Nenhuma frequência encontrada para a data selecionada.</td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -116,87 +90,88 @@
               {{ descricaoTuramaSelecionda }}
             </h5>
             <mat-divider *ngIf="descricaoTuramaSelecionda"></mat-divider>
-            <h6 class="mt-10 mb-0" *ngIf="descricaoTuramaSelecionda">TOTAL: {{ frequenciasPresentesTurmaEData.length + frequenciasAusentesTurmaEData.length }}</h6>
+            <h5 class="mt-10 mb-0" *ngIf="descricaoTuramaSelecionda">TOTAL: {{ frequenciasPresentesTurmaEData.length +
+              frequenciasAusentesTurmaEData.length }}</h5>
           </mat-card-title>
         </mat-card-header>
         <!-- <mat-card class="daxa-card mb-25 border-radius bg-white border-none d-block"> -->
-          <mat-card-content>
-            <mat-tab-group fitInkBarToContent>
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span>
-                </ng-template>
-                <span *ngIf="frequenciasPresentesTurmaEData.length == 0">
-                  <h5 class="mb-0">
-                    <!-- Nenhuma turma foi selecionada. -->
-                  </h5>
-                </span>
-                <div class="events-table" *ngIf="frequenciasPresentesTurmaEData.length > 0">
-                  <div class="table-responsive">
-                    <table class="mat-table">
-                      <!-- Cabeçalho da tabela -->
-                      <thead class="mat-header">
-                        <tr class="mat-header-row">
-                          <th class="mat-header-cell">Cod.</th>
-                          <th class="mat-header-cell">Nome</th>
-                          <th class="mat-header-cell">Horário</th>
-                        </tr>
-                      </thead>
-                      <!-- Corpo da tabela -->
-                      <tbody>
-                        <tr *ngFor="let item of frequenciasPresentesTurmaEData">
-                          <td>{{item.alunoCodigoCadastro}}</td>
-                          <td>{{item.alunoNomeCrianca}}</td>
-                          <td>{{item.dataFrequencia | date:'HH:mm:ss'}}</td>
-                        </tr>
-                        <!-- Mensagem quando não há dados -->
-                        <tr *ngIf="frequenciasPresentesTurmaEData.length === 0">
-                          <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+        <mat-card-content>
+          <mat-tab-group fitInkBarToContent>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span>
+              </ng-template>
+              <span *ngIf="frequenciasPresentesTurmaEData.length == 0">
+                <h5 class="mb-0">
+                  <!-- Nenhuma turma foi selecionada. -->
+                </h5>
+              </span>
+              <div class="events-table" *ngIf="frequenciasPresentesTurmaEData.length > 0">
+                <div class="table-responsive">
+                  <table class="mat-table">
+                    <!-- Cabeçalho da tabela -->
+                    <thead class="mat-header">
+                      <tr class="mat-header-row">
+                        <th class="mat-header-cell">Cod.</th>
+                        <th class="mat-header-cell">Nome</th>
+                        <th class="mat-header-cell">Horário</th>
+                      </tr>
+                    </thead>
+                    <!-- Corpo da tabela -->
+                    <tbody>
+                      <tr *ngFor="let item of frequenciasPresentesTurmaEData">
+                        <td>{{item.alunoCodigoCadastro}}</td>
+                        <td>{{item.alunoNomeCrianca}}</td>
+                        <td>{{item.dataFrequencia | date:'HH:mm:ss'}}</td>
+                      </tr>
+                      <!-- Mensagem quando não há dados -->
+                      <tr *ngIf="frequenciasPresentesTurmaEData.length === 0">
+                        <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              </mat-tab>
-              <!-- ---------------- -->
-              <mat-tab>
-                <ng-template mat-tab-label>
-                  <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span>
-                </ng-template>
-                <span *ngIf="frequenciasAusentesTurmaEData.length == 0">
-                  <h5 class="mb-0">
-                    <!-- Nenhuma turma foi selecionada. -->
-                  </h5>
-                </span>
-                <div class="events-table" *ngIf="frequenciasAusentesTurmaEData.length > 0">
-                  <div class="table-responsive">
-                    <table class="mat-table">
-                      <!-- Cabeçalho da tabela -->
-                      <thead class="mat-header">
-                        <tr class="mat-header-row">
-                          <th class="mat-header-cell">Cod.</th>
-                          <th class="mat-header-cell">Nome</th>
-                          <th class="mat-header-cell">Horário</th>
-                        </tr>
-                      </thead>
-                      <!-- Corpo da tabela -->
-                      <tbody>
-                        <tr *ngFor="let item of frequenciasAusentesTurmaEData">
-                          <td>{{item.alunoCodigoCadastro}}</td>
-                          <td>{{item.alunoNomeCrianca}}</td>
-                          <td>{{item.dataFrequencia | date:'HH:mm:ss'}}</td>
-                        </tr>
-                        <!-- Mensagem quando não há dados -->
-                        <tr *ngIf="frequenciasAusentesTurmaEData.length === 0">
-                          <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+              </div>
+            </mat-tab>
+            <!-- ---------------- -->
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span>
+              </ng-template>
+              <span *ngIf="frequenciasAusentesTurmaEData.length == 0">
+                <h5 class="mb-0">
+                  <!-- Nenhuma turma foi selecionada. -->
+                </h5>
+              </span>
+              <div class="events-table" *ngIf="frequenciasAusentesTurmaEData.length > 0">
+                <div class="table-responsive">
+                  <table class="mat-table">
+                    <!-- Cabeçalho da tabela -->
+                    <thead class="mat-header">
+                      <tr class="mat-header-row">
+                        <th class="mat-header-cell">Cod.</th>
+                        <th class="mat-header-cell">Nome</th>
+                        <th class="mat-header-cell">Horário</th>
+                      </tr>
+                    </thead>
+                    <!-- Corpo da tabela -->
+                    <tbody>
+                      <tr *ngFor="let item of frequenciasAusentesTurmaEData">
+                        <td>{{item.alunoCodigoCadastro}}</td>
+                        <td>{{item.alunoNomeCrianca}}</td>
+                        <td>{{item.dataFrequencia | date:'HH:mm:ss'}}</td>
+                      </tr>
+                      <!-- Mensagem quando não há dados -->
+                      <tr *ngIf="frequenciasAusentesTurmaEData.length === 0">
+                        <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-              </mat-tab>
-            </mat-tab-group>
-          </mat-card-content>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
         <!-- </mat-card> -->
       </div>
     </div>
