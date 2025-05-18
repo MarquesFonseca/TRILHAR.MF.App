@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { MatPaginator } from '@angular/material/paginator';
@@ -12,6 +12,9 @@ import { CriancaService } from '../../crianca/crianca.service';
 import { MensagemService } from '../../../services/mensagem.service';
 import { Subscription, map } from 'rxjs';
 import { LoadingService } from '../../../services/loading.service';
+import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
+import * as utils from '../../../shared/funcoes-comuns/utils';
+import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 
 @Component({
   selector: 'app-frequencia-checkin-dia',
@@ -20,13 +23,17 @@ import { LoadingService } from '../../../services/loading.service';
     CommonModule,
     RouterLink,
     ReactiveFormsModule,
-    MaterialModule
+    MaterialModule,
+    CalendarioComponent,
   ],
   templateUrl: './frequencia-checkin-dia.component.html',
   styleUrl: './frequencia-checkin-dia.component.scss'
 })
 export class FrequenciaCheckinDiaComponent extends BaseListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(CalendarioComponent) childCalendarioComponent!: CalendarioComponent;
+
+  formulario!: FormGroup;
 
   // alternado
   isToggled = false;
@@ -40,6 +47,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
 
   descricaoTuramaSelecionda: string = '';
+  maxData: Date = new Date();
   turmasAgrupadas: any[] = [];
   frequenciasPresentesTurmaEData: any[] = [];
   frequenciasAusentesTurmaEData: any[] = [];
@@ -49,43 +57,47 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   private subscriptions: Subscription = new Subscription();
 
   constructor(
-      public themeService: CustomizerSettingsService,
-      private fb: FormBuilder,
-      private criancaService: CriancaService,
-      private frequenciaService: FrequenciaService,
-      private mensagemService: MensagemService,
-      private loadingService: LoadingService,
-      public override router: Router,
-      public override activatedRoute: ActivatedRoute,
-    ) {
-      super(router, activatedRoute);
-      this.themeService.isToggled$.subscribe((isToggled) => {
-        this.isToggled = isToggled;
-        if(!this.isProducao) console.clear();
-      });
-      this.descricaoTuramaSelecionda = '';
-    }
+    public themeService: CustomizerSettingsService,
+    private fb: FormBuilder,
+    private criancaService: CriancaService,
+    private frequenciaService: FrequenciaService,
+    private mensagemService: MensagemService,
+    private loadingService: LoadingService,
+    public override router: Router,
+    public override activatedRoute: ActivatedRoute,
+  ) {
+    super(router, activatedRoute);
+    this.themeService.isToggled$.subscribe((isToggled) => {
+      this.isToggled = isToggled;
+      if (!this.isProducao) console.clear();
+    });
+    this.descricaoTuramaSelecionda = '';
+    this.maxData = new Date();
+  }
 
   override ngOnInit() {
-    this.onDataSelecionada('2025-05-11');
+    this.carregaFormGroup();
+
+    this.formulario.get('data')?.setValue(new Date());
+    this.carregarTurmasAgrupadasPorData(this.retornaDataHoje());
   }
 
-  retornaDataHoje(): string {
-    const hoje = new Date();
-    const ano = hoje.getFullYear();
-    const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
-    const dia = String(hoje.getDate()).padStart(2, '0');
-
-    const dataFormatada = `${ano}-${mes}-${dia}`;
-    return dataFormatada;
+  carregaFormGroup() {
+    this.formulario = this.fb.group({
+      data: [null, [Validators.required, validar.dataValidaValidator(), validar.dataNaoFuturaValidator()]],
+    });
   }
 
-
-  onDataSelecionada(data: string): void {
-    this.carregarTurmasAgrupadasPorData(data);
+  onDataSelecionada(dataSelecionada: DataOutPut): void {
+    this.carregarTurmasAgrupadasPorData(dataSelecionada.data.toISOString().split('T')[0]);
   }
 
   carregarTurmasAgrupadasPorData(data: string): void {
+    this.turmasAgrupadas = [];
+    this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>(this.turmasAgrupadas);
+    this.frequenciasPresentesTurmaEData = [];
+    this.frequenciasAusentesTurmaEData = [];
+    this.descricaoTuramaSelecionda = '';
     const sub = this.frequenciaService.listarTurmasAgrupadasPorData(data)
       .subscribe({
         next: (ret: any) => {
@@ -138,15 +150,15 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     this.subscriptions.add(sub);
   }
 
-  async carregarFrequenciasTurma(codigoTurma: number, descricaoTurma:string, data: string) {
-    if(codigoTurma == 0) {
+  async carregarFrequenciasTurma(codigoTurma: number, descricaoTurma: string, data: string) {
+    if (codigoTurma == 0) {
       return;
     }
     this.descricaoTuramaSelecionda = descricaoTurma;
     try {
       var ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data);
-      this.frequenciasPresentesTurmaEData = ret.dados.filter((x:any) => x.presenca == true && x.alunoAtivo == true);
-      this.frequenciasAusentesTurmaEData = ret.dados.filter((x:any) => x.presenca == false && x.alunoAtivo == true);
+      this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
+      this.frequenciasAusentesTurmaEData = ret.dados.filter((x: any) => x.presenca == false && x.alunoAtivo == true);
     } catch (err) {
       console.error('Erro:', err);
     }
@@ -157,7 +169,17 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   }
 
   ngOnDestroy(): void {
-      this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
-      this.subscriptions.unsubscribe();
-    }
+    this.dataSourceTurmasAgrupadas = new MatTableDataSource<any>([]);
+    this.subscriptions.unsubscribe();
+  }
+
+  retornaDataHoje(): string {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0'); // +1 porque janeiro é 0
+    const dia = String(hoje.getDate()).padStart(2, '0');
+
+    const dataFormatada = `${ano}-${mes}-${dia}`;
+    return dataFormatada;
+  }
 }

@@ -35,9 +35,22 @@
             </h5>
           </mat-card-title>
         </mat-card-header>
+
+        <form [formGroup]="formulario">
+          <div class="col-md-4">
+           <app-calendario ngSkipHydration
+                [formGroup]="formulario"
+                [field]="'data'"
+                [label]="'Selecione uma data'"
+                [maxDate]="maxData"
+                (itemSelecionado)="onDataSelecionada($event)">
+              </app-calendario>
+          </div>
+        </form>
+        <br>
+
         <div class="events-table">
           <div class="table-responsive">
-            <!-- <pre>{{dataSourceTurmasAgrupadas.data | json}}</pre> -->
             <table mat-table [dataSource]="dataSourceTurmasAgrupadas">
               <!-- Nome da Turma -->
               <ng-container matColumnDef="turmaDescricaoFormatada">
@@ -89,6 +102,10 @@
             </table>
           </div>
         </div>
+        <br>
+        <hr>
+        <br>
+        <br>
       </div>
 
 
