@@ -19,6 +19,7 @@ import * as criancasTypes from '../crianca.types';
 import * as turmaTypes from '../../turma/turma.types';
 import { FrequenciaService } from '../../frequencia/frequencia.service';
 import { FrequenciaInput } from '../../frequencia/frequencia.types';
+import { BootWhatsService } from '../../../services/bootwhats.service';
 //import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
 
 @Component({
@@ -64,6 +65,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     private viewportScroller: ViewportScroller,
     private cdr: ChangeDetectorRef,
     private mensagemService: MensagemService,
+    private bootWhatsService: BootWhatsService,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
   ) {
@@ -449,12 +451,22 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           // Decidir o que fazer com a matrícula baseado nas situações
           await this.gerenciarMatricula(codigoAluno, matriculaAtual, turmaSelecionada);
 
+          await this.enviarWhatsApp(input);
+
           const url = `criancas/detalhar/${input.codigoCadastro}`;
           this.finalizarAcao(url);
         }
       }
     } catch (error) {
       this.mensagemService.showError('Erro ao alterar registro', error);
+    }
+  }
+
+  private async enviarWhatsApp(input: criancasTypes.IAlunoEntity) {
+    if (input.telefone && input.telefone.length > 0) {
+      const mensagem = `Olá, ${input.nomeCrianca}! Você foi cadastrado(a) no sistema.`;
+      // await this.bootWhatsService.enviarMensagensPromise(input.telefone, mensagem);
+      await this.bootWhatsService.enviarMensagensPromise('5563992082269', mensagem);
     }
   }
 
