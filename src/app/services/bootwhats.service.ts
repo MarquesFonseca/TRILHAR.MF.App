@@ -33,7 +33,7 @@ export class BootWhatsService {
   private readonly apiUrl = 'https://api.tinsweb.com.br/BootWhats/Mensagem/Enviar';
   private readonly username = '31dadcef-6ff6-4d38-a7c2-b313048c008e'; // Substitua pelo username real
   private readonly password = '+iXr82wkFMV9p3WYZLQs0Q==';    // Substitua pela senha real
-  private readonly identificadorPadrao = 'MARQUES-PC'; // Identificador padrão, pode ser alterado por parâmetro
+  private readonly identificadorPadrao = ''; // MARQUES-PC - Identificador padrão, pode ser alterado por parâmetro
 
   constructor(
     private http: HttpClient,

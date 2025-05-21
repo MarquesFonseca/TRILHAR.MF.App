@@ -451,7 +451,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           // Decidir o que fazer com a matrícula baseado nas situações
           await this.gerenciarMatricula(codigoAluno, matriculaAtual, turmaSelecionada);
 
-          await this.enviarWhatsApp(input);
+          //await this.enviarWhatsApp(input);
 
           const url = `criancas/detalhar/${input.codigoCadastro}`;
           this.finalizarAcao(url);
@@ -464,9 +464,13 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
   private async enviarWhatsApp(input: criancasTypes.IAlunoEntity) {
     if (input.telefone && input.telefone.length > 0) {
-      const mensagem = `Olá, ${input.nomeCrianca}! Você foi cadastrado(a) no sistema.`;
+
+      const texto =
+      `Olá, *${input.nomeCrianca}*!\r\nData de Nascimento *${input.dataNascimento?.dataString()}*\r\nNome da Mãe *${input.nomeMae}*\r\nNome do Pai *${input.nomePai}*.`;
+
+      const mensagem = `Olá, *${input.nomeCrianca}*! Você foi cadastrado(a) no sistema.`;
       // await this.bootWhatsService.enviarMensagensPromise(input.telefone, mensagem);
-      await this.bootWhatsService.enviarMensagensPromise('5563992082269', mensagem);
+      await this.bootWhatsService.enviarMensagensPromise('5563992082269', texto);
     }
   }
 
