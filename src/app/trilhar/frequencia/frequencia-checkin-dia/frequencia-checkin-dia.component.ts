@@ -46,6 +46,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   frequenciasPresentesTurmaEDataPossueAlergia: any[] = [];
   frequenciasPresentesTurmaEDataPossueRestricaoAlimentar: any[] = [];
   frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais: any[] = [];
+  frequenciasPresentesTurmaEDataPossueAniversario: any[] = [];
   //frequencias: any[] = [];
   //frequenciaDetalhe: any;
 
@@ -93,6 +94,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     this.frequenciasPresentesTurmaEDataPossueAlergia = [];
     this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = [];
     this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = [];
+    this.frequenciasPresentesTurmaEDataPossueAniversario = [];
 
     const sub = this.frequenciaService.listarTurmasAgrupadasPorData(data)
       .subscribe({
@@ -160,14 +162,50 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
           return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
         });
 
+      const dataHoje = this.retornaDataHoje();
       this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAlergia == true);
       this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoRestricaoAlimentar == true);
       this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoDeficienciaOuSituacaoAtipica == true);
+      this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && this.ehAniversarioHojeSeguro(x.alunoDataNascimento));
 
     } catch (err) {
       console.error('Erro:', err);
     }
   }
+
+  /**
+ * Verifica se a pessoa faz aniversário hoje com validações
+ * @param dataNascimento - Data de nascimento no formato "2022-05-25T00:00:00" ou Date
+ * @returns true se for aniversário hoje, false caso contrário
+ */
+  ehAniversarioHojeSeguro(dataNascimento: string | Date): boolean {
+  try {
+    // Validação de entrada
+    if (!dataNascimento) {
+      return false;
+    }
+
+    const nascimento = typeof dataNascimento === 'string' ? new Date(dataNascimento) : dataNascimento;
+
+    // Verifica se a data é válida
+    if (isNaN(nascimento.getTime())) {
+      return false;
+    }
+
+    const hoje = new Date();
+
+    // Verifica se a data de nascimento não é no futuro
+    if (nascimento > hoje) {
+      return false;
+    }
+
+    return nascimento.getMonth() === hoje.getMonth() &&
+           nascimento.getDate() === hoje.getDate();
+  } catch (error) {
+    console.error('Erro ao verificar aniversário:', error);
+    return false;
+  }
+}
 
   override preencheFiltro(): void {
     throw new Error('Method not implemented.');
