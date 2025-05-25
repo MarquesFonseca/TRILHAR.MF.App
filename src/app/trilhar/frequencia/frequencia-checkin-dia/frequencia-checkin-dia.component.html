@@ -286,6 +286,43 @@
               </div>
             </mat-tab>
             <!-- ---------------- -->
+             <mat-tab>
+              <ng-template mat-tab-label>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="false">Pres. com Aniversário</span>
+              </ng-template>
+              <span *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length == 0">
+                <h5 class="mb-0">
+                  <!-- Nenhuma turma foi selecionada. -->
+                </h5>
+              </span>
+              <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length > 0">
+                <div class="table-responsive">
+                  <table class="mat-table">
+                    <!-- Cabeçalho da tabela -->
+                    <thead class="mat-header">
+                      <tr class="mat-header-row">
+                        <th class="mat-header-cell">Cod.</th>
+                        <th class="mat-header-cell">Nome</th>
+                        <th class="mat-header-cell">Data Nasc.</th>
+                      </tr>
+                    </thead>
+                    <!-- Corpo da tabela -->
+                    <tbody>
+                      <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAniversario">
+                        <td>{{item.alunoCodigoCadastro}}</td>
+                        <td>{{item.alunoNomeCrianca}}</td>
+                        <td>{{item.alunoDataNascimento | date:'dd/MM/yyyy'}}</td>
+                      </tr>
+                      <!-- Mensagem quando não há dados -->
+                      <tr *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length === 0">
+                        <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-tab>
+            <!-- ---------------- -->
           </mat-tab-group>
         </mat-card-content>
         <!-- </mat-card> -->
