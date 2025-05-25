@@ -43,6 +43,9 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   turmasAgrupadas: any[] = [];
   frequenciasPresentesTurmaEData: any[] = [];
   frequenciasAusentesTurmaEData: any[] = [];
+  frequenciasPresentesTurmaEDataPossueAlergia: any[] = [];
+  frequenciasPresentesTurmaEDataPossueRestricaoAlimentar: any[] = [];
+  frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais: any[] = [];
   //frequencias: any[] = [];
   //frequenciaDetalhe: any;
 
@@ -86,6 +89,11 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     this.frequenciasPresentesTurmaEData = [];
     this.frequenciasAusentesTurmaEData = [];
     this.descricaoTuramaSelecionda = '';
+
+    this.frequenciasPresentesTurmaEDataPossueAlergia = [];
+    this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = [];
+    this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = [];
+
     const sub = this.frequenciaService.listarTurmasAgrupadasPorData(data)
       .subscribe({
         next: (ret: any) => {
@@ -151,6 +159,11 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
           // Ordenação por nome de forma ascendente (A-Z)
           return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
         });
+
+      this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAlergia == true);
+      this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoRestricaoAlimentar == true);
+      this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoDeficienciaOuSituacaoAtipica == true);
+
     } catch (err) {
       console.error('Erro:', err);
     }
