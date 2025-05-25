@@ -431,6 +431,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
               await this.adicionarMatriculaRegistro(aluno, turmaSelecionada);
               await this.adicionarFrequenciaRegistro(aluno, turmaSelecionada);
             }
+            await this.enviarWhatsApp(input);
             var url = `criancas/detalhar/${aluno.codigoCadastro}`;
             this.finalizarAcao(url);
           }
