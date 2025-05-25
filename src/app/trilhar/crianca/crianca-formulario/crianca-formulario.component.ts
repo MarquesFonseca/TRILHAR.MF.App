@@ -464,9 +464,15 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
   private async enviarWhatsApp(input: criancasTypes.IAlunoEntity) {
     if (input.telefone && input.telefone.length > 0) {
-      const mensagem = `Olá, ${input.nomeCrianca}! Você foi cadastrado(a) no sistema.`;
-      // await this.bootWhatsService.enviarMensagensPromise(input.telefone, mensagem);
-      await this.bootWhatsService.enviarMensagensPromise('5563992082269', mensagem);
+
+      const texto =
+      `Olá, somos da equipe do *Ministério Trilhar da Sibapa.*\r\nGostaríamos de confirmar os dados:\r\nCódigo do Cadastro?: *${input.codigoCadastro}*\r\nNome da Criança: *${input.nomeCrianca}*\r\nData de Nascimento: *${input.dataNascimento?.dataString()}*\r\nNome da Mãe: *${input.nomeMae}*\r\nNome do Pai: *${input.nomePai}*\r\nEmail: *${input.enderecoEmail?.toString().toLocaleLowerCase()}*\r\nAlergia?: *${input.alergia ? 'Sim' : 'Não'}*\r\nDescrição da Alergia?: *${input.descricaoAlergia}*\r\nRestrição Alimentar?: *${input.restricaoAlimentar ? 'Sim' : 'Não'}*\r\nDescrição Restrição Alimentar?: *${input.descricaoRestricaoAlimentar}*\r\nSituação Atípica?: *${input.deficienciaOuSituacaoAtipica ? 'Sim' : 'Não'}*\r\nDescrição Situação Atípica: *${input.deficienciaOuSituacaoAtipica}*.`;
+
+      //await this.bootWhatsService.enviarMensagensPromise('5563992082269', texto);
+
+      const telefoneFormatado = `55${input.telefone}`;
+
+      await this.bootWhatsService.enviarMensagensPromise(telefoneFormatado , texto);
     }
   }
 

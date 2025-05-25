@@ -170,6 +170,122 @@
                 </div>
               </div>
             </mat-tab>
+            <!-- ---------------- -->
+             <!-- this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAlergia == true);
+            this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoRestricaoAlimentar == true);
+            this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.ret.alunoDeficienciaOuSituacaoAtipica == true); -->
+
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="false">Pres. com Alergia</span>
+              </ng-template>
+              <span *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length == 0">
+                <h5 class="mb-0">
+                  <!-- Nenhuma turma foi selecionada. -->
+                </h5>
+              </span>
+              <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length > 0">
+                <div class="table-responsive">
+                  <table class="mat-table">
+                    <!-- Cabeçalho da tabela -->
+                    <thead class="mat-header">
+                      <tr class="mat-header-row">
+                        <th class="mat-header-cell">Cod.</th>
+                        <th class="mat-header-cell">Nome</th>
+                        <th class="mat-header-cell">Alergia</th>
+                      </tr>
+                    </thead>
+                    <!-- Corpo da tabela -->
+                    <tbody>
+                      <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAlergia">
+                        <td>{{item.alunoCodigoCadastro}}</td>
+                        <td>{{item.alunoNomeCrianca}}</td>
+                        <td>{{item.alunoDescricaoAlergia}}</td>
+                      </tr>
+                      <!-- Mensagem quando não há dados -->
+                      <tr *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length === 0">
+                        <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-tab>
+            <!-- ---------------- -->
+             <mat-tab>
+              <ng-template mat-tab-label>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="false">Pres. com Rest. Alim</span>
+              </ng-template>
+              <span *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length == 0">
+                <h5 class="mb-0">
+                  <!-- Nenhuma turma foi selecionada. -->
+                </h5>
+              </span>
+              <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length > 0">
+                <div class="table-responsive">
+                  <table class="mat-table">
+                    <!-- Cabeçalho da tabela -->
+                    <thead class="mat-header">
+                      <tr class="mat-header-row">
+                        <th class="mat-header-cell">Cod.</th>
+                        <th class="mat-header-cell">Nome</th>
+                        <th class="mat-header-cell">Rest. Alimentar</th>
+                      </tr>
+                    </thead>
+                    <!-- Corpo da tabela -->
+                    <tbody>
+                      <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueRestricaoAlimentar">
+                        <td>{{item.alunoCodigoCadastro}}</td>
+                        <td>{{item.alunoNomeCrianca}}</td>
+                        <td>{{item.alunoDescricaoRestricaoAlimentar}}</td>
+                      </tr>
+                      <!-- Mensagem quando não há dados -->
+                      <tr *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length === 0">
+                        <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-tab>
+            <!-- ---------------- -->
+             <mat-tab>
+              <ng-template mat-tab-label>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="false">Pres. com Sit. Atípica</span>
+              </ng-template>
+              <span *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length == 0">
+                <h5 class="mb-0">
+                  <!-- Nenhuma turma foi selecionada. -->
+                </h5>
+              </span>
+              <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length > 0">
+                <div class="table-responsive">
+                  <table class="mat-table">
+                    <!-- Cabeçalho da tabela -->
+                    <thead class="mat-header">
+                      <tr class="mat-header-row">
+                        <th class="mat-header-cell">Cod.</th>
+                        <th class="mat-header-cell">Nome</th>
+                        <th class="mat-header-cell">Sit. Atípica</th>
+                      </tr>
+                    </thead>
+                    <!-- Corpo da tabela -->
+                    <tbody>
+                      <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais">
+                        <td>{{item.alunoCodigoCadastro}}</td>
+                        <td>{{item.alunoNomeCrianca}}</td>
+                        <td>{{item.alunoDescricaoDeficiencia}}</td>
+                      </tr>
+                      <!-- Mensagem quando não há dados -->
+                      <tr *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length === 0">
+                        <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </mat-tab>
+            <!-- ---------------- -->
           </mat-tab-group>
         </mat-card-content>
         <!-- </mat-card> -->
