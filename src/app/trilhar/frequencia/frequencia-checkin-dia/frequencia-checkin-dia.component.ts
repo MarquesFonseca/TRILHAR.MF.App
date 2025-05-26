@@ -4,16 +4,12 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { FrequenciaService } from '../frequencia.service';
-import { CriancaService } from '../../crianca/crianca.service';
 import { MensagemService } from '../../../services/mensagem.service';
-import { Subscription, map } from 'rxjs';
-import { LoadingService } from '../../../services/loading.service';
+import { Subscription } from 'rxjs';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
-import * as utils from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 
 @Component({
@@ -38,6 +34,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   // alternado
   isToggled = false;
 
+  dataSelecionada: Date = new Date();
   descricaoTuramaSelecionda: string = '';
   maxData: Date = new Date();
   turmasAgrupadas: any[] = [];
@@ -56,6 +53,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     public themeService: CustomizerSettingsService,
     private fb: FormBuilder,
     private frequenciaService: FrequenciaService,
+    private mensagemService: MensagemService,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
   ) {
@@ -71,8 +69,9 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   override ngOnInit() {
     this.carregaFormGroup();
 
+    this.dataSelecionada = new Date();
     this.formulario.get('data')?.setValue(new Date());
-    this.carregarTurmasAgrupadasPorData(this.retornaDataHoje());
+    //this.carregarTurmasAgrupadasPorData(this.retornaDataHoje());
   }
 
   carregaFormGroup() {
@@ -82,7 +81,28 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   }
 
   onDataSelecionada(dataSelecionada: DataOutPut): void {
-    this.carregarTurmasAgrupadasPorData(dataSelecionada.data.toISOString().split('T')[0]);
+    this.dataSelecionada = dataSelecionada.data;
+    this.formulario.get('data')?.setValue(this.dataSelecionada);
+    this.formulario.get('data')?.markAsDirty();
+    // this.carregarTurmasAgrupadasPorData(dataSelecionada.data.toISOString().split('T')[0]);
+  }
+
+  onBuscarFrequencias() {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      this.mensagemService.showInfo('Por favor, preencha todos os campos obrigatórios.');
+      return;
+    }
+    const data = this.formulario.get('data')?.value;
+    if (!data) {
+      this.mensagemService.showInfo('Data inválida. Por favor, selecione uma data válida.');
+      return;
+    }
+
+    this.dataSelecionada = data;
+    this.formulario.get('data')?.setValue(this.dataSelecionada);
+    this.formulario.get('data')?.markAsDirty();
+    this.carregarTurmasAgrupadasPorData(data.toISOString().split('T')[0]);
   }
 
   carregarTurmasAgrupadasPorData(data: string): void {
@@ -99,6 +119,9 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     const sub = this.frequenciaService.listarTurmasAgrupadasPorData(data)
       .subscribe({
         next: (ret: any) => {
+          if (ret.dados == null) {
+            return;
+          }
           this.turmasAgrupadas = ret.dados.map((turma: any) => ({
             codigoTurma: turma.codigoTurma, //31
             turmaDescricaoFormatada: turma.turmaDescricaoFormatada, //"BRANCO (0 A 11 M 29 D) - 2025/1",
@@ -116,10 +139,21 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
             turmaAtivo: turma.turmaAtivo, //true,
             turmaLimiteMaximo: turma.turmaLimiteMaximo, //8,
             qtd: turma.qtd, //11
+
+            qtdAlergia: turma.qtdAlergia,
+            qtdRestricaoAlimentar: turma.qtdRestricaoAlimentar,
+            qtdNecessidadesEspeciais: turma.qtdNecessidadesEspeciais,
+            qtdAniversariantes: turma.qtdAniversariantes,
           }));
           var somaTotalQtd = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtd, 0);
           var somaTotalLimiteMaximo = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.turmaLimiteMaximo, 0);
           var somaTotalRestante = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdRestante, 0);
+
+          var somaTotalAlergia = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdAlergia, 0);
+          var somaTotalRestricaoAlimentar = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdRestricaoAlimentar, 0);
+          var somaTotalNecessidadesEspeciais = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdNecessidadesEspeciais, 0);
+          var somaTotalAniversariantes = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdAniversariantes, 0);
+
           this.turmasAgrupadas.push({
             codigoTurma: 0,
             turmaDescricaoFormatada: 'TOTAL',
@@ -136,7 +170,12 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
             turmaIdadeFinalAluno: '',
             turmaAtivo: true,
             turmaLimiteMaximo: somaTotalLimiteMaximo,
-            qtd: somaTotalQtd
+            qtd: somaTotalQtd,
+
+            qtdAlergia: somaTotalAlergia,
+            qtdRestricaoAlimentar: somaTotalRestricaoAlimentar,
+            qtdNecessidadesEspeciais: somaTotalNecessidadesEspeciais,
+            qtdAniversariantes: somaTotalAniversariantes,
           });
         },
         error: (err) => {
@@ -153,7 +192,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     }
     this.descricaoTuramaSelecionda = descricaoTurma;
     try {
-      var ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data);
+      var ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data.split('T')[0]);
       this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
       this.frequenciasAusentesTurmaEData = ret.dados
         .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
@@ -162,50 +201,15 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
           return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
         });
 
-      const dataHoje = this.retornaDataHoje();
-      this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAlergia == true);
-      this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoRestricaoAlimentar == true);
-      this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoDeficienciaOuSituacaoAtipica == true);
-      this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && this.ehAniversarioHojeSeguro(x.alunoDataNascimento));
+      this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true);
+      this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true);
+      this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true);
+      this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && this.ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada));
 
     } catch (err) {
       console.error('Erro:', err);
     }
   }
-
-  /**
- * Verifica se a pessoa faz aniversário hoje com validações
- * @param dataNascimento - Data de nascimento no formato "2022-05-25T00:00:00" ou Date
- * @returns true se for aniversário hoje, false caso contrário
- */
-  ehAniversarioHojeSeguro(dataNascimento: string | Date): boolean {
-  try {
-    // Validação de entrada
-    if (!dataNascimento) {
-      return false;
-    }
-
-    const nascimento = typeof dataNascimento === 'string' ? new Date(dataNascimento) : dataNascimento;
-
-    // Verifica se a data é válida
-    if (isNaN(nascimento.getTime())) {
-      return false;
-    }
-
-    const hoje = new Date();
-
-    // Verifica se a data de nascimento não é no futuro
-    if (nascimento > hoje) {
-      return false;
-    }
-
-    return nascimento.getMonth() === hoje.getMonth() &&
-           nascimento.getDate() === hoje.getDate();
-  } catch (error) {
-    console.error('Erro ao verificar aniversário:', error);
-    return false;
-  }
-}
 
   override preencheFiltro(): void {
     throw new Error('Method not implemented.');
@@ -228,5 +232,32 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
 
     const dataFormatada = `${ano}-${mes}-${dia}`;
     return dataFormatada;
+  }
+
+  /**
+   * Verifica se a pessoa faz aniversário em uma data específica
+   * @param dataNascimento - Data de nascimento
+   * @param dataReferencia - Data para verificar (opcional, padrão é hoje)
+   * @returns true se for aniversário na data de referência, false caso contrário
+   */
+  ehAniversarioNaData(
+    dataNascimento: string | Date,
+    dataReferencia: string | Date = new Date()
+  ): boolean {
+    try {
+      const nascimento = typeof dataNascimento === 'string' ? new Date(dataNascimento) : dataNascimento;
+      const referencia = typeof dataReferencia === 'string' ? new Date(dataReferencia) : dataReferencia;
+
+      // Validações
+      if (isNaN(nascimento.getTime()) || isNaN(referencia.getTime())) {
+        return false;
+      }
+
+      return nascimento.getMonth() === referencia.getMonth() &&
+            nascimento.getDate() === referencia.getDate();
+    } catch (error) {
+      console.error('Erro ao verificar aniversário:', error);
+      return false;
+    }
   }
 }

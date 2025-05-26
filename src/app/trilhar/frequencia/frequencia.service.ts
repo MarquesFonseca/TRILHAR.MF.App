@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { finalize, firstValueFrom, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, finalize, firstValueFrom, Observable, of, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LoadingService } from '../../services/loading.service';
 import { MensagemService } from '../../services/mensagem.service';
@@ -166,11 +166,28 @@ export class FrequenciaService {
   *   }
   * });
   */
-  listarTurmasAgrupadasPorData(data: string): Observable<any[]> {
+  listarTurmasAgrupadasPorData(data: string): Observable<any> {
     this.loadingService.show();
+
     return this.http
       .get<any[]>(`${this.apiUrl}/turmas/agrupadas/data/${data}`)
-      .pipe(finalize(() => this.loadingService.hide()));
+      .pipe(
+        finalize(() => this.loadingService.hide()),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            const mensagem = error.error?.detail || 'Registro não encontrado.';
+            this.mensagemService.showError(mensagem, error);
+          } else if (error.status === 400) {
+            const erros = error.error?.erros || ['Erro de validação.'];
+            this.mensagemService.showError(erros.join('\n'), error);
+          } else {
+            this.mensagemService.showError('Erro inesperado.', error);
+          }
+
+          //return throwError(() => error); // dispara erro para quem consome
+          return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
+        })
+      );
   }
 
   /** GET /api/frequencias/turmas/agrupadas/data/{data}
