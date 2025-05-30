@@ -52,11 +52,8 @@
           </form>
         </div>
 
-
-
-
-
         <br>
+
         <div class="events-table" *ngIf="turmasAgrupadas.length > 0">
           <div class="table-responsive">
             <table class="mat-table">
@@ -139,7 +136,8 @@
             <!-- Aba Presentes ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span>
+                <!-- <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span> -->
+                 <mat-icon [matTooltip]="'Qtd. Presentes'" matTooltipPosition="above" style="color: #4CAF50;" [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="true">how_to_reg</mat-icon>
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEData.length == 0">
                 <h5 class="mb-0">
@@ -193,7 +191,8 @@
             <!-- Aba Ausentes ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span>
+                <!-- <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span> -->
+                 <mat-icon [matTooltip]="'Qtd. Ausentes'" matTooltipPosition="above" style="color: #F44336;" [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="true">person_remove</mat-icon>
               </ng-template>
               <span *ngIf="frequenciasAusentesTurmaEData.length == 0">
                 <h5 class="mb-0">
@@ -236,7 +235,8 @@
             <!-- Aba Presentes Com Alergia ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <span [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="false">Com Alergia</span>
+                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="false">Com Alergia</span> -->
+                 <mat-icon  [matTooltip]="'Qtd. Com Alergia'" style="color: #F44336;" [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="true">sick</mat-icon>
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length == 0">
                 <h5 class="mb-0">
@@ -281,8 +281,8 @@
             <!-- Aba Presentes Com Rest. Alimentar ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <span [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length"
-                  matBadgeOverlap="false">Com Rest. Alim.</span>
+                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="false">Com Rest. Alim.</span> -->
+                <mat-icon [matTooltip]="'Qtd. Com Restrição Alimentar'"  style="color: #FF5722;" [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="true">restaurant</mat-icon>
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length == 0">
                 <h5 class="mb-0">
@@ -327,8 +327,8 @@
             <!-- Aba Presentes Com Nec. Especiais ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <span [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length"
-                  matBadgeOverlap="false">Com Sit. Atípica</span>
+                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="false">Com Sit. Atípica</span> -->
+                 <mat-icon [matTooltip]="'Qtd. Com Sit. Atípica'" style="color: #3F51B5;" [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="true">accessible</mat-icon>
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length == 0">
                 <h5 class="mb-0">
@@ -373,7 +373,8 @@
             <!-- Aba Presentes Com Aniversário ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <span [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="false">Aniversário</span>
+                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="false">Aniversário</span> -->
+                 <mat-icon [matTooltip]="'Qtd. Aniversariante'" style="color: #E91E63;" [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="true">cake</mat-icon>
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length == 0">
                 <h5 class="mb-0">
