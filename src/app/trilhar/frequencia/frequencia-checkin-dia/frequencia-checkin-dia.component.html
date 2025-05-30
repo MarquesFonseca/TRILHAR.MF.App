@@ -36,23 +36,22 @@
           </div>
         </form> -->
 
-        <mat-card-header>
-          <mat-card-title style="width: 100%;">
-            <form class="search-box position-relative" [formGroup]="formulario" (ngSubmit)="onBuscarFrequencias()">
-              <div class="search-input-wrapper">
-                <app-calendario ngSkipHydration [formGroup]="formulario" [field]="'data'" [label]="'Selecione uma data'"
-                  [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)">
-                </app-calendario>
-              </div>
-              <div class="search-button-wrapper">
-                <button mat-flat-button color="accent" class="search-btn">
-                  <mat-icon>search</mat-icon>
-                  Buscar
-                </button>
-              </div>
-            </form>
-          </mat-card-title>
-        </mat-card-header>
+        <div class="row">
+          <form class="search-box w-100" [formGroup]="formulario" (ngSubmit)="onBuscarFrequencias()">
+            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6 form-group">
+              <app-calendario ngSkipHydration [formGroup]="formulario" [field]="'data'" [label]="'Selecione uma data'"
+                [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)">
+              </app-calendario>
+            </div>
+            <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-6 form-group d-flex">
+              <button mat-flat-button color="accent" class="search-btn">
+                <mat-icon>search</mat-icon>
+                Buscar
+              </button>
+            </div>
+          </form>
+        </div>
+
 
 
 
