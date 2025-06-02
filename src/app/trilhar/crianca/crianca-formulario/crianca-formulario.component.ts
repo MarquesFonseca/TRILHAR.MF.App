@@ -565,7 +565,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     // SITUAÇÃO 3: Aluno possuía matrícula e agora selecionou uma turma diferente
     if (matriculaAtual && turmaSelecionada && matriculaAtual.codigoTurma !== turmaSelecionada.codigo) {
       console.log('Situação 3: Aluno mudando de turma');
-      await this.alterarMatriculaRegistro(0, codigoAluno, turmaSelecionada.codigo);
+      await this.alterarMatriculaRegistro(turmaSelecionada.codigo, codigoAluno, turmaSelecionada.codigo);
       return;
     }
 
