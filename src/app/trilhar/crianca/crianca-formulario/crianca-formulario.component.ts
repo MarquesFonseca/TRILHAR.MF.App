@@ -19,7 +19,8 @@ import * as criancasTypes from '../crianca.types';
 import * as turmaTypes from '../../turma/turma.types';
 import { FrequenciaService } from '../../frequencia/frequencia.service';
 import { FrequenciaInput } from '../../frequencia/frequencia.types';
-import { BootWhatsService } from '../../../services/bootwhats.service';
+import { BootWhatsService, MensagemWhatsApp } from '../../../services/bootwhats.service';
+import QRCode from 'qrcode';
 //import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
 
 @Component({
@@ -431,7 +432,9 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
               await this.adicionarMatriculaRegistro(aluno, turmaSelecionada);
               await this.adicionarFrequenciaRegistro(aluno, turmaSelecionada);
             }
-            await this.enviarWhatsApp(input);
+
+            await this.enviarWhatsApp('INCLUSAO', aluno, turmaSelecionada);
+
             var url = `criancas/detalhar/${aluno.codigoCadastro}`;
             this.finalizarAcao(url);
           }
@@ -452,7 +455,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           // Decidir o que fazer com a matrícula baseado nas situações
           await this.gerenciarMatricula(codigoAluno, matriculaAtual, turmaSelecionada);
 
-          await this.enviarWhatsApp(input);
+          await this.enviarWhatsApp('ALTERACAO', input, turmaSelecionada);
 
           const url = `criancas/detalhar/${input.codigoCadastro}`;
           this.finalizarAcao(url);
@@ -463,17 +466,82 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     }
   }
 
-  private async enviarWhatsApp(input: criancasTypes.IAlunoEntity) {
+  private async enviarWhatsApp(tipo:string | 'INCLUSAO' | 'ALTERACAO', input: criancasTypes.IAlunoEntity, turmaSelecionada: any): Promise<void> {
     if (input.telefone && input.telefone.length > 0) {
 
-      const texto =
-      `Olá, somos da equipe do *Ministério Trilhar da Sibapa.*\r\nGostaríamos de confirmar os dados:\r\nCódigo do Cadastro: *${input.codigoCadastro}*\r\nNome da Criança: *${input.nomeCrianca}*\r\nData de Nascimento: *${input.dataNascimento?.dataString()}*\r\nNome da Mãe: *${input.nomeMae}*\r\nNome do Pai: *${input.nomePai}*\r\nEmail: *${input.enderecoEmail?.toString().toLocaleLowerCase()}*\r\nAlergia: *${input.alergia ? 'Sim' : 'Não'}*\r\nDescrição da Alergia: ${input.descricaoAlergia}\r\nRestrição Alimentar: *${input.restricaoAlimentar ? 'Sim' : 'Não'}*\r\nDescrição Restrição Alimentar: ${input.descricaoRestricaoAlimentar}\r\nSituação Atípica: *${input.deficienciaOuSituacaoAtipica ? 'Sim' : 'Não'}*\r\nDescrição Situação Atípica: ${input.descricaoDeficiencia}`;
+      var texto = '';
+      texto += `Olá! Aqui é do *Ministério Trilhar da SIBAPA* 💚\r\n\r\n`;
+      if (tipo === 'INCLUSAO') {
+        texto += `Estamos muito felizes por receber sua família em nossa jornada de fé e cuidado com as crianças!\r\n\r\n`;
+        texto += `✨ Seu código de cadastro é: *${input.codigoCadastro}*\r\n\r\n`;
+      }
+      texto += `*Por favor, confira as informações abaixo:* 👇\r\n\r\n`;
+      if (tipo === 'ALTERACAO') {
+        texto += `🧾 Código do Cadastro: *${input.codigoCadastro}*\r\n\r\n`;
+      }
+      if (!!turmaSelecionada) {
+        texto += `🏫 Sala: *${turmaSelecionada.descricaoAnoSemestreLetivo}*\r\n\r\n`;
+      }
+      texto += `👧 Nome da Criança: *${input.nomeCrianca}*\r\n\r\n`;
+      var dataNascimento = input.dataNascimento ? new Date(input.dataNascimento) : null;
+      texto += `🎂 Data de Nascimento: *${dataNascimento?.dataString()}*\r\n\r\n`;
+      if (input.nomeMae) {
+        texto += `👩‍👧 Nome da Mãe: *${input.nomeMae}*\r\n\r\n`;
+      }
+      if (input.nomePai) {
+        texto += `👨‍👧 Nome do Pai: *${input.nomePai}*\r\n\r\n`;
+      }
+      if (input.outroResponsavel) {
+        texto += `👥 Outro Responsável: *${input.outroResponsavel}*\r\n\r\n`;
+      }
+      if (input.enderecoEmail) {
+        texto += `📧 E-mail para contato: *${input.enderecoEmail?.toString().toLocaleLowerCase()}*\r\n\r\n`;
+      }
+      texto += `⚠️ Alergia: *${input.alergia ? 'Sim' : 'Não'}*\r\n`;
+      if (Boolean(input.alergia)) {
+        texto += `📋 Qual?: *${input.descricaoAlergia}*\r\n`;
+      }
+      texto += `\r\n🥗 Restrição Alimentar: *${input.restricaoAlimentar ? 'Sim' : 'Não'}*\r\n`;
+      if (Boolean(input.restricaoAlimentar)) {
+        texto += `📋 Qual?: *${input.descricaoRestricaoAlimentar}*\r\n\r\n`;
+      }
+      texto += `\r\n♿ Situação Atípica: *${input.deficienciaOuSituacaoAtipica ? 'Sim' : 'Não'}*\r\n`;
+      if (Boolean(input.deficienciaOuSituacaoAtipica)) {
+        texto += `📋 Qual?: *${input.descricaoDeficiencia}*\r\n`;
+      }
+
+      texto += `\r\nSe houver algo para ajustar ou se quiser conversar com a gente, é só responder esta mensagem. 💬\r\n\r\n`;
+      texto += `Conte conosco! Estamos animados por trilhar esse caminho junto com sua família. 🙌`;
 
       //await this.bootWhatsService.enviarMensagensPromise('5563992082269', texto);
 
       const telefoneFormatado = `55${input.telefone}`;
 
-      await this.bootWhatsService.enviarMensagensPromise(telefoneFormatado , texto);
+      // var fileBase64QRCode = await this.gerarQRCodeBase64(input.codigoCadastro);
+      // fileBase64QRCode = fileBase64QRCode.replace(/^data:image\/png;base64,/, '');
+
+      const fileBase64QRCode = await this.bootWhatsService.geraImagemMinisterioTrilhar()  ;
+
+      const mensagens: MensagemWhatsApp[] = [
+        {
+          numeroTelefone: telefoneFormatado,
+          textoMenagem: texto,
+          fileBase64: fileBase64QRCode
+        },
+      ];
+
+      await this.bootWhatsService.enviarMensagensPromise(mensagens);
+    }
+  }
+
+  async gerarQRCodeBase64(codigoCadastro: string): Promise<string> {
+    try {
+      const texto = `${codigoCadastro}`;
+      const base64 = await QRCode.toDataURL(texto); // retorna um data:image/png;base64,...
+      return base64;
+    } catch (err) {
+      console.error('Erro ao gerar QR Code:', err);
+      throw err;
     }
   }
 
