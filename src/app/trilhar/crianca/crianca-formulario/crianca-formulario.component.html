@@ -99,6 +99,7 @@
                     [label]="'Data de Nascimento'"
                     [maxDate]="maxData"
                     [readonly]="operacao.disabled"
+                    [autoSubmitOnComplete]="true"
                     (itemSelecionado)="onDataNascimentoSelecionada($event)">
                   </app-calendario>
                   <app-mensagem-erro ngSkipHydration
