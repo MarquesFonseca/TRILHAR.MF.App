@@ -50,6 +50,7 @@ export class CalendarioComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() field: string = '';
   @Input() label: string = 'Selecione uma data';
   @Input() readonly: boolean = false;
+  @Input() autoSubmitOnComplete: boolean = false; //esta propriedade ativa o envio automático quando o campo atinge 10 dígitos
 
   @Input() set disabled(value: boolean) {
     this._disabled = value;
@@ -167,6 +168,11 @@ export class CalendarioComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!this.isInitialized || this.readonly || this.disabled) return;
 
     const inputValue = event.target.value;
+
+    // Se o autoSubmitOnComplete estiver ativo e chegou a 10 dígitos
+    if (this.autoSubmitOnComplete && inputValue.length === 10) {
+      return; // Não faz nada, pois o envio automático já foi tratado no onInput
+    }
     if (inputValue) {
       const data = this.converterDataStringParaDate(inputValue);
       if (data) {
@@ -179,16 +185,26 @@ export class CalendarioComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onInput(event: any) {
-    if (!this.isInitialized || this.readonly || this.disabled) return;
+  if (!this.isInitialized || this.readonly || this.disabled) return;
 
-    const inputValue = event.target.value;
-    if (inputValue.length === 10) {
-      const data = this.converterDataStringParaDate(inputValue);
-      if (data) {
-        this.controle.setValue(data);
-      }
+  const inputValue = event.target.value;
+
+  // Se o autoSubmitOnComplete estiver ativo e chegou a 10 dígitos
+  if (this.autoSubmitOnComplete && inputValue.length === 10) {
+    const data = this.converterDataStringParaDate(inputValue);
+    if (data) {
+      this.controle.setValue(data);
+      this.processarEEmitirData(data); // Chama o método automaticamente
     }
   }
+  // Comportamento original (mantido para compatibilidade)
+  else if (inputValue.length === 10) {
+    const data = this.converterDataStringParaDate(inputValue);
+    if (data) {
+      this.controle.setValue(data);
+    }
+  }
+}
 
   private processarEEmitirData(data: Date): void {
     const dataSelecionada = new Date(data);
