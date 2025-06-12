@@ -282,12 +282,19 @@
 
               <!-- Data do Batizado -->
               <div class="col-sm-4" *ngIf="formulario.get('batizado')?.value">
-                  <mat-form-field class="mb-25" appearance="outline">
-                      <mat-label>Data do Batizado</mat-label>
-                      <input matInput [matDatepicker]="batizadoPicker" formControlName="dataBatizado" [readonly]="operacao.disabled" >
-                      <mat-datepicker-toggle matSuffix [for]="batizadoPicker"></mat-datepicker-toggle>
-                      <mat-datepicker #batizadoPicker></mat-datepicker>
-                  </mat-form-field>
+                  <app-calendario ngSkipHydration
+                    [formGroup]="formulario"
+                    [field]="'dataBatizado'"
+                    [label]="'Data do Batizado'"
+                    [maxDate]="maxData"
+                    [readonly]="operacao.disabled"
+                    [autoSubmitOnComplete]="false"
+                    (itemSelecionado)="null">
+                  </app-calendario>
+                  <app-mensagem-erro ngSkipHydration
+                    [control]="formulario.get('dataBatizado')"
+                    [field]="'dataBatizado'">
+                  </app-mensagem-erro>
               </div>
 
               <!-- Igreja do Batizado -->

@@ -378,7 +378,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
         const turmaSugerida = this.retornaTurmaSugerida(new Date(crianca.dados.dataNascimento), this.turmas);
         this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
-        this.turmaSugeridaDescricao = `${this.turmaSelecionado.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
+        this.turmaSugeridaDescricao = `${this.turmaSelecionado?.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
       }
 
       // Depois, processa a matrícula e turma
@@ -430,11 +430,16 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
             if (!!turmaSelecionada) { //se a turma for selecionada
               await this.adicionarMatriculaRegistro(aluno, turmaSelecionada);
-              await this.adicionarFrequenciaRegistro(aluno, turmaSelecionada);
+
+              if (await this.mensagemService.confirm('Atenção', 'Deseja registrar o check-in agora?')) {
+                await this.adicionarFrequenciaRegistro(aluno, turmaSelecionada);
+              }
             }
 
-            if(Boolean(input.ativo)) {
-              await this.enviarWhatsApp('INCLUSAO', aluno, turmaSelecionada);
+            if (Boolean(input.ativo)) {
+              if (await this.mensagemService.confirm('Atenção', 'Deseja enviar os dados pelo WhatsApp para uma possível confirmação?')) {
+                await this.enviarWhatsApp('INCLUSAO', aluno, turmaSelecionada);
+              }
             }
 
             var url = `criancas/detalhar/${aluno.codigoCadastro}`;
@@ -454,11 +459,12 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
           const matriculaAtual = this.criancaAtual.matricula;
           const turmaSelecionada = valoresForm.turmaMatricula;
 
-          // Decidir o que fazer com a matrícula baseado nas situações
           await this.gerenciarMatricula(codigoAluno, matriculaAtual, turmaSelecionada);
 
           if(Boolean(input.ativo)) {
-            await this.enviarWhatsApp('ALTERACAO', input, turmaSelecionada);
+            if (await this.mensagemService.confirm('Atenção', 'Deseja enviar os dados pelo WhatsApp para uma possível confirmação?')) {
+              await this.enviarWhatsApp('ALTERACAO', input, turmaSelecionada);
+            }
           }
 
           const url = `criancas/detalhar/${input.codigoCadastro}`;
@@ -474,96 +480,64 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     if (input.telefone && input.telefone.length > 0) {
 
       var dataNascimento = input.dataNascimento ? new Date(input.dataNascimento) : null;
-      var texto = '';
+      var dataBatizado = input.dataBatizado ? new Date(input.dataBatizado) : null;
+      let texto = '';
+
+      // Cabeçalho inicial
+      texto += `Olá! Aqui é do *Ministério Trilhar da SIBAPA* 💚\r\n\r\n`;
 
       if (tipo === 'INCLUSAO') {
-        texto += `Olá! Aqui é do *Ministério Trilhar da SIBAPA* 💚\r\n\r\n`;
         texto += `Estamos muito felizes por receber sua família em nossa jornada de fé e cuidado com as crianças!\r\n\r\n`;
         texto += `✨ Seu novo código de cadastro é: *${input.codigoCadastro}* ✨\r\n\r\n`;
-        if (!!turmaSelecionada) {
+        if (turmaSelecionada) {
           texto += `🏫 Salinha: *${turmaSelecionada.descricaoAnoSemestreLetivo}*\r\n\r\n`;
         }
         texto += `*Por favor, confira as informações abaixo:* 👇\r\n\r\n`;
-        texto += `*Nome da criança:* \r\n${input.nomeCrianca}\r\n\r\n`;
-        texto += `*Data de Nascimento:* \r\n${dataNascimento?.dataString()}\r\n\r\n`;
-        if (input.nomeMae) {
-          texto += `*Nome da Mãe:* \r\n${input.nomeMae}\r\n\r\n`;
-        }
-        else {
-          texto += `*Nome da Mãe:* \r\nNão Informado\r\n\r\n`;
-        }
-        if (input.nomePai) {
-          texto += `*Nome do Pai:* \r\n${input.nomePai}\r\n\r\n`;
-        }
-        else {
-          texto += `*Nome do Pai:* \r\nNão Informado\r\n\r\n`;
-        }
-        if (input.outroResponsavel) {
-          texto += `*Outro Responsável:* \r\n${input.outroResponsavel}\r\n\r\n`;
-        }
-        if (input.enderecoEmail) {
-          texto += `*E-mail para contato:* \r\n${input.enderecoEmail?.toString().toLocaleLowerCase()}\r\n\r\n`;
-        }
-        texto += `⚠️ *Possui Alergia?:* \r\n${input.alergia ? 'Sim' : 'Não'}\r\n\r\n`;
-        if (Boolean(input.alergia)) {
-          texto += `*Descrição da Alergia:* \r\n${input.descricaoAlergia}\r\n\r\n`;
-        }
-        texto += `🥗 *Possui Restrição Alimentar?:* \r\n${input.restricaoAlimentar ? 'Sim' : 'Não'}\r\n\r\n`;
-        if (Boolean(input.restricaoAlimentar)) {
-          texto += `*Descrição da Restrição Alimentar:* \r\n${input.descricaoRestricaoAlimentar}\r\n\r\n`;
-        }
-        texto += `♿ *Possui Situação Atípica ou alguma Necessidade Especial?:* \r\n${input.deficienciaOuSituacaoAtipica ? 'Sim' : 'Não'}\r\n\r\n`;
-        if (Boolean(input.deficienciaOuSituacaoAtipica)) {
-          texto += `*Descrição da Situação Atípica?:* \r\n${input.descricaoDeficiencia}\r\n\r\n`;
-        }
-
-        texto += `Se estiver tudo certo digite *Sim*. 🙌\r\n\r\n`;
-        texto += `Se houver algo para ajustar ou se quiser conversar com a gente, é só responder esta mensagem.💬`;
-      }
-
-      if (tipo === 'ALTERACAO') {
-        texto += `Olá! Aqui é do *Ministério Trilhar da SIBAPA* 💚\r\n\r\n`;
-        texto += `*Por favor, confira as informações abaixo:* 👇\r\n\r\n`;
+      } else if (tipo === 'ALTERACAO') {
         texto += `✨ Código de cadastro: *${input.codigoCadastro}* ✨\r\n\r\n`;
-        if (!!turmaSelecionada) {
+        if (turmaSelecionada) {
           texto += `🏫 Salinha: *${turmaSelecionada.descricaoAnoSemestreLetivo}*\r\n\r\n`;
         }
-        texto += `*Nome da criança:* \r\n${input.nomeCrianca}\r\n\r\n`;
-        texto += `*Data de Nascimento:* \r\n${dataNascimento?.dataString()}\r\n\r\n`;
-        if (input.nomeMae) {
-          texto += `*Nome da Mãe:* \r\n${input.nomeMae}\r\n\r\n`;
-        }
-        else {
-          texto += `*Nome da Mãe:* \r\nNão Informado\r\n\r\n`;
-        }
-        if (input.nomePai) {
-          texto += `*Nome do Pai:* \r\n${input.nomePai}\r\n\r\n`;
-        }
-        else {
-          texto += `*Nome do Pai:* \r\nNão Informado\r\n\r\n`;
-        }
-        if (input.outroResponsavel) {
-          texto += `*Outro Responsável:* \r\n${input.outroResponsavel}\r\n\r\n`;
-        }
-        if (input.enderecoEmail) {
-          texto += `*E-mail para contato:* \r\n${input.enderecoEmail?.toString().toLocaleLowerCase()}\r\n\r\n`;
-        }
-        texto += `⚠️ *Possui Alergia?:* \r\n${input.alergia ? 'Sim' : 'Não'}\r\n\r\n`;
-        if (Boolean(input.alergia)) {
-          texto += `*Descrição da Alergia:* \r\n${input.descricaoAlergia}\r\n\r\n`;
-        }
-        texto += `🥗 *Possui Restrição Alimentar?:* \r\n${input.restricaoAlimentar ? 'Sim' : 'Não'}\r\n\r\n`;
-        if (Boolean(input.restricaoAlimentar)) {
-          texto += `*Descrição da Restrição Alimentar:* \r\n${input.descricaoRestricaoAlimentar}\r\n\r\n`;
-        }
-        texto += `♿ *Possui Situação Atípica ou alguma Necessidade Especial?:* \r\n${input.deficienciaOuSituacaoAtipica ? 'Sim' : 'Não'}\r\n\r\n`;
-        if (Boolean(input.deficienciaOuSituacaoAtipica)) {
-          texto += `*Descrição da Situação Atípica?:* \r\n${input.descricaoDeficiencia}\r\n\r\n`;
-        }
-
-        texto += `Se estiver tudo certo digite *Sim*. 🙌\r\n\r\n`;
-        texto += `Se houver algo para ajustar ou se quiser conversar com a gente, é só responder esta mensagem.💬`;
+        texto += `*Por favor, confira as informações abaixo:* 👇\r\n\r\n`;
       }
+
+      texto += `*Nome da criança:* \r\n${input.nomeCrianca}\r\n\r\n`;
+      texto += `*Data de Nascimento:* \r\n${dataNascimento?.dataString()}\r\n\r\n`;
+
+      texto += `*Nome da Mãe:* \r\n${input.nomeMae || 'Não Informado.'}\r\n\r\n`;
+      texto += `*Nome do Pai:* \r\n${input.nomePai || 'Não Informado.'}\r\n\r\n`;
+
+      if (input.outroResponsavel) {
+        texto += `*Outro Responsável:* \r\n${input.outroResponsavel || 'Não Informado.'}\r\n\r\n`;
+      }
+
+      if (input.enderecoEmail) {
+        texto += `*E-mail para contato:* \r\n${input.enderecoEmail.toLocaleLowerCase() || 'Não Informado.'}\r\n\r\n`;
+      }
+
+      texto += `⚠️ *Possui Alergia?:* \r\n${input.alergia ? 'Sim' : 'Não'}\r\n\r\n`;
+      if (input.alergia) {
+        texto += `*Descrição da Alergia:* \r\n${input.descricaoAlergia || 'Não Informado.'}\r\n\r\n`;
+      }
+
+      texto += `🥗 *Possui Restrição Alimentar?:* \r\n${input.restricaoAlimentar ? 'Sim' : 'Não'}\r\n\r\n`;
+      if (input.restricaoAlimentar) {
+        texto += `*Descrição da Restrição Alimentar:* \r\n${input.descricaoRestricaoAlimentar || 'Não Informado.'}\r\n\r\n`;
+      }
+
+      texto += `♿ *Possui Situação Atípica ou Alguma Necessidade Especial?:* \r\n${input.deficienciaOuSituacaoAtipica ? 'Sim' : 'Não'}\r\n\r\n`;
+      if (input.deficienciaOuSituacaoAtipica) {
+        texto += `*Descrição da Situação Atípica?:* \r\n${input.descricaoDeficiencia || 'Não Informado.'}\r\n\r\n`;
+      }
+
+      texto += `*Já batizado por imersão ou aspersão?:* \r\n${input.batizado ? 'Sim' : 'Não'}\r\n\r\n`;
+      if (input.batizado) {
+        texto += `*Data do Batizado:* \r\n${input.dataBatizado ? dataBatizado?.dataString() : 'Não Informado.'}\r\n\r\n`;
+        texto += `*Igreja do batizado:* \r\n${input.igrejaBatizado || 'Não Informado.'}\r\n\r\n`;
+      }
+
+      texto += `Se estiver tudo certo digite *Sim*. 🙌\r\n\r\n`;
+      texto += `Se houver algo para ajustar ou se quiser conversar com a gente, é só responder esta mensagem.💬`;
 
       //await this.bootWhatsService.enviarMensagensPromise('5563992082269', texto);
 
