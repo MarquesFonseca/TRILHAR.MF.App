@@ -43,6 +43,8 @@ import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginato
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { CustomPaginatorIntl } from './shared/custom-paginator-intl';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [],
@@ -88,4 +90,11 @@ import { CustomPaginatorIntl } from './shared/custom-paginator-intl';
     { provide: MatPaginatorIntl, useClass: CustomPaginatorIntl }
   ],
 })
-export class MaterialModule {}
+export class MaterialModule {
+
+  constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    // iconRegistry.addSvgIcon('whatsapp', sanitizer.bypassSecurityTrustResourceUrl('https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg'));
+    iconRegistry.addSvgIcon('whatsapp', sanitizer.bypassSecurityTrustResourceUrl('images/icons/whatsApp.svg'));
+  }
+
+}
