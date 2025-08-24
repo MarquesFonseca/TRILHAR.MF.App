@@ -484,7 +484,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       let texto = '';
 
       // Cabeçalho inicial
-      texto += `Olá! Aqui é do *Ministério Trilhar da SIBAPA* 💚\r\n\r\n`;
+      texto += `Olá! Aqui é do *Ministério Trilhar da Igreja Batista Crescer* 💚\r\n\r\n`;
 
       if (tipo === 'INCLUSAO') {
         texto += `Estamos muito felizes por receber sua família em nossa jornada de fé e cuidado com as crianças!\r\n\r\n`;
