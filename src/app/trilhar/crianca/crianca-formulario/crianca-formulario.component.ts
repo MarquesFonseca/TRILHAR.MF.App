@@ -487,7 +487,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
       texto += `Olá! Aqui é do *Ministério Trilhar da Igreja Batista Crescer* 💚\r\n\r\n`;
 
       if (tipo === 'INCLUSAO') {
-        texto += `Estamos muito felizes por receber sua família em nossa jornada de fé e cuidado com as crianças!\r\n\r\n`;
+        texto += `Estamos muito felizes por receber sua família em nossa jornada de fé!\r\n\r\n`;
         texto += `*Por favor, confira as informações abaixo:* 👇\r\n\r\n`;
         texto += `✨ Seu novo código de cadastro é: *${input.codigoCadastro}* ✨\r\n\r\n`;
         if (turmaSelecionada) {
