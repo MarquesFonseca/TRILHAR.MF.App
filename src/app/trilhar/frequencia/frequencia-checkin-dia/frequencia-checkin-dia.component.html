@@ -59,26 +59,41 @@
             <table class="mat-table">
               <!-- Cabeçalho da tabela -->
               <thead class="mat-header">
+                <tr class="mat-header-row" style="text-align: center; font-size: 8px;">
+                  <th class="mat-header-cell" style="text-align: center;"></th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Atual</th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Máxima</th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Resultado</th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Alergias</th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Restrição Alimentar</th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Sit. Atípica</th>
+                  <th class="mat-header-cell" style="text-align: center;">Qtd. Aniversa riantes</th>
+                </tr>
                 <tr class="mat-header-row">
-                  <th class="mat-header-cell">Turma</th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Qtd. Atual'" matTooltipPosition="above"style="color: #4CAF50;">people</mat-icon></th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Qtd. Máximo'" matTooltipPosition="above" style="color: #FF9800;">people_outline</mat-icon></th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Resultado'" matTooltipPosition="above" style="color: #9C27B0;">person_add</mat-icon></th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Qtd. Alergias'" matTooltipPosition="above" style="color: #F44336;">sick</mat-icon></th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Qtd. Restrição Alimentar'" matTooltipPosition="above" style="color: #FF5722;">restaurant</mat-icon></th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Qtd. Nec. Especiais'" matTooltipPosition="above" style="color: #3F51B5;">accessible</mat-icon></th>
-                  <th class="mat-header-cell"><mat-icon [matTooltip]="'Qtd. Aniversariantes'" matTooltipPosition="above" style="color: #E91E63;">cake</mat-icon></th>
+                  <th class="mat-header-cell"><span [matTooltip]="'Clique no item para Detalhar'" matTooltipPosition="above"> Turma</span></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Atual'" matTooltipPosition="above" style="color: #4CAF50;">people</mat-icon></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Máxima'" matTooltipPosition="above" style="color: #FF9800;">people_outline</mat-icon></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Resultado'" matTooltipPosition="above" style="color: #9C27B0;">person_add</mat-icon></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Alergia'" matTooltipPosition="above" style="color: #F44336;">sick</mat-icon></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Restrição Alimentar'" matTooltipPosition="above" style="color: #FF5722;">restaurant</mat-icon></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Sit. Atípica'" matTooltipPosition="above" style="color: #3F51B5;">accessible</mat-icon></th>
+                  <th class="mat-header-cell" style="text-align: center;"><mat-icon [matTooltip]="'Qtd. Aniversariantes'" matTooltipPosition="above" style="color: #E91E63;">cake</mat-icon></th>
                 </tr>
               </thead>
               <!-- Corpo da tabela -->
               <tbody>
                 <tr *ngFor="let item of turmasAgrupadas">
                   <td>
-                    <a mat-button (click)="carregarFrequenciasTurma(item.codigoTurma, item.turmaDescricaoFormatada, item.dataFrequencia)"
+                    <!-- <a mat-button (click)="carregarFrequenciasTurma(item.codigoTurma, item.turmaDescricaoFormatada, item.dataFrequencia)"
                       [matTooltip]="'Detalhar ' + item.turmaDescricao" matTooltipPosition="above">
                       {{item.turmaDescricao}}
                       <mat-icon>chevron_right</mat-icon>
-                    </a>
+                    </a> -->
+                    <span class="link-turma" *ngIf="item.codigoTurma > 0"
+                      (click)="carregarFrequenciasTurma(item.codigoTurma, item.turmaDescricaoFormatada, item.dataFrequencia)">
+                      {{item.turmaDescricao}}
+                      <!-- <mat-icon inline>chevron_right</mat-icon> -->
+                    </span>
                   </td>
                   <td>
                     <div [align]="'center'">{{ item.qtd }}</div>
@@ -136,8 +151,8 @@
             <!-- Aba Presentes ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <!-- <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span> -->
-                 <mat-icon [matTooltip]="'Qtd. Presentes'" matTooltipPosition="above" style="color: #4CAF50;" [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="true">how_to_reg</mat-icon>
+                <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span>
+                 <!-- <mat-icon [matTooltip]="'Qtd. Presentes'" matTooltipPosition="above" style="color: #4CAF50;" [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="true" aria-hidden="false">how_to_reg</mat-icon> -->
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEData.length == 0">
                 <h5 class="mb-0">
@@ -163,8 +178,7 @@
                               #{{item.alunoCodigoCadastro}} <i class="ri-arrow-right-s-line"></i>
                           </a> -->
                           <a [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + item.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                            #{{item.alunoCodigoCadastro}}
-                            <i class="ri-arrow-right-s-line"></i>
+                            #{{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
                           </a>
                           <!-- <a mat-button [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]"
                             [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above">
@@ -191,8 +205,8 @@
             <!-- Aba Ausentes ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <!-- <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span> -->
-                 <mat-icon [matTooltip]="'Qtd. Ausentes'" matTooltipPosition="above" style="color: #F44336;" [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="true">person_remove</mat-icon>
+                <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span>
+                 <!-- <mat-icon [matTooltip]="'Qtd. Ausentes'" matTooltipPosition="above" style="color: #F44336;" [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="true" aria-hidden="false">person_remove</mat-icon> -->
               </ng-template>
               <span *ngIf="frequenciasAusentesTurmaEData.length == 0">
                 <h5 class="mb-0">
@@ -214,7 +228,7 @@
                       <tr *ngFor="let item of frequenciasAusentesTurmaEData">
                         <td>
                           <a [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + item.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                              #{{item.alunoCodigoCadastro}} <i class="ri-arrow-right-s-line"></i>
+                              #{{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
                           </a>
                         </td>
                         <td>
@@ -235,8 +249,8 @@
             <!-- Aba Presentes Com Alergia ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="false">Com Alergia</span> -->
-                 <mat-icon  [matTooltip]="'Qtd. Com Alergia'" style="color: #F44336;" [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="true">sick</mat-icon>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="false">Com Alergia</span>
+                 <!-- <mat-icon  [matTooltip]="'Qtd. Com Alergia'" style="color: #F44336;" [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="true" aria-hidden="false">sick</mat-icon> -->
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length == 0">
                 <h5 class="mb-0">
@@ -259,7 +273,7 @@
                       <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAlergia">
                         <td>
                           <a [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + item.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                              #{{item.alunoCodigoCadastro}} <i class="ri-arrow-right-s-line"></i>
+                              #{{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
                           </a>
                         </td>
                         <td>
@@ -281,8 +295,8 @@
             <!-- Aba Presentes Com Rest. Alimentar ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="false">Com Rest. Alim.</span> -->
-                <mat-icon [matTooltip]="'Qtd. Com Restrição Alimentar'"  style="color: #FF5722;" [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="true">restaurant</mat-icon>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="false">Com Rest. Alim.</span>
+                <!-- <mat-icon [matTooltip]="'Qtd. Com Restrição Alimentar'"  style="color: #FF5722;" [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="true" aria-hidden="false">restaurant</mat-icon> -->
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length == 0">
                 <h5 class="mb-0">
@@ -305,7 +319,7 @@
                       <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueRestricaoAlimentar">
                         <td>
                           <a [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + item.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                              #{{item.alunoCodigoCadastro}} <i class="ri-arrow-right-s-line"></i>
+                              #{{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
                           </a>
                         </td>
                         <td>
@@ -327,8 +341,8 @@
             <!-- Aba Presentes Com Nec. Especiais ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="false">Com Sit. Atípica</span> -->
-                 <mat-icon [matTooltip]="'Qtd. Com Sit. Atípica'" style="color: #3F51B5;" [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="true">accessible</mat-icon>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="false">Com Sit. Atípica</span>
+                 <!-- <mat-icon [matTooltip]="'Qtd. Com Sit. Atípica'" style="color: #3F51B5;" [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="true" aria-hidden="false">accessible</mat-icon> -->
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length == 0">
                 <h5 class="mb-0">
@@ -351,7 +365,7 @@
                       <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais">
                         <td>
                           <a [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + item.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                              #{{item.alunoCodigoCadastro}} <i class="ri-arrow-right-s-line"></i>
+                              #{{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
                           </a>
                         </td>
                         <td>
@@ -373,8 +387,8 @@
             <!-- Aba Presentes Com Aniversário ---------------- -->
             <mat-tab>
               <ng-template mat-tab-label>
-                <!-- <span [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="false">Aniversário</span> -->
-                 <mat-icon [matTooltip]="'Qtd. Aniversariante'" style="color: #E91E63;" [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="true">cake</mat-icon>
+                <span [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="false">Aniversário</span>
+                 <!-- <mat-icon [matTooltip]="'Qtd. Aniversariante'" style="color: #E91E63;" [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="true" aria-hidden="false">cake</mat-icon> -->
               </ng-template>
               <span *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length == 0">
                 <h5 class="mb-0">
@@ -397,7 +411,7 @@
                       <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAniversario">
                         <td>
                           <a [routerLink]="['/criancas/detalhar', item.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + item.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                              #{{item.alunoCodigoCadastro}} <i class="ri-arrow-right-s-line"></i>
+                              #{{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
                           </a>
                         </td>
                         <td>

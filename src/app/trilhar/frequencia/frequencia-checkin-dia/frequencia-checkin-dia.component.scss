@@ -36,3 +36,23 @@
 .search-button-wrapper {
   flex-shrink: 0;
 }
+
+
+
+
+.link-turma {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: #3f51b5; // cor padrão Angular Material
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    margin-left: 4px;
+  }
+}
