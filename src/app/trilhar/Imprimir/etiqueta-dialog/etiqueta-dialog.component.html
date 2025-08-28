@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Impressão de Etiquetas</h2>
+
+<mat-dialog-content>
+  <div id="print-area">
+    <div class="print-container" *ngFor="let etiqueta of etiquetas">
+      <div class="label">
+        <div class="codigo">{{ etiqueta.codigo }}</div>
+        <div class="nome" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ etiqueta.nome }}</div>
+        <div class="turma">{{ etiqueta.turma }}</div>
+      </div>
+      <div class="label">
+        <div class="codigo">{{ etiqueta.codigo }}</div>
+        <div class="nome" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ etiqueta.nome }}</div>
+        <div class="turma">{{ etiqueta.turma }}</div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="fechar()">Fechar</button>
+  <button mat-flat-button color="primary" (click)="imprimir()">Imprimir</button>
+</mat-dialog-actions>
