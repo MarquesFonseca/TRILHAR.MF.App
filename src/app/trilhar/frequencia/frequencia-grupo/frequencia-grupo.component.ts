@@ -9,7 +9,6 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
 import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
-import { PrimengModule } from '../../../primeng.module';
 import { CriancaService } from '../../crianca/crianca.service';
 import * as types from '../../crianca/crianca.types';
 import { MatDialog } from '@angular/material/dialog';
