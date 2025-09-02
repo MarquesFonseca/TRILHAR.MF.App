@@ -72,7 +72,7 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
     // }
 
     override ngOnInit() {
-      var filtro = this.montaFiltro(1, 10);
+      var filtro = this.montaFiltro(1, 99999999);
       this.carregarAlunos(filtro);
     }
 
@@ -113,7 +113,7 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
         if (res?.dados) {
           this.totalItems = res.dados.totalItens;
           var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
-          var temp = alunoOutput.map(aluno => ({
+          var temp = alunoOutput.filter(x => x.outroResponsavel?.toLocaleLowerCase().trim() == 'LAR BATISTA'.toLocaleLowerCase().trim()).map(aluno => ({
             ...aluno
           }));
           alunoOutput = temp;
