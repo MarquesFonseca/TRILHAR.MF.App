@@ -84,9 +84,18 @@ export class CriancaService {
           callback(resp); // Chama o callback apenas se ele estiver definido
         }
       },
-      error: (err: any) => {
-        console.error('Erro ao listar por filtro:', err);
-        this.mensagemService.showError('Erro ao listar por filtro', err); // Exibe uma mensagem de erro
+      error: (error: any) => {
+        console.error('Erro ao listar por filtro:', error);
+        if (error.status === 404) {
+          const mensagem = error.error?.detail || 'Registro não encontrado.';
+          this.mensagemService.showInfo(mensagem);
+        } else if (error.status === 400) {
+          const erros = error.error?.erros || ['Erro de validação.'];
+          this.mensagemService.showError(erros.join('\n'), error);
+        } else {
+          this.mensagemService.showError('Erro inesperado.', error);
+        }
+        this.loadingService.hide();
       },
       complete: () => {
         this.loadingService.hide(); // Oculta o indicador de carregamento ao finalizar
@@ -282,25 +291,25 @@ export class CriancaService {
     if (filtro.enderecoEmail) {
       params = params.set('enderecoEmail', filtro.enderecoEmail);
     }
-    if (filtro.alergia) {
+    if (filtro.alergia != null) {
       params = params.set('alergia', filtro.alergia.toString());
     }
     if (filtro.descricaoAlergia) {
       params = params.set('descricaoAlergia', filtro.descricaoAlergia);
     }
-    if (filtro.restricaoAlimentar) {
+    if (filtro.restricaoAlimentar != null) {
       params = params.set('restricaoAlimentar', filtro.restricaoAlimentar.toString());
     }
     if (filtro.descricaoRestricaoAlimentar) {
       params = params.set('descricaoRestricaoAlimentar', filtro.descricaoRestricaoAlimentar);
     }
-    if (filtro.deficienciaOuSituacaoAtipica) {
+    if (filtro.deficienciaOuSituacaoAtipica != null) {
       params = params.set('deficienciaOuSituacaoAtipica', filtro.deficienciaOuSituacaoAtipica.toString());
     }
     if (filtro.descricaoDeficiencia) {
       params = params.set('descricaoDeficiencia', filtro.descricaoDeficiencia);
     }
-    if (filtro.batizado) {
+    if (filtro.batizado != null) {
       params = params.set('batizado', filtro.batizado.toString());
     }
     if (filtro.dataBatizado) {
@@ -309,7 +318,7 @@ export class CriancaService {
     if (filtro.igrejaBatizado) {
       params = params.set('igrejaBatizado', filtro.igrejaBatizado);
     }
-    if (filtro.ativo) {
+    if (filtro.ativo != null) {
       params = params.set('ativo', filtro.ativo.toString());
     }
     if (filtro.codigoUsuarioLogado) {

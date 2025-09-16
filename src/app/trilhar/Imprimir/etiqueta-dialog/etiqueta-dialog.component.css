@@ -14,7 +14,7 @@
 .label {
   width: 49mm;
   height: 20mm;
-  border: 1px solid #000;
+  /* border: 1px solid #000; */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,13 +41,14 @@
 }
 
 .turma {
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: bold;
   text-align: center;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 49mm; /* Ajuste conforme necessário */
+  max-width: 48mm; /* Ajuste conforme necessário */
 }
 
 .ellipsis {

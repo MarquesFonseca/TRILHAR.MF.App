@@ -88,43 +88,53 @@
                         </td>
                     </ng-container>
 
-                    <!-- Codigo -->
-                    <ng-container matColumnDef="codigo">
+                    <!-- codigoAluno -->
+                    <!-- <ng-container matColumnDef="codigoAluno">
                         <th mat-header-cell *matHeaderCellDef>
                             Código
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{element.codigo}}
+                            {{element.codigoAluno}}
                         </td>
-                    </ng-container>
+                    </ng-container> -->
 
-                    <!-- CodigoCadastro -->
-                    <ng-container matColumnDef="codigoCadastro">
+                    <!-- alunoCodigoCadastro -->
+                    <ng-container matColumnDef="alunoCodigoCadastro">
                         <th mat-header-cell *matHeaderCellDef>
                             Cod.
                         </th>
                         <!-- <td mat-cell *matCellDef="let element">
-                            # {{element.codigoCadastro}}
+                            # {{element.alunoCodigoCadastro}}
                         </td> -->
                         <td mat-cell *matCellDef="let element">
-                          <a [routerLink]="['/criancas/detalhar', element.codigoCadastro]" [matTooltip]="'Detalhar ' + element.nomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                              #{{element.codigoCadastro}}
+                          <a [routerLink]="['/criancas/detalhar', element.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + element.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
+                              #{{element.alunoCodigoCadastro}}
                           </a>
                       </td>
                     </ng-container>
 
-                    <!-- NomeCrianca -->
-                    <ng-container matColumnDef="nomeCrianca">
+                    <!-- alunoNomeCrianca -->
+                    <ng-container matColumnDef="alunoNomeCrianca">
                         <th mat-header-cell *matHeaderCellDef>
                             Nome da Criança
                         </th>
                         <!-- <td mat-cell *matCellDef="let element">
-                            {{element.nomeCrianca}}
+                            {{element.alunoNomeCrianca}}
                         </td> -->
                         <td mat-cell *matCellDef="let element">
-                            <a [routerLink]="['/criancas/detalhar', element.codigoCadastro]" [matTooltip]="'Detalhar ' + element.nomeCrianca"  matTooltipPosition="above" class="fw-medium">
-                                {{element.nomeCrianca}}
+                            <a [routerLink]="['/criancas/detalhar', element.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + element.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
+                                {{element.alunoNomeCrianca}}
                             </a>
+                        </td>
+                    </ng-container>
+
+                    <!-- turmaDescricao -->
+                    <ng-container matColumnDef="turmaDescricao">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Turma
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.turmaDescricao}}
                         </td>
                     </ng-container>
 

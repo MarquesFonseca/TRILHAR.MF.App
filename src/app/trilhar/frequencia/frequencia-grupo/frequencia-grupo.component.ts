@@ -10,6 +10,7 @@ import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { CriancaService } from '../../crianca/crianca.service';
+import { MatriculaService } from '../../matricula/matricula.service';
 import * as types from '../../crianca/crianca.types';
 import { MatDialog } from '@angular/material/dialog';
 import { EtiquetaDialogComponent } from '../../Imprimir/etiqueta-dialog/etiqueta-dialog.component';
@@ -32,12 +33,13 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
 
     displayedColumns: string[] = [
       'select',
-      'codigo',
-      'codigoCadastro',
-      'nomeCrianca'
+      // 'codigoAluno',
+      'alunoCodigoCadastro',
+      'alunoNomeCrianca',
+      'turmaDescricao',
     ];
-    dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
-    selection = new SelectionModel<types.IAlunoOutput>(true, []);
+    dataSource = new MatTableDataSource<any>([]);
+    selection = new SelectionModel<any>(true, []);
 
     //dataSource = new MatTableDataSource<any>();
     totalItems = 0;
@@ -51,6 +53,7 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
       public themeService: CustomizerSettingsService,
       private fb: FormBuilder,
       private criancaService: CriancaService,
+      private matriculaService: MatriculaService,
       private mensagemService: MensagemService,
       private dialog: MatDialog,
       public override router: Router,
@@ -72,8 +75,8 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
     // }
 
     override ngOnInit() {
-      var filtro = this.montaFiltro(1, 99999999);
-      this.carregarAlunos(filtro);
+      //var filtro = this.montaFiltro();
+      this.carregarMatriculas(this.montaFiltro());
     }
 
     override preencheFiltro(): void {
@@ -84,16 +87,20 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
       this.page = event.pageIndex + 1;
       this.pageSize = event.pageSize;
 
-      var filtro = this.montaFiltro(this.page, this.pageSize);
-      await this.carregarAlunos(filtro);
+      //var filtro = this.montaFiltro();
+      await this.carregarMatriculas(this.montaFiltro());
     }
 
-    montaFiltro(page: number, pageSize: number) {
-      var filtro: types.IAlunoInput = new types.IAlunoInput();
-      filtro.isPaginacao = true;
-      filtro.page = page;
-      filtro.pageSize = pageSize;
-
+    montaFiltro() {
+      var filtro = {
+        ativo: true,
+        alunoOutroResponsavel: 'lar batista',
+        alunoAtivo: true,
+        turmaAnoLetivo: 2025,
+        turmaSemestreLetivo: 2,
+        turmaAtivo: true,
+        isPaginacao: false,
+      }
       return filtro;
     }
 
@@ -104,20 +111,16 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
     ngOnDestroy(): void {
       //Called once, before the instance is destroyed.
       //Add 'implements OnDestroy' to the class.
-      this.dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
-      this.selection = new SelectionModel<types.IAlunoOutput>(true, []);
+      this.dataSource = new MatTableDataSource<any>([]);
+      this.selection = new SelectionModel<any>(true, []);
     }
 
-    carregarAlunos(filtro: types.IAlunoInput): void {
-      this.criancaService.listarPorFiltro(filtro, (res: any) => {
+    carregarMatriculas(filtro: any): void {
+      this.matriculaService.listarPorFiltro(filtro, (res: any) => {
         if (res?.dados) {
           this.totalItems = res.dados.totalItens;
-          var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
-          var temp = alunoOutput.filter(x => x.outroResponsavel?.toLocaleLowerCase().trim() == 'LAR BATISTA'.toLocaleLowerCase().trim()).map(aluno => ({
-            ...aluno
-          }));
-          alunoOutput = temp;
-          this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
+          var matriculaOutput = res.dados.dados;
+          this.dataSource = new MatTableDataSource<any>(matriculaOutput);
         }
       });
     }
@@ -126,7 +129,7 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
       var res = await this.criancaService.listarPorFiltroPromise(filtro);
       if (res?.dados) {
         this.totalItems = res.dados.totalItens;
-        var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
+        var alunoOutput: any[] = res.dados.dados;
         var temp = alunoOutput.map(aluno => ({
           ...aluno,
           Action: {
@@ -136,7 +139,7 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
           },
         }));
         alunoOutput = temp;
-        this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
+        this.dataSource = new MatTableDataSource<any>(alunoOutput);
         }
     }
 
@@ -161,7 +164,7 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
     }
 
     /** O rótulo da caixa de seleção na linha passada */
-    checkboxLabel(row?: types.IAlunoOutput): string {
+    checkboxLabel(row?: any): string {
       if (!row) {
         return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
       }
@@ -171,16 +174,18 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
     }
 
   abrirEtiquetas() {
-    var selecionados =  this.selection.selected;
+    var selecionados = this.selection.selected;
+    var listaSelecionados = selecionados.map(s => ({
+      codigo: s.alunoCodigoCadastro || '',
+      nome: s.alunoNomeCrianca || '',
+      turma: s.turmaDescricao || ''
+    }));
+
     this.dialog.open(EtiquetaDialogComponent, {
       width: '80%',
       height: '80%',
       data: {
-        etiquetas: selecionados.map(s => ({
-          codigo: s.codigoCadastro || '',
-          nome: s.nomeCrianca || '',
-          turma: s.nomeCrianca || ''
-        }))
+        etiquetas: listaSelecionados
       }
     });
   }

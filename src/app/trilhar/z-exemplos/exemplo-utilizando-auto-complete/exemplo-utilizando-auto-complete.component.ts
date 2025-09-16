@@ -19,7 +19,7 @@ interface Produto {
 }
 
 @Component({
-  selector: 'app-auto-complete',
+  selector: 'exemplo-utilizando-auto-complete',
   standalone: true,
   imports: [
     MaterialModule,
@@ -51,12 +51,12 @@ export class ExemploUtilizandoAutoCompleteComponent implements OnInit {
 
   ngOnInit() {
     // Primeiro carregamos os dados necessários
-    //this.carregarDados();
+    this.carregarDados();
 
     // Depois, com um pequeno delay, definimos os valores iniciais
     setTimeout(() => {
-      //this.definirValorUsuario();
-      //this.definirValorProduto();
+      this.definirValorUsuario();
+      this.definirValorProduto();
     }, 0);
   }
 

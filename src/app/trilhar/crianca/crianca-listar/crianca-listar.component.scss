@@ -25,3 +25,11 @@
 .search-btn:hover {
   background-color: #0056b3;
 }
+
+
+.actions-right {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* controla o espaçamento entre os botões */
+  margin-bottom: 10px;
+}

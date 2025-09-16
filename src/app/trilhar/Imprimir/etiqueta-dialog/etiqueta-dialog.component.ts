@@ -47,26 +47,26 @@ export class EtiquetaDialogComponent {
           <style>
             @page {
               /* size: 100mm 20mm landscape; etiqueta fixa em modo paisagem */
-              /* size: 100mm 20mm; etiqueta fixa 100x20mm */
+              size: 100mm 20mm; /* etiqueta fixa 100x20mm */
               margin: 0;        /* sem margens */
             }
             body {
               margin: 0;
               padding: 0;
               width: 100mm;
-              height: 15mm;
+              height: 20mm;
               font-family: Arial, sans-serif;
             }
             .print-container {
               display: flex;
               justify-content: space-between;
               width: 100mm;
-              height: 15mm;
+              height: 20mm;
               margin: 0;
             }
             .label {
               width: 49mm; /* duas etiquetas lado a lado */
-              height: 15mm;
+              height: 20mm;
               display: flex;
               flex-direction: column;
               align-items: center;
@@ -90,7 +90,8 @@ export class EtiquetaDialogComponent {
               max-width: 48mm; /* Ajuste conforme necessário */
             }
             .turma {
-              font-size: 12px;
+              font-size: 14px;
+              font-weight: bold;
               text-align: center;
               line-height: 1.2;
               white-space: nowrap;
