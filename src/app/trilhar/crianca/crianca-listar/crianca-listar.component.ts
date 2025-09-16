@@ -1,6 +1,6 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from '../../../material.module';
 import { MatPaginator } from '@angular/material/paginator';
@@ -12,6 +12,8 @@ import { MensagemService } from '../../../services/mensagem.service';
 import { CriancaService } from '../crianca.service';
 import * as types from '../crianca.types';
 import { FormsModule } from '@angular/forms';
+import * as validar from '../../../shared/funcoes-comuns/validators/validator';
+import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
 
 @Component({
   selector: 'app-criancas-listar',
@@ -21,14 +23,22 @@ import { FormsModule } from '@angular/forms';
     RouterLink,
     ReactiveFormsModule,
     MaterialModule,
-    NgIf,
     FormsModule,
+    AutoCompleteComponent,
+    NgIf,
   ],
   templateUrl: './crianca-listar.component.html',
   styleUrl: './crianca-listar.component.scss',
 })
 export class CriancaListarComponent extends BaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
+
+  formularioPesquisar!: FormGroup;
+  listaTurmasAutoComplete: any[] = [];
+  //listaTurmasAutoCompleteSelecionado: any | null = null;
+  listaAlunosAutoComplete: any[] = [];
+  //listaAlunosAutoCompleteSelecionado: any | null = null;
 
   searchText: string = ''; // Variável para armazenar o texto da pesquisa
   displayedColumns: string[] = [
@@ -80,23 +90,105 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     super(router, activatedRoute);
     this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
-      if(!this.isProducao) console.clear();
+      if (!this.isProducao) console.clear();
     });
-    //var ljlj = this.getOperacao();
-    //var lkjlll = this.getTitle();
   }
 
-  // override async ngOnInit() {
-  //   // Depois, com um pequeno delay, definimos os valores iniciais
-  //   setTimeout(async () => {
-  //     var filtro = this.montaFiltro(1, 10);
-  //     await this.carregarAlunosPromise(filtro);
-  //   }, 100);
-  // }
-
   override ngOnInit() {
-    var filtro = this.montaFiltro(1, 10);
-    this.carregarAlunos(filtro);
+    this.carregaFormGroupPesquisar();
+    setTimeout(async () => {
+      //var filtro = this.montaFiltro(1, 5);
+      this.carregaListaAlunosAutoComplete();
+      //this.carregaListaTurmasAutoComplete('2025', '2');
+    }, 100);
+  }
+
+  carregaFormGroupPesquisar() {
+    this.formularioPesquisar = this.fb.group({
+      codigo: [0],
+      codigoCadastro: [''],
+      alunoSelecionado: [null],
+      nomeCrianca: [''],
+      //dataNascimento: [null, [Validators.required, validar.dataValidaValidator(), validar.dataNaoFuturaValidator()]],
+      //idadeCrianca: [''],
+      //turmaMatricula: [null],
+      nomeMae: [''],
+      nomePai: [''],
+      outroResponsavel: [''],
+      //telefone: ['', validar.telefoneValidator()],
+      // enderecoEmail: ['', validar.emailValidator()],
+      alergia: [null],
+      // descricaoAlergia: [''],
+      restricaoAlimentar: [null],
+      // descricaoRestricaoAlimentar: [''],
+      deficienciaOuSituacaoAtipica: [null],
+      // descricaoDeficiencia: [''],
+      batizado: [null],
+      // dataBatizado: [null],
+      // igrejaBatizado: [''],
+      ativo: [null],
+      // codigoUsuarioLogado: [null],
+      // dataAtualizacao: [null],
+      // dataCadastro: [null],
+    });
+  }
+
+  private carregaListaAlunosAutoComplete() {
+    var filtro: types.IAlunoInput = new types.IAlunoInput();
+    filtro.isPaginacao = false;
+    //filtro.codigoCadastro = '1484';
+
+    this.criancaService.listarPorFiltro(filtro, (res: any) => {
+      if (!!res?.dados) {
+        var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
+        this.listaAlunosAutoComplete = alunoOutput.map(item => ({
+          id: item.codigo,
+          codigoCadastro: item.codigoCadastro,
+          descricao: `${item.codigoCadastro} - ${item.nomeCrianca}`,
+        })) || [];
+      }
+    });
+  }
+
+  public onListaAlunosAutoCompleteSelecionado(alunoSelecionada: any): void {
+    if (alunoSelecionada) {
+      this.formularioPesquisar.patchValue({
+        codigo: alunoSelecionada.id,
+        codigoCadastro: alunoSelecionada.codigoCadastro,
+        alunoSelecionado: alunoSelecionada
+      });
+    }
+  }
+
+  private carregaListaTurmasAutoComplete(anoSelecionado: string, semestreSelecionado: string) {
+    // Simulando carregamento de dados de um serviço
+    //traga todos as turmas no ano selecionado, semestre selecionado
+    var listaTurmasMock = [
+      { id: 1, descricao: '1 - Turma 1', ano: '2023', semestre: '1' },
+      { id: 2, descricao: '2 - Turma 2', ano: '2023', semestre: '2' },
+      { id: 3, descricao: '3 - Turma 3', ano: '2024', semestre: '1' },
+      { id: 4, descricao: '4 - Turma 4', ano: '2024', semestre: '2' },
+      { id: 5, descricao: '5 - Turma 5', ano: '2025', semestre: '1' },
+      { id: 6, descricao: '6 - Turma 6', ano: '2025', semestre: '2' },
+      { id: 7, descricao: '7 - Turma 7', ano: '2025', semestre: '2' },
+      { id: 8, descricao: '8 - Turma 8', ano: '2025', semestre: '2' },
+      { id: 1484, descricao: '1484 - Maitê Marques Ferreira Fonseca', ano: '2025', semestre: '2' },
+      { id: 2484, descricao: '2484 - Maite Marques Ferreira Fonseca', ano: '2025', semestre: '2' },
+    ] as any[];
+
+    this.listaTurmasAutoComplete =
+      listaTurmasMock.filter(
+        (t) => t.ano === anoSelecionado
+      ) || [];
+  }
+
+  public onlistaTurmasAutoCompleteSelecionado(turmaSelecionada: any): void {
+    //console.log('Turma selecionado do autocomplete:', turmaSelecionada);
+    if (turmaSelecionada) {
+      this.formularioPesquisar.patchValue({
+        TurmaMatricula: turmaSelecionada
+      });
+    }
   }
 
   override preencheFiltro(): void {
@@ -108,7 +200,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     this.pageSize = event.pageSize;
 
     var filtro = this.montaFiltro(this.page, this.pageSize);
-    if(this.searchText) {
+    if (this.searchText) {
       this.applyFilter();
     }
     else {
@@ -117,21 +209,57 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   }
 
   montaFiltro(page: number, pageSize: number) {
+    const { codigo, codigoCadastro, alunoSelecionado, nomeCrianca, nomeMae, nomePai, outroResponsavel,
+      alergia, restricaoAlimentar, deficienciaOuSituacaoAtipica, ativo, batizado
+    } = this.formularioPesquisar.value;
+
+    this.page = page;
+    this.pageSize = pageSize;
+
     var filtro: types.IAlunoInput = new types.IAlunoInput();
     filtro.isPaginacao = true;
     filtro.page = page;
     filtro.pageSize = pageSize;
 
+    filtro.codigo = codigo || 0;
+    filtro.codigoCadastro = codigoCadastro || '';
+    filtro.nomeCrianca = nomeCrianca || '';
+    // filtro.dataNascimento = null;
+    filtro.nomeMae = nomeMae || '';
+    filtro.nomePai = nomePai || '';
+    filtro.outroResponsavel = outroResponsavel || '';
+    // filtro.telefone = '';
+    // filtro.enderecoEmail = null;
+    filtro.alergia = alergia == null ? null : Boolean(alergia);
+    // filtro.descricaoAlergia = '';
+    filtro.restricaoAlimentar = restricaoAlimentar == null ? null : Boolean(restricaoAlimentar);
+    // filtro.descricaoRestricaoAlimentar = '';
+    filtro.deficienciaOuSituacaoAtipica = deficienciaOuSituacaoAtipica == null ? null : Boolean(deficienciaOuSituacaoAtipica);
+    // filtro.descricaoDeficiencia = '';
+    filtro.batizado = batizado == null ? null : Boolean(batizado);
+    // filtro.dataBatizado = null;
+    // filtro.igrejaBatizado = '';
+    filtro.ativo = ativo == null ? null : Boolean(ativo);
+    // filtro.codigoUsuarioLogado = 0; // Pode ser nulo
+    // filtro.dataAtualizacao = null; // Pode ser nulo
+    // filtro.dataCadastro = null; // Data atual por padrão
+
+    // filtro.dataNascimentoInicial = null;
+    // filtro.dataNascimentoFinal = null;
+    // filtro.dataBatizadoInicial = null;
+    // filtro.dataBatizadoFinal = null;
+    // filtro.dataAtualizacaoInicial = null;
+    // filtro.dataAtualizacaoFinal = null;
+    // filtro.dataCadastroInicial = null;
+    // filtro.dataCadastroFinal = null;
+
+
+
+
     return filtro;
   }
 
-  // async ngOnInit() {
-  //   await this.carregarAlunosPromise();
-  // }
-
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     this.dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
     this.selection = new SelectionModel<types.IAlunoOutput>(true, []);
   }
@@ -163,14 +291,43 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
       var temp = alunoOutput.map(aluno => ({
         ...aluno,
         Action: {
-            view: 'visibility',
-            edit: 'edit',
-            delete: 'delete',
+          view: 'visibility',
+          edit: 'edit',
+          delete: 'delete',
         },
       }));
       alunoOutput = temp;
       this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
+    }
+  }
+
+  pesquisar(): void {
+    var filtro = this.montaFiltro(1, this.pageSize);
+
+    this.criancaService.listarPorFiltro(filtro, (res: any) => {
+      if (res?.dados) {
+        this.totalItems = res.dados.totalItens;
+        var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
+        var temp = alunoOutput.map(aluno => ({
+          ...aluno,
+          Action: {
+            view: 'visibility',
+            edit: 'edit',
+            delete: 'delete',
+          },
+        }));
+        alunoOutput = temp;
+        this.dataSource = new MatTableDataSource<types.IAlunoOutput>(alunoOutput);
       }
+    });
+  }
+
+  limpar(): void {
+    this.formularioPesquisar.reset();
+  }
+
+  exportar(tipo: string): void {
+
   }
 
   ngAfterViewInit() {
@@ -198,17 +355,15 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.nomeCrianca + 1
-    }`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.nomeCrianca + 1
+      }`;
   }
-
 
   // Filtro de pesquisa
   async applyFilter() {
     //this.dataSource.filter = this.searchText.trim().toLowerCase();
 
-    if(this.searchText) {
+    if (this.searchText) {
       var filtro: types.IAlunoInput = new types.IAlunoInput();
       filtro.codigoCadastro = this.searchText.trim();
       filtro.isPaginacao = true;

@@ -12,7 +12,7 @@ interface AutoCompleteOption {
 }
 
 @Component({
-  selector: 'app-auto-complete',
+  selector: 'app-auto-complete-teste',
   standalone: true,
   imports: [
     MaterialModule,
@@ -21,8 +21,8 @@ interface AutoCompleteOption {
     AsyncPipe,
     NgFor
   ],
-  templateUrl: './auto-complete.component.html',
-  styleUrl: './auto-complete.component.scss'
+  templateUrl: './auto-complete-teste.component.html',
+  styleUrl: './auto-complete-teste.component.scss'
 })
 export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
 

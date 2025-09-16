@@ -211,6 +211,7 @@ import { MatriculaDashboardComponent } from './trilhar/matricula/matricula-dashb
 //Frequencias
 import { FrequenciaDashboardComponent } from './trilhar/frequencia/frequencia-dashboard/frequencia-dashboard.component';
 import { FrequenciaCheckinDiaComponent } from './trilhar/frequencia/frequencia-checkin-dia/frequencia-checkin-dia.component';
+import { FrequenciaGrupoComponent } from './trilhar/frequencia/frequencia-grupo/frequencia-grupo.component';
 
 export const routes: Routes = [
     // {path: '', component: EcommerceComponent},
@@ -258,6 +259,7 @@ export const routes: Routes = [
         children: [
           {path: 'dashboard', component: FrequenciaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
           {path: 'checkin-dia', component: FrequenciaCheckinDiaComponent, data: { rota: "checkin-dia", titulo: "Resultado checkin no dia", breadcrumb: "Checkin dia", },},
+          {path: 'grupo', component: FrequenciaGrupoComponent, data: { rota: "grupo", titulo: "Resultado frequência por grupo", breadcrumb: "frequências por grupo", },},
       ]
     },
     {

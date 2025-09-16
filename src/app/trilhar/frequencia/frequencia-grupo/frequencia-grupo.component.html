@@ -1,0 +1,164 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+  <!-- <h5 class="mb-0">
+    {{this.getTitle()}}
+  </h5> -->
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
+      <li class="breadcrumb-item position-relative">
+          <a routerLink="/criancas/dashboard" class="d-inline-block position-relative">
+              <i class="ri-home-8-line"></i>
+              Frequências
+          </a>
+      </li>
+      <li class="breadcrumb-item position-relative">
+          <a [routerLink]="this.getRotaOperacao()" class="d-inline-block position-relative">
+              <i class="ri-arrow-left-line"></i>
+              {{this.getTitle()}}
+          </a>
+      </li>
+      <li class="breadcrumb-item position-relative">
+          {{this.getOperacao()}}
+      </li>
+  </ol>
+  <!-- Botões -->
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 16px; border: 0px solid red;">
+    <button mat-button color="primary" class="action-button"
+      style="display: flex; align-items: center;"
+      (click)="navegar($event, '/criancas/incluir')"  routerLinkActive="active">
+      <i class="material-symbols-outlined" style="vertical-align: middle;">add_circle</i>
+      <span style="vertical-align: middle; margin-left: 4px;">Incluir Novo</span>
+    </button>
+  </div>
+</div>
+
+<mat-card class="daxa-card events-card mb-25 border-radius bg-white border-none d-block" [class.rtl-enabled]="themeService.isRTLEnabled()">
+
+    <div style="padding-top: 0px; padding-bottom: 0px; border: 0px solid red;">
+      <!-- Título -->
+      <div style="border-bottom: 0px dashed #808080; padding-bottom: 16px; ">
+        <h5 class="mb-0" style="margin: 0;">
+          {{this.getTitle()}}
+        </h5>
+      </div>
+    </div>
+
+
+    <!-- <mat-card-header>
+      <mat-card-title style="width: 100%;">
+        <form class="search-box position-relative">
+          <i class="material-symbols-outlined">
+            search
+          </i>
+          <input type="text" class="input-search d-block w-100 border-none outline-0"
+            placeholder="Pesquisar código de cadastro..." [(ngModel)]="searchText" name="search" #input>
+          <button mat-flat-button class="search-btn" (click)="applyFilter()">Buscar</button>
+        </form> -->
+        <!-- <mat-icon svgIcon="whatsapp"></mat-icon> -->
+      <!-- </mat-card-title>
+    </mat-card-header> -->
+
+
+
+
+    <mat-card-content>
+        <div class="events-table">
+            <div class="table-responsive">
+              <!-- <pre>{{dataSource.data| json}}</pre> -->
+                <table mat-table [dataSource]="dataSource">
+
+                    <!-- Checkbox Column -->
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox
+                                (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()"
+                            >
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox
+                                (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)"
+                            >
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <!-- codigoAluno -->
+                    <!-- <ng-container matColumnDef="codigoAluno">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Código
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.codigoAluno}}
+                        </td>
+                    </ng-container> -->
+
+                    <!-- alunoCodigoCadastro -->
+                    <ng-container matColumnDef="alunoCodigoCadastro">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Cod.
+                        </th>
+                        <!-- <td mat-cell *matCellDef="let element">
+                            # {{element.alunoCodigoCadastro}}
+                        </td> -->
+                        <td mat-cell *matCellDef="let element">
+                          <a [routerLink]="['/criancas/detalhar', element.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + element.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
+                              #{{element.alunoCodigoCadastro}}
+                          </a>
+                      </td>
+                    </ng-container>
+
+                    <!-- alunoNomeCrianca -->
+                    <ng-container matColumnDef="alunoNomeCrianca">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Nome da Criança
+                        </th>
+                        <!-- <td mat-cell *matCellDef="let element">
+                            {{element.alunoNomeCrianca}}
+                        </td> -->
+                        <td mat-cell *matCellDef="let element">
+                            <a [routerLink]="['/criancas/detalhar', element.alunoCodigoCadastro]" [matTooltip]="'Detalhar ' + element.alunoNomeCrianca"  matTooltipPosition="above" class="fw-medium">
+                                {{element.alunoNomeCrianca}}
+                            </a>
+                        </td>
+                    </ng-container>
+
+                    <!-- turmaDescricao -->
+                    <ng-container matColumnDef="turmaDescricao">
+                        <th mat-header-cell *matHeaderCellDef>
+                            Turma
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.turmaDescricao}}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                </table>
+            </div>
+            <!-- <mat-paginator
+                [length]="totalItems"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="[10, 20, 30, 40, 50, 100, 200, 500, 1000, 5000]"
+                (page)="onPageChange($event)"
+                [showFirstLastButtons]="true">
+            </mat-paginator> -->
+        </div>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <!-- <div class="row"> -->
+          <button mat-raised-button (click)="abrirEtiquetas()">Abrir Etiquetas</button>
+        <!-- </div> -->
+    </mat-card-content>
+</mat-card>
+

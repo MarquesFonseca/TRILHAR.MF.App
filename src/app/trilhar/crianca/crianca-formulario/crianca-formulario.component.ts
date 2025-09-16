@@ -377,8 +377,13 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
         }, { emitEvent: false });
 
         const turmaSugerida = this.retornaTurmaSugerida(new Date(crianca.dados.dataNascimento), this.turmas);
-        this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
-        this.turmaSugeridaDescricao = `${this.turmaSelecionado?.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
+        if(!!turmaSugerida) {
+          this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
+          this.turmaSugeridaDescricao = `${this.turmaSelecionado?.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
+        }
+        else {
+          this.resetarSelecaoTurma();
+        }
       }
 
       // Depois, processa a matrícula e turma

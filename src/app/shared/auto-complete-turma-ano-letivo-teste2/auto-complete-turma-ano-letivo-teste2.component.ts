@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MaterialModule } from '../../../material.module';
+import { MaterialModule } from './../../material.module';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, CommonModule, NgFor, NgIf } from '@angular/common';
-import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { AutoCompleteComponent } from '../auto-complete/auto-complete.component';
+import { AutoCompleteTurmaAnoLetivoComponent } from '../auto-complete-turma-ano-letivo/auto-complete-turma-ano-letivo.component';
 
 interface Usuario {
   id: number;
@@ -19,21 +19,22 @@ interface Produto {
 }
 
 @Component({
-  selector: 'exemplo-utilizando-auto-complete',
+  selector: 'app-auto-complete-turma-ano-letivo-teste2',
   standalone: true,
   imports: [
-    MaterialModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    AutoCompleteComponent,
-    CommonModule,
+    MaterialModule,
+    //AutoCompleteComponent,
+    AutoCompleteTurmaAnoLetivoComponent,
     //RouterLink,
     //NgIf,
   ],
-  templateUrl: './exemplo-utilizando-auto-complete.component.html',
-  styleUrl: './exemplo-utilizando-auto-complete.component.scss'
+  templateUrl: './auto-complete-turma-ano-letivo-teste2.component.html',
+  styleUrl: './auto-complete-turma-ano-letivo-teste2.component.scss'
 })
-export class ExemploUtilizandoAutoCompleteComponent implements OnInit {
+export class AutoCompleteTurmaAnoLetivoTeste2MaximoComponent implements OnInit {
   @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
 
   formulario!: FormGroup;
@@ -55,8 +56,8 @@ export class ExemploUtilizandoAutoCompleteComponent implements OnInit {
 
     // Depois, com um pequeno delay, definimos os valores iniciais
     setTimeout(() => {
-      this.definirValorUsuario();
-      this.definirValorProduto();
+      //this.definirValorUsuario();
+      //this.definirValorProduto();
     }, 0);
   }
 
@@ -134,6 +135,16 @@ export class ExemploUtilizandoAutoCompleteComponent implements OnInit {
       this.formulario.patchValue({
         produtoId: produto.id,
         produto: produto
+      });
+    }
+  }
+
+  onTurmaSelecionado(turma: any): void {
+    console.log('Turma selecionado do autocomplete:', turma);
+    if (turma) {
+      this.formulario.patchValue({
+        produtoId: turma.id,
+        produto: turma
       });
     }
   }

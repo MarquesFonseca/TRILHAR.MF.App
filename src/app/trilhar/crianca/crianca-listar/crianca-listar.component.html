@@ -43,7 +43,7 @@
     </div>
 
 
-    <mat-card-header>
+    <!-- <mat-card-header>
       <mat-card-title style="width: 100%;">
         <form class="search-box position-relative">
           <i class="material-symbols-outlined">
@@ -53,11 +53,132 @@
             placeholder="Pesquisar código de cadastro..." [(ngModel)]="searchText" name="search" #input>
           <button mat-flat-button class="search-btn" (click)="applyFilter()">Buscar</button>
         </form>
-        <!-- <mat-icon svgIcon="whatsapp"></mat-icon> -->
       </mat-card-title>
-    </mat-card-header>
+    </mat-card-header> -->
 
 
+
+    <form [formGroup]="formularioPesquisar">
+      <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 form-group">
+          <div class="mb-25">
+            <app-auto-complete ngSkipHydration
+              [formGroup]="formularioPesquisar"
+              [field]="'alunoSelecionado'"
+              [itens]="listaAlunosAutoComplete"
+              [propriedadeMostrar]="'descricao'"
+              [label]="'Selecione uma criança'"
+              (itemSelecionado)="onListaAlunosAutoCompleteSelecionado($event)">
+            </app-auto-complete>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 form-group">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="nomeCrianca" placeholder="Nome">
+          </mat-form-field>
+        </div>
+        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 form-group" style="border: 0px solid red;">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Situação:</mat-label>
+            <mat-select formControlName="ativo">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option [value]="true">Ativo</mat-option>
+              <mat-option [value]="false">Inativo</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 form-group">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Nome da mãe</mat-label>
+            <input matInput formControlName="nomeMae" placeholder="Nome da mãe">
+          </mat-form-field>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 form-group">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Nome do pai</mat-label>
+            <input matInput formControlName="nomePai" placeholder="Nome do pai">
+          </mat-form-field>
+        </div>
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 form-group">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Nome do responsável</mat-label>
+            <input matInput formControlName="outroResponsavel" placeholder="Nome do responsável">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 form-group" style="border: 0px solid red;">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Com Alergia:</mat-label>
+            <mat-select formControlName="alergia">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option [value]="true">Sim</mat-option>
+              <mat-option [value]="false">Não</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 form-group" style="border: 0px solid red;">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Com Restrição alimentar:</mat-label>
+            <mat-select formControlName="restricaoAlimentar">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option [value]="true">Sim</mat-option>
+              <mat-option [value]="false">Não</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 form-group" style="border: 0px solid red;">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Com Situação Atípica:</mat-label>
+            <mat-select formControlName="deficienciaOuSituacaoAtipica">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option [value]="true">Sim</mat-option>
+              <mat-option [value]="false">Não</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 form-group" style="border: 0px solid red;">
+          <mat-form-field class="mb-25" appearance="outline">
+            <mat-label>Já batizado:</mat-label>
+            <mat-select formControlName="batizado">
+              <mat-option [value]="null">Todos</mat-option>
+              <mat-option [value]="true">Sim</mat-option>
+              <mat-option [value]="false">Não</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <br />
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+          <mat-card-content class="actions-right">
+            <button mat-flat-button color="warn" (click)="limpar()">Limpar</button>
+            <button mat-flat-button class="daxa" (click)="pesquisar()" style="margin-left: 10px;">Pesquisar</button>
+            <!-- <button mat-flat-button [matMenuTriggerFor]="menu" style="margin-left: 10px;">Exportar</button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="exportar('pdf')">
+                <mat-icon>picture_as_pdf</mat-icon> PDF
+              </button>
+              <button mat-menu-item (click)="exportar('xlsx')">
+                <mat-icon>table_chart</mat-icon> Excel
+              </button>
+              <button mat-menu-item (click)="exportar('docx')">
+                <mat-icon>description</mat-icon> Word
+              </button>
+            </mat-menu> -->
+          </mat-card-content>
+        </div>
+      </div>
+
+    <pre *ngIf="!isProducao">{{this.formularioPesquisar.value | json}}</pre>
+    </form>
 
 
     <mat-card-content>
@@ -399,9 +520,9 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
                     <!-- Row shown when there is no matching data. -->
-                    <tr class="mat-row" *matNoDataRow>
+                    <!-- <tr class="mat-row" *matNoDataRow>
                         <td class="mat-cell" colspan="4">Nenhum dado corresponde ao filtro "{{input.value}}"</td>
-                    </tr>
+                    </tr> -->
 
                 </table>
             </div>
