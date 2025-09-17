@@ -35,10 +35,8 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
 
   formularioPesquisar!: FormGroup;
-  listaTurmasAutoComplete: any[] = [];
-  //listaTurmasAutoCompleteSelecionado: any | null = null;
   listaAlunosAutoComplete: any[] = [];
-  //listaAlunosAutoCompleteSelecionado: any | null = null;
+  listaTurmasAutoComplete: any[] = [];
 
   searchText: string = ''; // Variável para armazenar o texto da pesquisa
   displayedColumns: string[] = [
@@ -48,6 +46,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     'codigoCadastro',
     'ativo',
     'nomeCrianca',
+    'turmaDescricao',
     'dataNascimento',
     'nomeMae',
     'nomePai',
@@ -252,9 +251,6 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     // filtro.dataAtualizacaoFinal = null;
     // filtro.dataCadastroInicial = null;
     // filtro.dataCadastroFinal = null;
-
-
-
 
     return filtro;
   }

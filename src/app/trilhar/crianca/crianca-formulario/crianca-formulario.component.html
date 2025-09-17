@@ -131,15 +131,27 @@
                 </mat-card>
               </div>
 
-              <!-- Matriculado na Turma -->
-              <div class="col-sm-12">
+              <!-- Mensagem de alerta (detalhar ou editar, sem turmaMatricula) -->
+              <div class="col-sm-12" *ngIf="(operacao.isDetalhar || operacao.isEditar) && !formulario.get('turmaMatricula')?.value">
+                <div class="mb-25">
+                  <span style="color: red; font-size: 18px;">
+                    <i class="ri-error-warning-line" style="vertical-align: middle;"></i>
+                    <span style="vertical-align: middle;">
+                      Esta criança não está matriculada em nenhuma turma.
+                    </span>
+                  </span>
+                </div>
+              </div>
+
+              <!-- AutoComplete -->
+              <div class="col-sm-12" *ngIf="operacao.isDetalhar || operacao.isEditar || operacao.isNovo || isNovoIrmao">
                 <div class="mb-25">
                   <app-auto-complete ngSkipHydration
                     [formGroup]="formulario"
                     [field]="'turmaMatricula'"
                     [itens]="turmas"
                     [propriedadeMostrar]="'descricaoAnoSemestreLetivo'"
-                    [label]="'Selecione uma turma para matrícular'"
+                    [label]="operacao.isDetalhar ? 'Turma matriculada' : 'Turma para matrícular'"
                     [valorInicial]="turmaSelecionado"
                     (itemSelecionado)="onTurmaSelecionado($event)"
                     [readonly]="operacao.disabled">
@@ -150,7 +162,7 @@
                   </app-mensagem-erro>
                 </div>
               </div>
-
+              
               <!-- Nome da Mãe -->
               <div class="col-sm-4">
                 <mat-form-field class="mb-25" appearance="outline">

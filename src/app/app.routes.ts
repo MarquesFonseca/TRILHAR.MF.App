@@ -215,7 +215,7 @@ import { FrequenciaGrupoComponent } from './trilhar/frequencia/frequencia-grupo/
 
 export const routes: Routes = [
     // {path: '', component: EcommerceComponent},
-    {path: '', component: CriancaListarComponent},
+    {path: '', component: CriancaListarComponent, data: { rota: "criancas", titulo: "Listar Crianças", breadcrumb: "Listar", } },
     {path: 'crm', component: CrmComponent},
     {path: 'project-management', component: ProjectManagementComponent},
     {path: 'lms', component: LmsComponent},
