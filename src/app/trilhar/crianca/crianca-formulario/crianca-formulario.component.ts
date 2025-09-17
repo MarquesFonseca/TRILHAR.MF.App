@@ -368,39 +368,35 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
   }
 
   private preencheMatricula(crianca: any) {
-    this.matriculaService.listarPorCodigoAluno(String(crianca.dados.codigo)).subscribe((mat: any) => {
-      // Primeiro, configura a data de nascimento e idade
-      if (crianca.dados.dataNascimento) {
-        this.formulario.patchValue({
-          dataNascimento: new Date(crianca.dados.dataNascimento),
-          idadeCrianca: utils.retornaIdadeFormatadaAnoMesDia(new Date(crianca.dados.dataNascimento))
-        }, { emitEvent: false });
+    if (crianca.dados.dataNascimento) {
+      this.formulario.patchValue({
+        dataNascimento: new Date(crianca.dados.dataNascimento),
+        idadeCrianca: utils.retornaIdadeFormatadaAnoMesDia(new Date(crianca.dados.dataNascimento))
+      }, { emitEvent: false });
 
-        const turmaSugerida = this.retornaTurmaSugerida(new Date(crianca.dados.dataNascimento), this.turmas);
-        if(!!turmaSugerida) {
-          this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
-          this.turmaSugeridaDescricao = `${this.turmaSelecionado?.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
-        }
-        else {
-          this.resetarSelecaoTurma();
-        }
+      const turmaSugerida = this.retornaTurmaSugerida(new Date(crianca.dados.dataNascimento), this.turmas);
+      if (!!turmaSugerida) {
+        this.turmaSelecionado = this.turmas.find(u => Number(u.codigo) === Number(turmaSugerida.codigo)) || null;
+        this.turmaSugeridaDescricao = `${this.turmaSelecionado?.descricaoAnoSemestreLetivo} - ${utils.formatarDataBrasileira(turmaSugerida.idadeInicialAluno)} até ${utils.formatarDataBrasileira(turmaSugerida.idadeFinalAluno)}`
       }
-
-      // Depois, processa a matrícula e turma
-      if (mat.dados != null) {
-        const matriculaAluno = mat.dados.find((m: any) => m.ativo === true);
-        if (matriculaAluno) {
-          const turmaMatricula = this.turmas.find((t: any) => t.codigo === matriculaAluno.codigoTurma);
-          if (turmaMatricula) {
-            this.configurarTurmaSugerida(turmaMatricula);
-          }
-        } else {
-          this.resetarSelecaoTurma();
-        }
-      } else {
+      else {
         this.resetarSelecaoTurma();
       }
-    });
+    }
+
+    if(!!crianca.dados.matricula) {
+      const turmaMatricula = this.turmas.find((t: any) => t.codigo === crianca.dados.matricula.codigoTurma);
+      if (turmaMatricula) {
+        this.configurarTurmaSugerida(turmaMatricula);
+      }
+    }
+    else { //não existe
+      this.turmaSelecionado = null;
+      this.formulario.get('turmaMatricula')?.setValue(null, { emitEvent: false });
+      this.childAutoCompleteComponent?.limpar();
+      //this.turmaSugeridaDescricao = 'Nenhuma Turma encontrada.';
+      this.cdr.detectChanges();
+    }
   }
 
   async salvar(): Promise<void> {

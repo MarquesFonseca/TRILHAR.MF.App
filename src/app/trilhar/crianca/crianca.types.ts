@@ -1,3 +1,5 @@
+import { IVMatriculaOutput } from "../matricula/vMatricula.types";
+
 export interface IAlunoEntity {
   codigo: number;
   codigoCadastro: string;
@@ -83,6 +85,7 @@ export class IAlunoOutput {
   codigoUsuarioLogado: number | null = 0; // Pode ser nulo
   dataAtualizacao: Date | null = null;
   dataCadastro: Date | null = null;
+  matricula?: IVMatriculaOutput[] = [];
 
   Action: any;
 }
