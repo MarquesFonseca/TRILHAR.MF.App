@@ -72,7 +72,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   //dataSource = new MatTableDataSource<any>();
   totalItems = 0;
   page = 0;
-  pageSize = 10;
+  pageSize = 5;
 
 
   // alternado
@@ -298,8 +298,10 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   }
 
   pesquisar(): void {
-    var filtro = this.montaFiltro(1, this.pageSize);
+    this.totalItems = 0;
+    this.dataSource = new MatTableDataSource<types.IAlunoOutput>([]);
 
+    var filtro = this.montaFiltro(1, this.pageSize);
     this.criancaService.listarPorFiltro(filtro, (res: any) => {
       if (res?.dados) {
         this.totalItems = res.dados.totalItens;
