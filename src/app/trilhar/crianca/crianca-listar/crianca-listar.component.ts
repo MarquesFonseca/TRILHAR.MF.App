@@ -71,7 +71,8 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
 
   //dataSource = new MatTableDataSource<any>();
   totalItems = 0;
-  page = 0;
+  pageIndex = 0;
+  page = 1;
   pageSize = 5;
 
 
@@ -195,6 +196,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   }
 
   async onPageChange(event: any): Promise<void> {
+    this.pageIndex = event.pageIndex;
     this.page = event.pageIndex + 1;
     this.pageSize = event.pageSize;
 
@@ -214,6 +216,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
 
     this.page = page;
     this.pageSize = pageSize;
+    this.pageIndex = page - 1;
 
     var filtro: types.IAlunoInput = new types.IAlunoInput();
     filtro.isPaginacao = true;
