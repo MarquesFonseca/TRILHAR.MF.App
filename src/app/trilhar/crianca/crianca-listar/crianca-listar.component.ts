@@ -1,19 +1,18 @@
-import { CommonModule, NgIf } from '@angular/common';
+import { SelectionModel } from '@angular/cdk/collections';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink, ActivatedRoute, Router } from '@angular/router';
-import { MaterialModule } from '../../../material.module';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
-import { BaseListComponent } from '../../../shared/formulario/baseList';
+import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
+import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
+import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { CriancaService } from '../crianca.service';
 import * as types from '../crianca.types';
-import { FormsModule } from '@angular/forms';
-import * as validar from '../../../shared/funcoes-comuns/validators/validator';
-import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
+import { isNullOrEmpty } from '../../../shared/funcoes-comuns/utils';
 
 @Component({
   selector: 'app-criancas-listar',
@@ -24,8 +23,7 @@ import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-comple
     ReactiveFormsModule,
     MaterialModule,
     FormsModule,
-    AutoCompleteComponent,
-    NgIf,
+    AutoCompleteComponent
   ],
   templateUrl: './crianca-listar.component.html',
   styleUrl: './crianca-listar.component.scss',
@@ -210,9 +208,15 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   }
 
   montaFiltro(page: number, pageSize: number) {
-    const { codigo, codigoCadastro, alunoSelecionado, nomeCrianca, nomeMae, nomePai, outroResponsavel,
-      alergia, restricaoAlimentar, deficienciaOuSituacaoAtipica, ativo, batizado
-    } = this.formularioPesquisar.value;
+    if(isNullOrEmpty(this.formularioPesquisar.value.alunoSelecionado)){
+      this.formularioPesquisar.patchValue({
+        codigo: 0,
+        codigoCadastro: '',
+        alunoSelecionado: null
+      });
+    }
+
+    const formValues = this.formularioPesquisar.value;
 
     this.page = page;
     this.pageSize = pageSize;
@@ -223,25 +227,25 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
     filtro.page = page;
     filtro.pageSize = pageSize;
 
-    filtro.codigo = codigo || 0;
-    filtro.codigoCadastro = codigoCadastro || '';
-    filtro.nomeCrianca = nomeCrianca || '';
+    filtro.codigo = formValues.codigo || 0;
+    filtro.codigoCadastro = formValues.codigoCadastro || '';
+    filtro.nomeCrianca = formValues.nomeCrianca || '';
     // filtro.dataNascimento = null;
-    filtro.nomeMae = nomeMae || '';
-    filtro.nomePai = nomePai || '';
-    filtro.outroResponsavel = outroResponsavel || '';
+    filtro.nomeMae = formValues.nomeMae || '';
+    filtro.nomePai = formValues.nomePai || '';
+    filtro.outroResponsavel = formValues.outroResponsavel || '';
     // filtro.telefone = '';
     // filtro.enderecoEmail = null;
-    filtro.alergia = alergia == null ? null : Boolean(alergia);
+    filtro.alergia = formValues.alergia == null ? null : Boolean(formValues.alergia);
     // filtro.descricaoAlergia = '';
-    filtro.restricaoAlimentar = restricaoAlimentar == null ? null : Boolean(restricaoAlimentar);
+    filtro.restricaoAlimentar = formValues.restricaoAlimentar == null ? null : Boolean(formValues.restricaoAlimentar);
     // filtro.descricaoRestricaoAlimentar = '';
-    filtro.deficienciaOuSituacaoAtipica = deficienciaOuSituacaoAtipica == null ? null : Boolean(deficienciaOuSituacaoAtipica);
+    filtro.deficienciaOuSituacaoAtipica = formValues.deficienciaOuSituacaoAtipica == null ? null : Boolean(formValues.deficienciaOuSituacaoAtipica);
     // filtro.descricaoDeficiencia = '';
-    filtro.batizado = batizado == null ? null : Boolean(batizado);
+    filtro.batizado = formValues.batizado == null ? null : Boolean(formValues.batizado);
     // filtro.dataBatizado = null;
     // filtro.igrejaBatizado = '';
-    filtro.ativo = ativo == null ? null : Boolean(ativo);
+    filtro.ativo = formValues.ativo == null ? null : Boolean(formValues.ativo);
     // filtro.codigoUsuarioLogado = 0; // Pode ser nulo
     // filtro.dataAtualizacao = null; // Pode ser nulo
     // filtro.dataCadastro = null; // Data atual por padrão
