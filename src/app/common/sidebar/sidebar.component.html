@@ -34,20 +34,21 @@
                     <span class="sub-title text-body">
                         MINISTÉRIO TRILHAR
                     </span>
-                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                    <!-- ---------------------------------------------------- -->
+                    <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <i class="material-symbols-outlined">dashboard</i>
                                 <span class="title">Dashboard</span>
-                                <span class="daxa-badge five">4</span>
+                                <span class="daxa-badge five">4</span> comentar
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
-                            <!-- <li class="sidemenu-item">
+                            <li class="sidemenu-item">
                               <a routerLink="/criancas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                   Crianças
                               </a>
-                            </li> -->
+                            </li>
                             <li class="sidemenu-item">
                               <a routerLink="/turmas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                   Turmas
@@ -63,35 +64,8 @@
                                   Frequências
                               </a>
                             </li>
-                            <!--
-                            <li class="sidemenu-item">
-                                <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    E-Commerce
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/crm" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    CRM
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/project-management" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    Project Management
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/lms" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    LMS
-                                </a>
-                            </li>
-                            <li class="sidemenu-item">
-                                <a routerLink="/help-desk" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                                    Help Desk <span class="daxa-badge">Hot</span>
-                                </a>
-                            </li>
-                            -->
                         </ul>
-                    </mat-expansion-panel>
+                    </mat-expansion-panel> -->
                    <!-- ---------------------------------------------------- -->
 
                     <!-- <span class="sub-title text-body">
@@ -133,11 +107,11 @@
                                   Listar
                               </a>
                           </li>
-                          <li class="sidemenu-item">
+                          <!-- <li class="sidemenu-item">
                               <a routerLink="/turmas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                   Novo
                               </a>
-                          </li>
+                          </li> -->
                           <li *ngIf="!isProducao" class="sidemenu-item">
                             <a routerLink="/turmas/limite" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
                                 Ajustar limites
@@ -146,12 +120,12 @@
                       </ul>
                     </mat-expansion-panel>
                     <!-- ---------------------------------------------------- -->
-                    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
+                    <!-- <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                       <mat-expansion-panel-header>
                           <mat-panel-title>
                               <i class="material-symbols-outlined">assignment</i>
                               <span class="title">Matrículas</span>
-                              <!-- <span class="daxa-badge two">1</span> -->
+                              <span class="daxa-badge two">1</span> comentar
                           </mat-panel-title>
                       </mat-expansion-panel-header>
                       <ul class="sidebar-sub-menu">
@@ -161,7 +135,7 @@
                           </a>
                         </li>
                       </ul>
-                    </mat-expansion-panel>
+                    </mat-expansion-panel> -->
                     <!-- ---------------------------------------------------- -->
                     <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = true">
                       <mat-expansion-panel-header>
@@ -179,12 +153,17 @@
                         </li>
                         <li class="sidemenu-item">
                           <a routerLink="/frequencias/checkin-dia" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                              Resultado checkin no dia
+                            Resultado check-in no dia
+                          </a>
+                        </li>
+                        <li class="sidemenu-item">
+                          <a routerLink="/frequencias/checkin-dia/incluir" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                            Efetuar check-in
                           </a>
                         </li>
                         <li class="sidemenu-item">
                           <a routerLink="/frequencias/grupo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
-                              Por Grupo
+                            Por Grupo
                           </a>
                         </li>
                       </ul>
