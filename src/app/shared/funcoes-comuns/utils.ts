@@ -1,31 +1,5 @@
 import { DataOutPut } from "../calendario/calendario.component";
 
-export function retornaIdadeFormatadaAnoMesDia(dataNascimento: Date): string {
-  try {
-    if (!isNaN(dataNascimento.getTime())) {
-      const dataAtual = new Date();
-
-      // Calcula a diferença em milissegundos entre as datas
-      const diferenca = dataAtual.getTime() - dataNascimento.getTime();
-      const diasTotais = diferenca / (1000 * 3600 * 24); // Convertendo para dias
-
-      const anos = Math.floor(diasTotais / 365.25); // Considerando anos bissextos
-      const meses = Math.floor((diasTotais % 365.25) / 30.44); // Média de dias por mês
-      const dias = Math.floor(diasTotais % 30.44);
-
-      let resultado = `${anos} ano${anos !== 1 ? 's' : ''} `;
-      resultado += `${meses} ${meses <= 1 ? 'mês' : meses > 1 ? 'meses' : ''} e `;
-      resultado += `${dias} dia${dias !== 1 ? 's' : ''}`;
-
-      return resultado;
-    } else {
-      return '';
-    }
-  } catch (error) {
-    return '';
-  }
-}
-
 //#region Data
 
 export function converterParaDataOutput(dataString: string): DataOutPut {
@@ -43,6 +17,13 @@ export function converterParaDataOutput(dataString: string): DataOutPut {
     data,
     dataFormatada
   };
+}
+
+export function formatDataToFormatoAnoMesDia(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // meses começam em 0
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
 export function formatarDataBrasileira(data: string | Date): string {
@@ -160,6 +141,59 @@ export function retornaPeriodoApuracaoDataAnoMesEDataFormatada(periodoApuracao: 
       .padStart(2, '0')}`
     : '';
   return { dataAnoMes, dataFormatada };
+}
+
+export function retornaIdadeFormatadaAnoMesDia(dataNascimento: Date): string {
+  try {
+    if (!isNaN(dataNascimento.getTime())) {
+      const dataAtual = new Date();
+
+      // Calcula a diferença em milissegundos entre as datas
+      const diferenca = dataAtual.getTime() - dataNascimento.getTime();
+      const diasTotais = diferenca / (1000 * 3600 * 24); // Convertendo para dias
+
+      const anos = Math.floor(diasTotais / 365.25); // Considerando anos bissextos
+      const meses = Math.floor((diasTotais % 365.25) / 30.44); // Média de dias por mês
+      const dias = Math.floor(diasTotais % 30.44);
+
+      let resultado = `${anos} ano${anos !== 1 ? 's' : ''} `;
+      resultado += `${meses} ${meses <= 1 ? 'mês' : meses > 1 ? 'meses' : ''} e `;
+      resultado += `${dias} dia${dias !== 1 ? 's' : ''}`;
+
+      return resultado;
+    } else {
+      return '';
+    }
+  } catch (error) {
+    return '';
+  }
+}
+
+/**
+ * Verifica se a pessoa faz aniversário em uma data específica
+ * @param dataNascimento - Data de nascimento
+ * @param dataReferencia - Data para verificar (opcional, padrão é hoje)
+ * @returns true se for aniversário na data de referência, false caso contrário
+*/
+export function ehAniversarioNaData(
+  dataNascimento: string | Date,
+  dataReferencia: string | Date = new Date()
+): boolean {
+  try {
+    const nascimento = typeof dataNascimento === 'string' ? new Date(dataNascimento) : dataNascimento;
+    const referencia = typeof dataReferencia === 'string' ? new Date(dataReferencia) : dataReferencia;
+
+    // Validações
+    if (isNaN(nascimento.getTime()) || isNaN(referencia.getTime())) {
+      return false;
+    }
+
+    return nascimento.getMonth() === referencia.getMonth() &&
+      nascimento.getDate() === referencia.getDate();
+  } catch (error) {
+    console.error('Erro ao verificar aniversário:', error);
+    return false;
+  }
 }
 //#endregion
 

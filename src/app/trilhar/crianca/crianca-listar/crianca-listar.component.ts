@@ -95,9 +95,7 @@ export class CriancaListarComponent extends BaseListComponent implements OnInit 
   override ngOnInit() {
     this.carregaFormGroupPesquisar();
     setTimeout(async () => {
-      //var filtro = this.montaFiltro(1, 5);
       this.carregaListaAlunosAutoComplete();
-      //this.carregaListaTurmasAutoComplete('2025', '2');
     }, 100);
   }
 

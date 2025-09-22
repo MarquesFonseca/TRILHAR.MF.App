@@ -11,6 +11,7 @@ import { MensagemService } from '../../../services/mensagem.service';
 import { Subscription } from 'rxjs';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
+import { formatDataToFormatoAnoMesDia } from '../../../shared/funcoes-comuns/utils';
 
 @Component({
   selector: 'app-frequencia-checkin-dia',
@@ -102,7 +103,8 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     this.dataSelecionada = data;
     this.formulario.get('data')?.setValue(this.dataSelecionada);
     this.formulario.get('data')?.markAsDirty();
-    this.carregarTurmasAgrupadasPorData(data.toISOString().split('T')[0]);
+    var dataFormatada = formatDataToFormatoAnoMesDia(data);
+    this.carregarTurmasAgrupadasPorData(dataFormatada);
   }
 
   carregarTurmasAgrupadasPorData(data: string): void {
