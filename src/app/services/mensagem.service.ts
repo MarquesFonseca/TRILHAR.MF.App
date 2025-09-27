@@ -110,9 +110,10 @@ export class MensagemService {
     title: string,
     message: string,
     confirmText: string = 'Sim',
-    cancelText: string = 'Não'): Promise<boolean> {
+    cancelText: string = 'Não',
+    tamanhoEmPx: string = '400px'): Promise<boolean> {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
+      width: tamanhoEmPx,
       data: {
         titulo: title,
         mensagem: message,

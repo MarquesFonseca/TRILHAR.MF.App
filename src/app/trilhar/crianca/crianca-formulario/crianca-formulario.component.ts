@@ -421,6 +421,17 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     input.dataAtualizacao = input.dataCadastro;
     input.codigoUsuarioLogado = 0;
 
+    if (!valoresForm.turmaMatricula) { //se a turma não for selecionada
+      if (!await this.mensagemService.confirm('Atenção',
+        'Nenhuma turma selecionada.',
+        'Continuar sem Turma',
+        'Cancelar',
+        '440px')) {
+        return;
+      }
+    }
+
+
     try {
       if (this.operacao.isNovo) {
         const res = await this.criancaService.IncluirPromise(input);
