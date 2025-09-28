@@ -52,7 +52,7 @@ export function formatarDataComPontos(data: Date): string {
   return dia + '.' + mes + '.' + ano;
 }
 
-export function dataString(data: Date) {
+export function dataString(data: Date): string {
   let dia = data.getDate().toString().padStart(2, '0');
   let mes = (data.getMonth() + 1).toString().padStart(2, '0');
   let ano = data.getFullYear();
