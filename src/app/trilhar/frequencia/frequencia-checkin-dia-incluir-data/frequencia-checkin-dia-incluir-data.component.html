@@ -1,7 +1,7 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
   <h5 class="mb-0">
-    {{this.getTitle()}} - data: {{ dataSelecionada | date:'dd/MM/yyyy' }}
+    {{this.getTitle()}} {{ dataSelecionada | date:'dd/MM/yyyy' }}
   </h5>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 pl-0">
     <li class="breadcrumb-item position-relative">
@@ -31,7 +31,7 @@
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 form-group" style="border: 0px solid red">
           <div class="mb-25">
             <app-calendario ngSkipHydration [formGroup]="formularioCheckin" [field]="'data'"
-              [label]="'Data do Check-in'" [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)" [readonly]="true" >
+              [label]="'Data do Check-in'" [maxDate]="maxData" [readonly]="true" >
             </app-calendario>
           </div>
         </div>
@@ -39,16 +39,38 @@
       <div class="row align-items-end">
         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6 col-xs-6 form-group" style="border: 0px solid red">
           <div class="mb-25">
-            <app-auto-complete ngSkipHydration [formGroup]="formularioCheckin" [field]="'alunoSelecionado'"
-              [itens]="listaAlunosAutoComplete" [propriedadeMostrar]="'descricao'" [label]="'Selecione uma criança'"
-              (itemSelecionado)="onListaAlunosAutoCompleteSelecionado($event)">
+            <app-auto-complete ngSkipHydration
+              [formGroup]="formularioCheckin"
+              [field]="'alunoSelecionado'"
+              [itens]="listaAlunosAutoComplete"
+              [propriedadeMostrar]="'descricao'"
+              [label]="'Selecione uma criança'"
+              (itemSelecionado)="onAlunosAutoCompleteSelecionado($event)">
             </app-auto-complete>
           </div>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 form-group" style="border: 0px solid red">
           <div class="mb-25">
-            <button mat-flat-button color="accent" class="search-btn w-100" (click)="onRegistrarFrequencias()">
+            <button mat-flat-button color="accent" class="search-btn w-100" (click)="onRegistrarCheckin()"
+              [disabled]="!formularioCheckin.get('alunoSelecionado')?.value || !alunoAtual?.matricula ? true : null">
               <mat-icon>event_available</mat-icon>Registrar Check-in
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <pre>{{this.formularioCheckin.get('alunoSelecionado')?.value ? 'selecionado' : 'não selecionado'}}</pre>
+      <pre>{{alunoAtual && alunoAtual?.ativo ? 'ativo' : 'inativo'}}</pre>
+      <pre>{{!(alunoAtual?.matricula && alunoAtual?.matricula.turmaDescricao) ? 'sem matricula' : 'com matricula'}}</pre> -->
+
+      <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+          <div class="mb-25" *ngIf="
+          (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.ativo)) ||
+          (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.matricula)) ||
+          (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.matricula?.ativo))">
+            <button mat-flat-button color="warn" class="search-btn w-100">
+              <mat-icon>error_outline</mat-icon>Cadastro Desatualizado
             </button>
           </div>
         </div>
@@ -66,7 +88,7 @@
             </h2>
           </div> -->
 
-          <div class="mb-20" *ngIf="alunoAtual?.matricula.turmaDescricao">
+          <div class="mb-20" *ngIf="alunoAtual?.matricula && alunoAtual?.matricula.turmaDescricao">
             <h2>
               <b>Sala:</b> {{ alunoAtual?.matricula.turmaDescricao }}
               <span class="badge"
@@ -75,8 +97,6 @@
               </span>
             </h2>
           </div>
-
-
           <div class="mb-20" *ngIf="alunoAtual?.nomeMae">
             <h2><b>Mãe:</b> {{ alunoAtual?.nomeMae }}</h2>
           </div>
@@ -92,6 +112,11 @@
 
         </div>
       </div>
+
+      <!-- <pre>formularioCheckin</pre> -->
+      <!-- <pre>{{this.formularioCheckin.value | json}}</pre> -->
+      <!-- <pre>alunoAtual</pre> -->
+      <!-- <pre>{{alunoAtual | json}}</pre> -->
 
     </mat-card-content>
   </mat-card>

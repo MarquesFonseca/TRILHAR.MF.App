@@ -32,33 +32,19 @@ import { isNullOrEmpty } from '../../../shared/funcoes-comuns/utils';
   styleUrl: './frequencia-checkin-dia-incluir-data.component.scss'
 })
 export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent implements OnInit, OnDestroy {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(CalendarioComponent) childCalendarioComponent!: CalendarioComponent;
   @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
 
   formularioCheckin!: FormGroup;
-
   listaAlunosAutoComplete: any[] = [];
-
   alunoAtual: any;
+  maxData: Date = new Date();
+  dataSelecionada: Date = new Date();
+  descricaoTuramaSelecionda: string = '';
+  private subscriptions: Subscription = new Subscription();
 
   // alternado
   isToggled = false;
-
-  dataSelecionada: Date = new Date();
-  descricaoTuramaSelecionda: string = '';
-  maxData: Date = new Date();
-  turmasAgrupadas: any[] = [];
-  frequenciasPresentesTurmaEData: any[] = [];
-  frequenciasAusentesTurmaEData: any[] = [];
-  frequenciasPresentesTurmaEDataPossueAlergia: any[] = [];
-  frequenciasPresentesTurmaEDataPossueRestricaoAlimentar: any[] = [];
-  frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais: any[] = [];
-  frequenciasPresentesTurmaEDataPossueAniversario: any[] = [];
-  //frequencias: any[] = [];
-  //frequenciaDetalhe: any;
-
-  private subscriptions: Subscription = new Subscription();
 
   constructor(
     public themeService: CustomizerSettingsService,
@@ -85,7 +71,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
 
     setTimeout(async () => {
       this.carregaListaAlunosAutoComplete();
-    }, 100);
+    }, 10);
   }
 
   override preencheFiltro(): void {
@@ -95,8 +81,6 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
   carregaFormGroup() {
     this.formularioCheckin = this.fb.group({
       data: [null],
-      codigo: [0],
-      codigoCadastro: [''],
       alunoSelecionado: [null]
     });
   }
@@ -127,32 +111,49 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     });
   }
 
+  public onAlunosAutoCompleteSelecionado(alunoSelecionada: any): void {
+    if (!!alunoSelecionada) {
+      this.formularioCheckin.patchValue({
+        alunoSelecionado: alunoSelecionada
+      });
+    }
+    else {//Campo de aluno está vazio!
+
+      // this.formularioCheckin.patchValue({
+      //   codigo: 0,
+      //   codigoCadastro: '',
+      //   alunoSelecionado: null
+      // });
+
+      // setTimeout(async () => {
+      //   const formValue = this.formularioCheckin.value;
+      // }, 10);
+    }
+
+    this.carregaAlunoSelecionadoAutoComplete();
+  }
+
   private carregaAlunoSelecionadoAutoComplete() {
+    this.alunoAtual = null;
+
+    if (!this.formularioCheckin.get('alunoSelecionado')?.value) {
+      return;
+    }
+
     var filtro: types.IAlunoInput = new types.IAlunoInput();
     filtro.isPaginacao = true;
-    filtro.codigo = this.formularioCheckin.get('codigo')?.value;
+    filtro.codigo = this.formularioCheckin?.value.alunoSelecionado.id;
+
     this.criancaService.listarPorFiltro(filtro, (res: any) => {
       if (!!res?.dados) {
         var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
         this.alunoAtual = alunoOutput[0] || {};
-        // this.alunoAtual.dataNascimento = new Date(this.alunoAtual.dataNascimento);
         this.alunoAtual.idadeCrianca = `${new Date(this.alunoAtual.dataNascimento)?.toLocaleDateString('pt-BR')} - ${retornaIdadeFormatadaAnoMesDia(new Date(this.alunoAtual.dataNascimento))}`;
       }
     });
   }
 
-  public onListaAlunosAutoCompleteSelecionado(alunoSelecionada: any): void {
-    if (alunoSelecionada) {
-      this.formularioCheckin.patchValue({
-        codigo: alunoSelecionada.id,
-        codigoCadastro: alunoSelecionada.codigoCadastro,
-        alunoSelecionado: alunoSelecionada
-      });
-      this.carregaAlunoSelecionadoAutoComplete.call(this);
-    }
-  }
-
-  onRegistrarFrequencias() {
+  onRegistrarCheckin() {
     if (this.formularioCheckin.invalid) {
       this.formularioCheckin.markAllAsTouched();
       this.mensagemService.showInfo('Por favor, preencha todos os campos obrigatórios.');
@@ -168,11 +169,6 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
       this.mensagemService.showInfo('Aluno inválido. Por favor, selecione um aluno válido.');
       return;
     }
-    const codigoCadastro = this.formularioCheckin.get('codigoCadastro')?.value;
-    if (!codigoCadastro) {
-      this.mensagemService.showInfo('Código de cadastro inválido. Por favor, selecione um aluno válido.');
-      return;
-    }
     // this.frequenciaService.registrarFrequenciaDiaParaAluno(codigoCadastro, data.toISOString().split('T')[0], (res: any) => {
     //   if (res.sucesso) {
     //     this.mensagemService.showSuccess('Frequência registrada com sucesso!');
@@ -185,143 +181,15 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     //     this.mensagemService.showError(res.mensagem || 'Erro ao registrar frequência. Tente novamente.');
     //   }
     // });
-  }
 
-  onDataSelecionada(dataSelecionada: DataOutPut): void {
-    this.dataSelecionada = dataSelecionada.data;
-    this.formularioCheckin.get('data')?.setValue(this.dataSelecionada);
-    this.formularioCheckin.get('data')?.markAsDirty();
-    // this.carregarTurmasAgrupadasPorData(dataSelecionada.data.toISOString().split('T')[0]);
-  }
 
-  onBuscarFrequencias() {
-    if (this.formularioCheckin.invalid) {
-      this.formularioCheckin.markAllAsTouched();
-      this.mensagemService.showInfo('Por favor, preencha todos os campos obrigatórios.');
-      return;
-    }
-    const data = this.formularioCheckin.get('data')?.value;
-    if (!data) {
-      this.mensagemService.showInfo('Data inválida. Por favor, selecione uma data válida.');
-      return;
-    }
-
-    this.dataSelecionada = data;
-    this.formularioCheckin.get('data')?.setValue(this.dataSelecionada);
-    this.formularioCheckin.get('data')?.markAsDirty();
-    this.carregarTurmasAgrupadasPorData(data.toISOString().split('T')[0]);
-  }
-
-  carregarTurmasAgrupadasPorData(data: string): void {
-    this.turmasAgrupadas = [];
-    this.frequenciasPresentesTurmaEData = [];
-    this.frequenciasAusentesTurmaEData = [];
-    this.descricaoTuramaSelecionda = '';
-
-    this.frequenciasPresentesTurmaEDataPossueAlergia = [];
-    this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = [];
-    this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = [];
-    this.frequenciasPresentesTurmaEDataPossueAniversario = [];
-
-    const sub = this.frequenciaService.listarTurmasAgrupadasPorData(data)
-      .subscribe({
-        next: (ret: any) => {
-          if (ret.dados == null) {
-            return;
-          }
-          this.turmasAgrupadas = ret.dados.map((turma: any) => ({
-            codigoTurma: turma.codigoTurma, //31
-            turmaDescricaoFormatada: turma.turmaDescricaoFormatada, //"BRANCO (0 A 11 M 29 D) - 2025/1",
-            turmaIdadeInicialAlunoFormatada: turma.turmaIdadeInicialAlunoFormatada, //"01/03/2024",
-            turmaIdadeFinalAlunoFormatada: turma.turmaIdadeFinalAlunoFormatada, //"30/07/2025",
-            qtdRestante: turma.qtdRestante, //3,
-            qtdRestanteFormatada: turma.qtdRestanteFormatada, //"+3",
-            dataFrequencia: turma.dataFrequencia, //"2025-05-11T00:00:00",
-            dataFrequenciaFormatada: turma.dataFrequenciaFormatada, //"11/05/2025",
-            turmaDescricao: turma.turmaDescricao, //"BRANCO (0 A 11 M 29 D)",
-            turmaAnoLetivo: turma.turmaAnoLetivo, //2025,
-            turmaSemestreLetivo: turma.turmaSemestreLetivo, //1,
-            turmaIdadeInicialAluno: turma.turmaIdadeInicialAluno, //"2024-03-01T00:00:00",
-            turmaIdadeFinalAluno: turma.turmaIdadeFinalAluno, //"2025-07-30T00:00:00",
-            turmaAtivo: turma.turmaAtivo, //true,
-            turmaLimiteMaximo: turma.turmaLimiteMaximo, //8,
-            qtd: turma.qtd, //11
-
-            qtdAlergia: turma.qtdAlergia,
-            qtdRestricaoAlimentar: turma.qtdRestricaoAlimentar,
-            qtdNecessidadesEspeciais: turma.qtdNecessidadesEspeciais,
-            qtdAniversariantes: turma.qtdAniversariantes,
-          }));
-          var somaTotalQtd = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtd, 0);
-          var somaTotalLimiteMaximo = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.turmaLimiteMaximo, 0);
-          var somaTotalRestante = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdRestante, 0);
-
-          var somaTotalAlergia = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdAlergia, 0);
-          var somaTotalRestricaoAlimentar = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdRestricaoAlimentar, 0);
-          var somaTotalNecessidadesEspeciais = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdNecessidadesEspeciais, 0);
-          var somaTotalAniversariantes = this.turmasAgrupadas.reduce((acc, turma) => acc + turma.qtdAniversariantes, 0);
-
-          this.turmasAgrupadas.push({
-            codigoTurma: 0,
-            turmaDescricaoFormatada: 'TOTAL',
-            turmaIdadeInicialAlunoFormatada: '',
-            turmaIdadeFinalAlunoFormatada: '',
-            qtdRestante: somaTotalRestante,
-            qtdRestanteFormatada: somaTotalRestante,
-            dataFrequencia: '',
-            dataFrequenciaFormatada: '',
-            turmaDescricao: 'TOTAL',
-            turmaAnoLetivo: 0,
-            turmaSemestreLetivo: 0,
-            turmaIdadeInicialAluno: '',
-            turmaIdadeFinalAluno: '',
-            turmaAtivo: true,
-            turmaLimiteMaximo: somaTotalLimiteMaximo,
-            qtd: somaTotalQtd,
-
-            qtdAlergia: somaTotalAlergia,
-            qtdRestricaoAlimentar: somaTotalRestricaoAlimentar,
-            qtdNecessidadesEspeciais: somaTotalNecessidadesEspeciais,
-            qtdAniversariantes: somaTotalAniversariantes,
-          });
-        },
-        error: (err) => {
-          console.error('Erro ao carregar turmas agrupadas:', err);
-        }
-      });
-
-    this.subscriptions.add(sub);
-  }
-
-  async carregarFrequenciasTurma(codigoTurma: number, descricaoTurma: string, data: string) {
-    if (codigoTurma == 0) {
-      return;
-    }
-    this.descricaoTuramaSelecionda = descricaoTurma;
-    try {
-      var ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data.split('T')[0]);
-      this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
-      this.frequenciasAusentesTurmaEData = ret.dados
-        .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
-        .sort((a: any, b: any) => {
-          // Ordenação por nome de forma ascendente (A-Z)
-          return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
-        });
-
-      this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true);
-      this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true);
-      this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true);
-      this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada));
-
-    } catch (err) {
-      console.error('Erro:', err);
-    }
+    this.mensagemService.showSuccess('Check-in registrada com sucesso!');
+    this.childAutoCompleteComponent.limpar();
+    this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
+    this.alunoAtual = {};
   }
 
   ngOnDestroy(): void {
-    this.turmasAgrupadas = [];
-    this.frequenciasPresentesTurmaEData = [];
-    this.frequenciasAusentesTurmaEData = [];
     this.descricaoTuramaSelecionda = '';
     this.formularioCheckin.reset();
     this.subscriptions.unsubscribe();

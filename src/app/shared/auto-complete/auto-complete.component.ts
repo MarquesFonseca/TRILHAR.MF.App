@@ -1,6 +1,6 @@
 // auto-complete.component.ts
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable, startWith, map, Subject, takeUntil } from 'rxjs';
 import { MaterialModule } from '../../material.module';
@@ -20,9 +20,8 @@ import * as utils from "../funcoes-comuns/utils";
   templateUrl: './auto-complete.component.html',
   styleUrl: './auto-complete.component.scss'
 })
-export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
+export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
-  //@Input() formGroup = new FormGroup('');
   @Input() formGroup!: FormGroup;
   @Input() field: string = '';
   @Input() label: string = 'Selecione...';
@@ -41,13 +40,20 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
     return this.formGroup?.get(this.field) as FormControl;
   }
   itensFiltrados!: Observable<any[]>;
-
   private valorDefinido = false;
 
   ngOnInit() {
-    //console.log('ngOnInit - valorInicial:', this.valorInicial);
-    // Inicializa o filtro primeiro sem o valor inicial
     this.inicializarFiltro();
+
+    //Detecta quando o usuário apaga o campo
+    this.controle?.valueChanges
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(valor => {
+        // Se for string vazia ou diferente de um item da lista
+        if (!valor || (typeof valor === 'object' && !this.itens.includes(valor))) {
+          this.itemSelecionado.emit(null);
+        }
+      });
   }
 
   ngAfterViewInit() {
@@ -70,6 +76,8 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
     if (changes['itens'] && !changes['itens'].firstChange) {
       //console.log('Itens mudaram, reinicializando filtro');
       this.inicializarFiltro();
+
+
     }
 
     // Se o valorInicial mudar e for não nulo
@@ -97,6 +105,8 @@ export class AutoCompleteComponent implements OnInit, OnChanges, AfterViewInit {
         console.warn('Itens não disponíveis ainda, aguardando...');
       }
     }
+
+
   }
 
   private inicializarFiltro() {
