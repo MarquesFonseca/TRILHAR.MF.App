@@ -27,71 +27,27 @@
     [class.rtl-enabled]="themeService.isRTLEnabled()">
 
     <mat-card-content>
-      <div class="row">
-        <div class="col-xl-7 col-lg-7 col-md-5 col-sm-8 col-xs-8 form-group">
+      <div class="row align-items-end">
+        <!-- Coluna do calendário -->
+        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 form-group">
           <div class="mb-25">
-            <app-auto-complete ngSkipHydration [formGroup]="formularioCheckin" [field]="'alunoSelecionado'"
-              [itens]="listaAlunosAutoComplete" [propriedadeMostrar]="'descricao'" [label]="'Selecione uma criança'"
-              (itemSelecionado)="onListaAlunosAutoCompleteSelecionado($event)">
-            </app-auto-complete>
-          </div>
+          <app-calendario ngSkipHydration [formGroup]="formularioCheckin" [field]="'data'"
+            [label]="'Selecione uma data'" [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)">
+          </app-calendario>
         </div>
-        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 form-group">
-          <div class="mb-25">
-            <app-calendario ngSkipHydration [formGroup]="formularioPesquisar" [field]="'data'"
-              [label]="'Selecione uma data'" [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)">
-            </app-calendario>
-          </div>
         </div>
-        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-12 col-xs-12 form-group">
+
+        <!-- Coluna do botão -->
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 form-group">
           <div class="mb-25">
-            <button mat-flat-button color="accent" class="search-btn" (click)="onRegistrarFrequencias()">
+            <button mat-flat-button color="accent" class="search-btn w-100"
+              (click)="navegar($event, '/frequencias/checkin-dia/incluir', [this.formatDate(this.formularioCheckin.get('data')?.value)])">
               <mat-icon>event_available</mat-icon>
-              Registrar Check-in
+              Iniciar Check-in
             </button>
           </div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-
-          <!-- <div class="mb-20" *ngIf="alunoAtual?.matricula.turmaDescricao">
-            <h2>
-              <b>Sala:</b>
-              <span [ngStyle]="{ color: getCorSala(alunoAtual?.matricula.turmaDescricao) }">
-                {{ alunoAtual?.matricula.turmaDescricao }}
-              </span>
-            </h2>
-          </div> -->
-
-          <div class="mb-20" *ngIf="alunoAtual?.matricula.turmaDescricao">
-            <h2>
-              <b>Sala:</b> {{ alunoAtual?.matricula.turmaDescricao }}
-              <span class="badge"
-                [ngStyle]="{ backgroundColor: getCorSala(alunoAtual?.matricula.turmaDescricao), color: 'white', padding: '4px 8px', borderRadius: '6px', fontSize: '0.8rem' }">
-                {{ alunoAtual?.matricula.turmaDescricao.split(' ')[0] }}
-              </span>
-            </h2>
-          </div>
-
-
-          <div class="mb-20" *ngIf="alunoAtual?.nomeMae">
-            <h2><b>Mãe:</b> {{ alunoAtual?.nomeMae }}</h2>
-          </div>
-          <div class="mb-20" *ngIf="alunoAtual?.nomePai">
-            <h2><b>Pai:</b> {{ alunoAtual?.nomePai }}</h2>
-          </div>
-          <div class="mb-20" *ngIf="alunoAtual?.outroResponsavel">
-            <h2><b>Responsável:</b> {{ alunoAtual?.outroResponsavel }}</h2>
-          </div>
-          <div class="mb-20" *ngIf="alunoAtual?.dataNascimento">
-            <h2><b>Nascimento/Idade:</b> {{ alunoAtual?.idadeCrianca }}</h2>
-          </div>
-
-        </div>
-      </div>
-
     </mat-card-content>
   </mat-card>
 </form>
