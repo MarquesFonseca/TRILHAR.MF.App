@@ -9,13 +9,14 @@ import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
-import { ehAniversarioNaData, isDate, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
+import { ehAniversarioNaData, isDate, obterDataHoraBrasileira, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import { FrequenciaService } from '../frequencia.service';
 import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
 import * as types from '../../crianca/crianca.types';
 import { CriancaService } from '../../crianca/crianca.service';
 import { isNullOrEmpty } from '../../../shared/funcoes-comuns/utils';
+import { FrequenciaInput } from '../frequencia.types';
 
 @Component({
   selector: 'app-frequencia-checkin-dia-incluir-data',
@@ -153,40 +154,60 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     });
   }
 
-  onRegistrarCheckin() {
+  async onRegistrarCheckin() {
+    const alunoSelecionado = this.formularioCheckin.get('alunoSelecionado')?.value;
+    const aluno = this.alunoAtual;
+    const turma = aluno.matricula;
+    const data = this.formularioCheckin.get('data')?.value;
+
     if (this.formularioCheckin.invalid) {
       this.formularioCheckin.markAllAsTouched();
       this.mensagemService.showInfo('Por favor, preencha todos os campos obrigatórios.');
       return;
     }
-    const data = this.formularioCheckin.get('data')?.value;
     if (!data) {
       this.mensagemService.showInfo('Data inválida. Por favor, selecione uma data válida.');
       return;
     }
-    const alunoSelecionado = this.formularioCheckin.get('alunoSelecionado')?.value;
     if (!alunoSelecionado) {
-      this.mensagemService.showInfo('Aluno inválido. Por favor, selecione um aluno válido.');
+      this.mensagemService.showInfo('Criança inválida. Por favor, selecione uma criança válida.');
       return;
     }
-    // this.frequenciaService.registrarFrequenciaDiaParaAluno(codigoCadastro, data.toISOString().split('T')[0], (res: any) => {
-    //   if (res.sucesso) {
-    //     this.mensagemService.showSuccess('Frequência registrada com sucesso!');
-    //     this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
-    //     this.formularioCheckin.get('codigoCadastro')?.setValue('');
-    //     this.formularioCheckin.get('codigo')?.setValue(0);
-    //     this.childAutoCompleteComponent.limparSelecao();
-    //     this.carregarTurmasAgrupadasPorData(data.toISOString().split('T')[0]);
-    //   } else {
-    //     this.mensagemService.showError(res.mensagem || 'Erro ao registrar frequência. Tente novamente.');
-    //   }
-    // });
+    if (!aluno.matricula) {
+      this.mensagemService.showInfo('Turma inválida. Por favor, verifique se o a criança está vinculado à uma turma.');
+      return;
+    }
 
+    if (!!aluno.matricula) { //se a turma for selecionada
+      var retorno = await this.adicionarFrequenciaRegistro(aluno, turma);
+      if (!retorno || retorno.dados) {
+        this.mensagemService.showSuccess('Check-in registrada com sucesso!');
+        this.childAutoCompleteComponent.limpar();
+        this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
+        this.alunoAtual = null;
+      }
+    }
 
-    this.mensagemService.showSuccess('Check-in registrada com sucesso!');
-    this.childAutoCompleteComponent.limpar();
-    this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
-    this.alunoAtual = null;
+  }
+
+  private async adicionarFrequenciaRegistro(aluno: any, turma: any) {
+    var inputFrequencia: FrequenciaInput = {
+      "codigo": 0,
+      "dataFrequencia": obterDataHoraBrasileira(),
+      "codigoAluno": aluno.codigo,
+      "codigoTurma": turma.codigoTurma,
+      "presenca": true,
+      "turmaDescricao": turma.turmaDescricao,
+      "turmaIdadeInicialAluno": turma.turmaIdadeInicialAluno,
+      "turmaIdadeFinalAluno": turma.turmaIdadeFinalAluno,
+      "turmaAnoLetivo": turma.turmaAnoLetivo,
+      "turmaSemestreLetivo": turma.turmaSemestreLetivo,
+      "codigoUsuarioLogado": turma.turmaCodigoUsuarioLogado,
+      "dataAtualizacao": obterDataHoraBrasileira(),
+      "dataCadastro": obterDataHoraBrasileira()
+    }
+    var retorno = await this.frequenciaService.IncluirPromise(inputFrequencia);
+    return retorno;
   }
 
   desbilitarBotaoRegistrarCheckin(): boolean | null {
