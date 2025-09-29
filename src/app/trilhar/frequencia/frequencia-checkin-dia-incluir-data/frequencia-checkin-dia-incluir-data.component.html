@@ -27,7 +27,7 @@
     [class.rtl-enabled]="themeService.isRTLEnabled()">
 
     <mat-card-content>
-      <div class="row align-items-end">
+      <!-- <div class="row align-items-end">
         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 form-group" style="border: 0px solid red">
           <div class="mb-25">
             <app-calendario ngSkipHydration [formGroup]="formularioCheckin" [field]="'data'"
@@ -35,7 +35,7 @@
             </app-calendario>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="row align-items-end">
         <div class="col-xl-8 col-lg-8 col-md-8 col-sm-6 col-xs-6 form-group" style="border: 0px solid red">
           <div class="mb-25">
@@ -52,7 +52,7 @@
         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 form-group" style="border: 0px solid red">
           <div class="mb-25">
             <button mat-flat-button color="accent" class="search-btn w-100" (click)="onRegistrarCheckin()"
-              [disabled]="!formularioCheckin.get('alunoSelecionado')?.value || !alunoAtual?.matricula ? true : null">
+              [disabled]="desbilitarBotaoRegistrarCheckin()">
               <mat-icon>event_available</mat-icon>Registrar Check-in
             </button>
           </div>
@@ -65,10 +65,7 @@
 
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-          <div class="mb-25" *ngIf="
-          (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.ativo)) ||
-          (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.matricula)) ||
-          (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.matricula?.ativo))">
+          <div class="mb-25" *ngIf="exibirBotaoCadastroDestatualizado()">
             <button mat-flat-button color="warn" class="search-btn w-100">
               <mat-icon>error_outline</mat-icon>Cadastro Desatualizado
             </button>
@@ -113,10 +110,22 @@
         </div>
       </div>
 
-      <!-- <pre>formularioCheckin</pre> -->
-      <!-- <pre>{{this.formularioCheckin.value | json}}</pre> -->
-      <!-- <pre>alunoAtual</pre> -->
-      <!-- <pre>{{alunoAtual | json}}</pre> -->
+      <div class="row" *ngIf="alunoAtual">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+          <div class="mb-25">
+            <button mat-flat-button color="warn" class="search-btn" (click)="limpar()">
+              <mat-icon>delete_sweep</mat-icon>Limpar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!isProducao">
+        <pre>formularioCheckin</pre>
+        <pre>{{this.formularioCheckin.value | json}}</pre>
+        <pre>alunoAtual</pre>
+        <pre>{{alunoAtual | json}}</pre>
+      </div>
 
     </mat-card-content>
   </mat-card>

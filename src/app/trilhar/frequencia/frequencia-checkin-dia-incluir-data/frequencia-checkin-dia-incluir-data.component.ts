@@ -25,14 +25,14 @@ import { isNullOrEmpty } from '../../../shared/funcoes-comuns/utils';
     RouterLink,
     ReactiveFormsModule,
     MaterialModule,
-    CalendarioComponent,
+    // CalendarioComponent,
     AutoCompleteComponent
   ],
   templateUrl: './frequencia-checkin-dia-incluir-data.component.html',
   styleUrl: './frequencia-checkin-dia-incluir-data.component.scss'
 })
 export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent implements OnInit, OnDestroy {
-  @ViewChild(CalendarioComponent) childCalendarioComponent!: CalendarioComponent;
+  // @ViewChild(CalendarioComponent) childCalendarioComponent!: CalendarioComponent;
   @ViewChild(AutoCompleteComponent) childAutoCompleteComponent!: AutoCompleteComponent;
 
   formularioCheckin!: FormGroup;
@@ -147,7 +147,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     this.criancaService.listarPorFiltro(filtro, (res: any) => {
       if (!!res?.dados) {
         var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
-        this.alunoAtual = alunoOutput[0] || {};
+        this.alunoAtual = alunoOutput[0] || null;
         this.alunoAtual.idadeCrianca = `${new Date(this.alunoAtual.dataNascimento)?.toLocaleDateString('pt-BR')} - ${retornaIdadeFormatadaAnoMesDia(new Date(this.alunoAtual.dataNascimento))}`;
       }
     });
@@ -186,7 +186,61 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     this.mensagemService.showSuccess('Check-in registrada com sucesso!');
     this.childAutoCompleteComponent.limpar();
     this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
-    this.alunoAtual = {};
+    this.alunoAtual = null;
+  }
+
+  desbilitarBotaoRegistrarCheckin(): boolean | null {
+    // (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.ativo)) ||
+    // (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.matricula)) ||
+    // (this.formularioCheckin.get('alunoSelecionado')?.value && (alunoAtual && !alunoAtual?.matricula?.ativo))
+
+    const alunoSelecionado = this.formularioCheckin.get('alunoSelecionado')?.value;
+    const aluno = this.alunoAtual;
+
+    if (!alunoSelecionado) {
+      return true;
+    }
+    if (!aluno) {
+      return true;
+    }
+    if (!Boolean(aluno?.ativo)) {
+      return true;
+    }
+    if (!aluno?.matricula) {
+      return true;
+    }
+    if (!aluno?.matricula?.ativo) {
+      return true;
+    }
+
+    return null;
+  }
+
+  exibirBotaoCadastroDestatualizado(): boolean {
+    // (this.formularioCheckin.get('alunoSelecionado')?.value && (this.alunoAtual && !this.alunoAtual?.ativo)) ||
+    // (this.formularioCheckin.get('alunoSelecionado')?.value && (this.alunoAtual && !this.alunoAtual?.matricula)) ||
+    // (this.formularioCheckin.get('alunoSelecionado')?.value && (this.alunoAtual && !this.alunoAtual?.matricula?.ativo))
+
+    const alunoSelecionado = this.formularioCheckin.get('alunoSelecionado')?.value;
+    const aluno = this.alunoAtual;
+
+    if (alunoSelecionado && (aluno && !Boolean(aluno?.ativo))) {
+      return true;
+    }
+    if (alunoSelecionado && (aluno && !Boolean(aluno?.matricula))) {
+      return true;
+    }
+    if (alunoSelecionado && (Boolean(aluno?.matricula) && !Boolean(aluno?.matricula?.ativo))) {
+      return true;
+    }
+    return false;
+  }
+
+  limpar() {
+    this.descricaoTuramaSelecionda = '';
+    this.alunoAtual = null;
+    this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
+    this.childAutoCompleteComponent.limpar();
   }
 
   ngOnDestroy(): void {
