@@ -192,21 +192,9 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
 
   private async adicionarFrequenciaRegistro(aluno: any, turma: any) {
     const dataFormulario = this.formularioCheckin.get('data')?.value;
-    const dataAgora = new Date();
-    const fusoHorarioBrasilia = -3; // Fuso horário de Brasília (UTC-3)
-    const dataComHoraAtual = new Date(
-      dataFormulario.getUTCFullYear(),
-      dataFormulario.getUTCMonth(),
-      dataFormulario.getUTCDate(),
-      dataAgora.getUTCHours() + fusoHorarioBrasilia,
-      dataAgora.getUTCMinutes(),
-      dataAgora.getUTCSeconds(),
-      dataAgora.getUTCMilliseconds()
-    );
-
     var inputFrequencia: FrequenciaInput = {
       "codigo": 0,
-      "dataFrequencia": dataComHoraAtual,
+      "dataFrequencia": dataFormulario,
       "codigoAluno": aluno.codigo,
       "codigoTurma": turma.codigoTurma,
       "presenca": true,
