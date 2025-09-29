@@ -9,7 +9,7 @@ import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
-import { ehAniversarioNaData, isDate, obterDataHoraBrasileira, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
+import { ehAniversarioNaData, formatarDataBrasileira, isDate, obterDataHoraBrasileira, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import { FrequenciaService } from '../frequencia.service';
 import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
@@ -191,9 +191,22 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
   }
 
   private async adicionarFrequenciaRegistro(aluno: any, turma: any) {
+    const dataFormulario = this.formularioCheckin.get('data')?.value;
+    const dataAgora = new Date();
+    const fusoHorarioBrasilia = -3; // Fuso horário de Brasília (UTC-3)
+    const dataComHoraAtual = new Date(
+      dataFormulario.getUTCFullYear(),
+      dataFormulario.getUTCMonth(),
+      dataFormulario.getUTCDate(),
+      dataAgora.getUTCHours() + fusoHorarioBrasilia,
+      dataAgora.getUTCMinutes(),
+      dataAgora.getUTCSeconds(),
+      dataAgora.getUTCMilliseconds()
+    );
+
     var inputFrequencia: FrequenciaInput = {
       "codigo": 0,
-      "dataFrequencia": obterDataHoraBrasileira(),
+      "dataFrequencia": dataComHoraAtual,
       "codigoAluno": aluno.codigo,
       "codigoTurma": turma.codigoTurma,
       "presenca": true,
