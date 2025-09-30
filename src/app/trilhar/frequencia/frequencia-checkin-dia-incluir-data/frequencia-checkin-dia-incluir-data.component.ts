@@ -180,7 +180,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
 
     if (!!aluno.matricula) { //se a turma for selecionada
       var retorno = await this.adicionarFrequenciaRegistro(aluno, turma);
-      if (!retorno || retorno.dados) {
+      if (retorno || retorno.dados) {
         this.mensagemService.showSuccess('Check-in registrada com sucesso!');
         this.childAutoCompleteComponent.limpar();
         this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
