@@ -9,7 +9,7 @@ import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
 import { BaseListComponent } from '../../../shared/formulario/baseList';
-import { ehAniversarioNaData, formatarDataBrasileira, isDate, obterDataHoraBrasileira, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
+import { dataString, ehAniversarioNaData, formatarDataBrasileira, formatDataToFormatoAnoMesDia, isDate, obterDataHoraBrasileira, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import { FrequenciaService } from '../frequencia.service';
 import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
@@ -178,20 +178,27 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
       return;
     }
 
-    if (!!aluno.matricula) { //se a turma for selecionada
-      var retorno = await this.adicionarFrequenciaRegistro(aluno, turma);
-      if (retorno || retorno.dados) {
-        this.mensagemService.showSuccess('Check-in registrada com sucesso!');
-        this.childAutoCompleteComponent.limpar();
-        this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
-        this.alunoAtual = null;
+    var frequenciasAlunoTurmaData = await this.frequenciaService.listarPorAlunoETurmaEDataPromise(aluno.codigo, turma.codigoTurma, formatDataToFormatoAnoMesDia(data));
+    if (frequenciasAlunoTurmaData && frequenciasAlunoTurmaData?.dados.some((x: any) => x.presenca)) {
+      const frequencia = frequenciasAlunoTurmaData?.dados.find((x: any) => x.presenca);
+
+      if (frequencia.presenca) {
+        this.mensagemService.showInfo(`Check-in já registrado na data ${formatarDataBrasileira(frequencia.dataFrequencia)} ${frequencia.dataFrequencia.split('T')[1]}`);
+        return;
       }
+    }
+
+    var retorno = await this.adicionarFrequenciaRegistro(aluno, turma, data);
+    if (retorno || retorno.dados) {
+      this.mensagemService.showSuccess('Check-in registrada com sucesso!');
+      this.childAutoCompleteComponent.limpar();
+      this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
+      this.alunoAtual = null;
     }
 
   }
 
-  private async adicionarFrequenciaRegistro(aluno: any, turma: any) {
-    const dataFormulario = this.formularioCheckin.get('data')?.value;
+  private async adicionarFrequenciaRegistro(aluno: any, turma: any, dataFormulario: Date): Promise<any> {
     var inputFrequencia: FrequenciaInput = {
       "codigo": 0,
       "dataFrequencia": dataFormulario,

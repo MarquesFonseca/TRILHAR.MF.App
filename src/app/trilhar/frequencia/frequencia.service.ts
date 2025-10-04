@@ -404,6 +404,53 @@ export class FrequenciaService {
     }
   }
 
+  /** GET /api/frequencias/alunos/{codigoAluno}/turmas/{codigoTurma}/data/{data}
+  * Retorna todas as frequências do aluno, turma e data da frequencia.
+  *
+  * Exemplo de uso com Observable:
+  * this.frequenciaService.listarPorAlunoETurmaEData(123, 456, '2025-05-17').subscribe({
+  *   next: (data) => {
+  *     this.frequenciasAlunoTurma = data;
+  *     console.log('Frequências do aluno na turma:', this.frequenciasAlunoTurma);
+  *   },
+  *   error: (err) => {
+  *     console.error('Erro ao carregar frequências do aluno na turma:', err);
+  *   }
+  * });
+  */
+  listarPorAlunoETurmaEData(codigoAluno: number, codigoTurma: number, data: string): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get<any[]>(`${this.apiUrl}/alunos/${codigoAluno}/turmas/${codigoTurma}/data/${data}`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  /** GET /api/frequencias/alunos/{codigoAluno}/turmas/{codigoTurma}/data/{data}
+  * Retorna todas as frequências do aluno, turma e data da frequencia (versão Promise)
+  *
+  * Exemplo de uso com Promise:
+  * async carregarFrequenciasAlunoTurmaData(codigoAluno: number, codigoTurma: number, data: string) {
+  *   try {
+  *     this.frequenciasAlunoTurma = await this.frequenciaService.listarPorAlunoETurmaEDataPromise(codigoAluno, codigoTurma, data);
+  *   } catch (err) {
+  *     console.error('Erro:', err);
+  *   }
+  * }
+  */
+  async listarPorAlunoETurmaEDataPromise(codigoAluno: number, codigoTurma: number, data: string): Promise<any> {
+    this.loadingService.show();
+    try {
+      return await firstValueFrom(
+        this.http.get<any[]>(`${this.apiUrl}/alunos/${codigoAluno}/turmas/${codigoTurma}/data/${data}`)
+      );
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao obter frequências do aluno na turma', error);
+      throw error;
+    } finally {
+      this.loadingService.hide();
+    }
+  }
+
   /** POST /api/frequencias
   * Inclui um novo registro de frequência
   *
