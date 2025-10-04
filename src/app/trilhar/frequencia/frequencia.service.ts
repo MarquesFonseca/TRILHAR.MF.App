@@ -216,7 +216,7 @@ export class FrequenciaService {
     }
   }
 
-  /** GET /api/frequencias/turmas/{codigoTurma}/data/{data}
+  /** GET /api/frequencias/turma/{codigoTurma}/data/{data}
   * Retorna todas as frequências [Presentes + Ausentes] das turma para o dia informado
   *
   * Exemplo de uso com Observable:
@@ -233,11 +233,11 @@ export class FrequenciaService {
   listarPorTurmaEData(codigoTurma: number, data: string): Observable<any[]> {
     this.loadingService.show();
     return this.http
-      .get<any[]>(`${this.apiUrl}/turmas/${codigoTurma}/data/${data}`)
+      .get<any[]>(`${this.apiUrl}/turma/${codigoTurma}/data/${data}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  /** GET /api/frequencias/turmas/{codigoTurma}/data/{data}
+  /** GET /api/frequencias/turma/{codigoTurma}/data/{data}
   * Retorna todas as frequências [Presentes + Ausentes] das turma para o dia informado (versão Promise)
   *
   * Exemplo de uso com Promise:
@@ -253,7 +253,7 @@ export class FrequenciaService {
     this.loadingService.show();
     try {
       return await firstValueFrom(
-        this.http.get<any[]>(`${this.apiUrl}/turmas/${codigoTurma}/data/${data}`)
+        this.http.get<any[]>(`${this.apiUrl}/turma/${codigoTurma}/data/${data}`)
       );
     } catch (error: any) {
       this.mensagemService.showError('Erro ao obter frequências da turma por data', error);
@@ -310,7 +310,7 @@ export class FrequenciaService {
     }
   }
 
-  /** GET /api/frequencias/turmas/{codigoTurma}
+  /** GET /api/frequencias/turma/{codigoTurma}
   * Retorna todas as frequências da turma
   *
   * Exemplo de uso com Observable:
@@ -327,11 +327,11 @@ export class FrequenciaService {
   listarPorTurma(codigoTurma: number): Observable<any[]> {
     this.loadingService.show();
     return this.http
-      .get<any[]>(`${this.apiUrl}/turmas/${codigoTurma}`)
+      .get<any[]>(`${this.apiUrl}/turma/${codigoTurma}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  /** GET /api/frequencias/turmas/{codigoTurma}
+  /** GET /api/frequencias/turma/{codigoTurma}
   * Retorna todas as frequências da turma (versão Promise)
   *
   * Exemplo de uso com Promise:
@@ -347,7 +347,7 @@ export class FrequenciaService {
     this.loadingService.show();
     try {
       return await firstValueFrom(
-        this.http.get<any[]>(`${this.apiUrl}/turmas/${codigoTurma}`)
+        this.http.get<any[]>(`${this.apiUrl}/turma/${codigoTurma}`)
       );
     } catch (error: any) {
       this.mensagemService.showError('Erro ao obter frequências da turma', error);
@@ -357,7 +357,7 @@ export class FrequenciaService {
     }
   }
 
-  /** GET /api/frequencias/alunos/{codigoAluno}/turmas/{codigoTurma}
+  /** GET /api/frequencias/aluno/{codigoAluno}/turma/{codigoTurma}
   * Retorna todas as frequências do aluno e da turma
   *
   * Exemplo de uso com Observable:
@@ -374,11 +374,11 @@ export class FrequenciaService {
   listarPorAlunoETurma(codigoAluno: number, codigoTurma: number): Observable<any[]> {
     this.loadingService.show();
     return this.http
-      .get<any[]>(`${this.apiUrl}/alunos/${codigoAluno}/turmas/${codigoTurma}`)
+      .get<any[]>(`${this.apiUrl}/aluno/${codigoAluno}/turma/${codigoTurma}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  /** GET /api/frequencias/alunos/{codigoAluno}/turmas/{codigoTurma}
+  /** GET /api/frequencias/aluno/{codigoAluno}/turma/{codigoTurma}
   * Retorna todas as frequências do aluno e da turma (versão Promise)
   *
   * Exemplo de uso com Promise:
@@ -394,7 +394,7 @@ export class FrequenciaService {
     this.loadingService.show();
     try {
       return await firstValueFrom(
-        this.http.get<any[]>(`${this.apiUrl}/alunos/${codigoAluno}/turmas/${codigoTurma}`)
+        this.http.get<any[]>(`${this.apiUrl}/aluno/${codigoAluno}/turma/${codigoTurma}`)
       );
     } catch (error: any) {
       this.mensagemService.showError('Erro ao obter frequências do aluno na turma', error);
@@ -404,7 +404,7 @@ export class FrequenciaService {
     }
   }
 
-  /** GET /api/frequencias/alunos/{codigoAluno}/turmas/{codigoTurma}/data/{data}
+  /** GET /api/frequencias/aluno/{codigoAluno}/turma/{codigoTurma}/data/{data}
   * Retorna todas as frequências do aluno, turma e data da frequencia.
   *
   * Exemplo de uso com Observable:
@@ -421,11 +421,11 @@ export class FrequenciaService {
   listarPorAlunoETurmaEData(codigoAluno: number, codigoTurma: number, data: string): Observable<any> {
     this.loadingService.show();
     return this.http
-      .get<any[]>(`${this.apiUrl}/alunos/${codigoAluno}/turmas/${codigoTurma}/data/${data}`)
+      .get<any[]>(`${this.apiUrl}/aluno/${codigoAluno}/turma/${codigoTurma}/data/${data}`)
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
-  /** GET /api/frequencias/alunos/{codigoAluno}/turmas/{codigoTurma}/data/{data}
+  /** GET /api/frequencias/aluno/{codigoAluno}/turma/{codigoTurma}/data/{data}
   * Retorna todas as frequências do aluno, turma e data da frequencia (versão Promise)
   *
   * Exemplo de uso com Promise:
@@ -441,11 +441,20 @@ export class FrequenciaService {
     this.loadingService.show();
     try {
       return await firstValueFrom(
-        this.http.get<any[]>(`${this.apiUrl}/alunos/${codigoAluno}/turmas/${codigoTurma}/data/${data}`)
+        this.http.get<any[]>(`${this.apiUrl}/aluno/${codigoAluno}/turma/${codigoTurma}/data/${data}`)
       );
     } catch (error: any) {
-      this.mensagemService.showError('Erro ao obter frequências do aluno na turma', error);
-      throw error;
+      if (error.status === 404) {
+        return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
+      } else if (error.status === 400) {
+        const erros = error.error?.erros || ['Erro de validação.'];
+        this.mensagemService.showError(erros.join('\n'), error);
+      } else {
+        this.mensagemService.showError('Erro inesperado.', error);
+        throw error;
+      }
+      //return throwError(() => error); // dispara erro para quem consome
+      return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
     } finally {
       this.loadingService.hide();
     }
