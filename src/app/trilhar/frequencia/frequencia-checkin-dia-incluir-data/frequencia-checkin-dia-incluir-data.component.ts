@@ -179,9 +179,9 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     }
 
     var frequenciasAlunoTurmaData = await this.frequenciaService.listarPorAlunoETurmaEDataPromise(aluno.codigo, turma.codigoTurma, formatDataToFormatoAnoMesDia(data));
-    if (frequenciasAlunoTurmaData && frequenciasAlunoTurmaData?.dados.some((x: any) => x.presenca)) {
+    const frequencias = frequenciasAlunoTurmaData?.dados ?? []; // se for null, vira []
+    if (frequencias.length > 0 && frequencias.some((x: any) => x.presenca)) {
       const frequencia = frequenciasAlunoTurmaData?.dados.find((x: any) => x.presenca);
-
       if (frequencia.presenca) {
         this.mensagemService.showInfo(`Check-in já registrado na data ${formatarDataBrasileira(frequencia.dataFrequencia)} ${frequencia.dataFrequencia.split('T')[1]}`);
         return;
