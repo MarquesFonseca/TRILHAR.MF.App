@@ -45,6 +45,18 @@ export function formatarData(data: Date): string {
   return dia + '/' + mes + '/' + ano;
 }
 
+export function parseDataLocal(yyyyMmDd: string): Date {
+  const [ano, mes, dia] = yyyyMmDd.split('-').map(Number);
+  // mês -1 porque o Date usa 0 = janeiro
+  return new Date(ano, mes - 1, dia);
+}
+
+export function parseDataLocalToString(yyyyMmDd: string): string {
+  const [ano, mes, dia] = yyyyMmDd.split('-').map(Number);
+  // mês -1 porque o Date usa 0 = janeiro
+  return formatarData(new Date(ano, mes - 1, dia));
+}
+
 export function formatarDataComPontos(data: Date): string {
   let dia = data.getDate().toString().padStart(2, '0');
   let mes = (data.getMonth() + 1).toString().padStart(2, '0'); //+1 pois no getMonth Janeiro começa com zero.
