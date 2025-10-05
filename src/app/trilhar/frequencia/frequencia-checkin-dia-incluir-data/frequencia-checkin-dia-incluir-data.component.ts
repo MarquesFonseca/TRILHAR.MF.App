@@ -1,21 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 import { MaterialModule } from '../../../material.module';
 import { MensagemService } from '../../../services/mensagem.service';
-import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
-import { BaseListComponent } from '../../../shared/formulario/baseList';
-import { dataString, ehAniversarioNaData, formatarDataBrasileira, formatDataToFormatoAnoMesDia, isDate, obterDataHoraBrasileira, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
-import * as validar from '../../../shared/funcoes-comuns/validators/validator';
-import { FrequenciaService } from '../frequencia.service';
 import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
-import * as types from '../../crianca/crianca.types';
+import { BaseListComponent } from '../../../shared/formulario/baseList';
+import { formatDataToFormatoAnoMesDia, obterDataHoraBrasileira, parseDataLocalToString, retornaIdadeFormatadaAnoMesDia } from '../../../shared/funcoes-comuns/utils';
 import { CriancaService } from '../../crianca/crianca.service';
-import { isNullOrEmpty } from '../../../shared/funcoes-comuns/utils';
+import * as types from '../../crianca/crianca.types';
+import { FrequenciaService } from '../frequencia.service';
 import { FrequenciaInput } from '../frequencia.types';
 
 @Component({
@@ -178,16 +174,26 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
       return;
     }
 
-    var frequenciasAlunoTurmaData = await this.frequenciaService.listarPorAlunoETurmaEDataPromise(aluno.codigo, turma.codigoTurma, formatDataToFormatoAnoMesDia(data));
-    const frequencias = frequenciasAlunoTurmaData?.dados ?? []; // se for null, vira []
-    if (frequencias.length > 0 && frequencias.some((x: any) => x.presenca)) {
-      const frequencia = frequenciasAlunoTurmaData?.dados.find((x: any) => x.presenca);
-      if (frequencia.presenca) {
-        this.mensagemService.showInfo(`Check-in já registrado na data ${formatarDataBrasileira(frequencia.dataFrequencia)} ${frequencia.dataFrequencia.split('T')[1]}`);
-        return;
-      }
+    //verifica se o check-in já foi registrado para o aluno na data selecionada
+    const frequenciasAlunoTurmaData = await this.frequenciaService.listarPorAlunoETurmaEDataPromise(aluno.codigo, turma.codigoTurma, formatDataToFormatoAnoMesDia(data));
+    const frequencias = frequenciasAlunoTurmaData?.dados ?? [];
+    const frequenciaComPresenca = frequencias.find((x: any) => x.presenca);
+    if (frequencias.length > 0 && frequenciaComPresenca) {
+      const [dataParte, horaParte] = frequenciaComPresenca.dataFrequencia.split('T');
+      this.mensagemService.showInfo(`Check-in já registrado na data ${parseDataLocalToString(dataParte)} ${horaParte}`);
+      return;
     }
 
+    //verifica se a turma atingiu o limite máximo de crianças na data selecionada
+    const listarTurmasAgrupadasPorData = await this.frequenciaService.listarTurmasAgrupadasPorDataPromise(formatDataToFormatoAnoMesDia(data));
+    const turmasAgrupadas = listarTurmasAgrupadasPorData?.dados ?? [];
+    const turmaLotada = turmasAgrupadas.find((x: any) => x.codigoTurma === turma.codigoTurma && x.qtd === x.turmaLimiteMaximo);
+    if (turmasAgrupadas.length > 0 && turmaLotada) {
+      this.mensagemService.showInfo(`Turma ${turmaLotada.turmaDescricaoFormatada} está com a capacidade máxima atingida.`);
+      return;
+    }
+
+    //adiciona o registro de frequência (check-in)
     var retorno = await this.adicionarFrequenciaRegistro(aluno, turma, data);
     if (retorno || retorno.dados) {
       this.mensagemService.showSuccess('Check-in registrada com sucesso!');
@@ -195,7 +201,6 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
       this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
       this.alunoAtual = null;
     }
-
   }
 
   private async adicionarFrequenciaRegistro(aluno: any, turma: any, dataFormulario: Date): Promise<any> {

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { finalize, firstValueFrom, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { finalize, firstValueFrom, Observable, of } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LoadingService } from '../../services/loading.service';
 import { MensagemService } from '../../services/mensagem.service';
-import * as types from './turma.types';
 
 @Injectable({
   providedIn: 'root', // Isso garante que o serviço seja singleton no root injector
@@ -62,6 +61,29 @@ export class TurmaService {
             }
         }
     });
+  }
+
+  async listarPorFiltroPromise(filtro: any): Promise<any> {
+    this.loadingService.show();
+    try {
+      return await firstValueFrom(
+        this.http.post(`${this.apiUrl}/listarPorFiltro`, filtro)
+      );
+    } catch (error: any) {
+      if (error.status === 404) {
+        return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
+      } else if (error.status === 400) {
+        const erros = error.error?.erros || ['Erro de validação.'];
+        this.mensagemService.showError(erros.join('\n'), error);
+      } else {
+        this.mensagemService.showError('Erro inesperado.', error);
+        throw error;
+      }
+      //return throwError(() => error); // dispara erro para quem consome
+      return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
+    } finally {
+      this.loadingService.hide();
+    }
   }
 
   Incluir(Entity: any, callback?: any) {

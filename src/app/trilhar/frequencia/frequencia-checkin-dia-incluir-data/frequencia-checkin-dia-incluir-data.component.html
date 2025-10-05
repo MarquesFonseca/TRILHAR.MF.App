@@ -94,9 +94,14 @@
             </h2>
           </div> -->
 
+          <div class="mb-20" *ngIf="alunoAtual?.codigoCadastro">
+            <h2>
+              <b>Criança:</b> {{ alunoAtual?.codigoCadastro }} - {{ alunoAtual?.nomeCrianca }}
+            </h2>
+          </div>
           <div class="mb-20" *ngIf="alunoAtual?.matricula && alunoAtual?.matricula.turmaDescricao">
             <h2>
-              <b>Sala:</b> {{ alunoAtual?.matricula.turmaDescricao }}
+              <b>Sala:</b> {{ alunoAtual?.matricula.turmaDescricao }} - {{alunoAtual?.matricula.turmaAnoLetivo}}/{{alunoAtual?.matricula.turmaSemestreLetivo}}
               <span class="badge"
                 [ngStyle]="{ backgroundColor: getCorSala(alunoAtual?.matricula.turmaDescricao), color: 'white', padding: '4px 8px', borderRadius: '6px', fontSize: '0.8rem' }">
                 {{ alunoAtual?.matricula.turmaDescricao.split(' ')[0] }}

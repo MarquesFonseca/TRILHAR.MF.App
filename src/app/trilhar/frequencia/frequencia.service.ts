@@ -202,15 +202,24 @@ export class FrequenciaService {
   *   }
   * }
   */
-  async listarTurmasAgrupadasPorDataPromise(data: string): Promise<any[]> {
+  async listarTurmasAgrupadasPorDataPromise(data: string): Promise<any> {
     this.loadingService.show();
     try {
       return await firstValueFrom(
         this.http.get<any[]>(`${this.apiUrl}/turmas/agrupadas/data/${data}`)
       );
     } catch (error: any) {
-      this.mensagemService.showError('Erro ao obter turmas agrupadas por data', error);
-      throw error;
+      if (error.status === 404) {
+        return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
+      } else if (error.status === 400) {
+        const erros = error.error?.erros || ['Erro de validação.'];
+        this.mensagemService.showError(erros.join('\n'), error);
+      } else {
+        this.mensagemService.showError('Erro inesperado.', error);
+        throw error;
+      }
+      //return throwError(() => error); // dispara erro para quem consome
+      return of({ dados: null }); // evita que o subscribe dispare erro, depende da lógica desejada
     } finally {
       this.loadingService.hide();
     }
