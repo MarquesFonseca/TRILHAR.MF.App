@@ -146,6 +146,20 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
         var alunoOutput: types.IAlunoOutput[] = res.dados.dados;
         this.alunoAtual = alunoOutput[0] || null;
         this.alunoAtual.idadeCrianca = `${new Date(this.alunoAtual.dataNascimento)?.toLocaleDateString('pt-BR')} - ${retornaIdadeFormatadaAnoMesDia(new Date(this.alunoAtual.dataNascimento))}`;
+
+        this.frequenciaService.listarPorAlunoETurmaEData(this.alunoAtual.codigo, this.alunoAtual.matricula.codigoTurma, formatDataToFormatoAnoMesDia(this.formularioCheckin.get('data')?.value)).subscribe({
+          next: (data) => {
+            const frequencias = data?.dados ?? [];
+            const frequenciaComPresenca = frequencias.find((x: any) => x.presenca);
+            if (frequencias.length > 0 && frequenciaComPresenca) {
+              const [dataParte, horaParte] = frequenciaComPresenca.dataFrequencia.split('T');
+              this.alunoAtual.frequencia = {};
+              this.alunoAtual.frequencia.dataFrequenciaParte = parseDataLocalToString(dataParte);
+              this.alunoAtual.frequencia.horaFrequenciaParte = horaParte;
+              this.mensagemService.showInfo(`Check-in já registrado na data ${this.alunoAtual.frequencia.dataFrequenciaParte} ${this.alunoAtual.frequencia.horaFrequenciaParte}`);
+            }
+          }
+        });
       }
     });
   }
@@ -189,7 +203,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     const turmasAgrupadas = listarTurmasAgrupadasPorData?.dados ?? [];
     const turmaLotada = turmasAgrupadas.find((x: any) => x.codigoTurma === turma.codigoTurma && x.qtd === x.turmaLimiteMaximo);
     if (turmasAgrupadas.length > 0 && turmaLotada) {
-      this.mensagemService.showInfo(`Turma ${turmaLotada.turmaDescricaoFormatada} está com a capacidade máxima atingida.`);
+      this.mensagemService.showInfo(`Turma ${turmaLotada.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${turmaLotada.turmaLimiteMaximo} crianças.`);
       return;
     }
 
@@ -244,6 +258,9 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
       return true;
     }
     if (!aluno?.matricula?.ativo) {
+      return true;
+    }
+    if (aluno?.frequencia) {
       return true;
     }
 
