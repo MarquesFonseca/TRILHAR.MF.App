@@ -94,6 +94,11 @@
             </h2>
           </div> -->
 
+          <div class="mb-20" *ngIf="alunoAtual?.frequencia">
+            <h2>
+              <b>Data do Check-in:</b> {{ alunoAtual?.frequencia?.dataFrequenciaParte }} {{ alunoAtual?.frequencia?.horaFrequenciaParte }}
+            </h2>
+          </div>
           <div class="mb-20" *ngIf="alunoAtual?.codigoCadastro">
             <h2>
               <b>Criança:</b> {{ alunoAtual?.codigoCadastro }} - {{ alunoAtual?.nomeCrianca }}
