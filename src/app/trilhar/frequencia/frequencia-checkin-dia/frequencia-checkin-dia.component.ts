@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { MaterialModule } from '../../../material.module';
 import { MatPaginator } from '@angular/material/paginator';
-import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
-import { BaseListComponent } from '../../../shared/formulario/baseList';
-import { FrequenciaService } from '../frequencia.service';
-import { MensagemService } from '../../../services/mensagem.service';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
+import { MaterialModule } from '../../../material.module';
+import { MensagemService } from '../../../services/mensagem.service';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
-import * as validar from '../../../shared/funcoes-comuns/validators/validator';
+import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { formatDataToFormatoAnoMesDia } from '../../../shared/funcoes-comuns/utils';
+import * as validar from '../../../shared/funcoes-comuns/validators/validator';
+import { FrequenciaService } from '../frequencia.service';
 
 @Component({
   selector: 'app-frequencia-checkin-dia',
@@ -158,14 +158,14 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
 
           this.turmasAgrupadas.push({
             codigoTurma: 0,
-            turmaDescricaoFormatada: 'TOTAL',
+            turmaDescricaoFormatada: 'GERAL',
             turmaIdadeInicialAlunoFormatada: '',
             turmaIdadeFinalAlunoFormatada: '',
             qtdRestante: somaTotalRestante,
             qtdRestanteFormatada: somaTotalRestante,
-            dataFrequencia: '',
-            dataFrequenciaFormatada: '',
-            turmaDescricao: 'TOTAL',
+            dataFrequencia: this.turmasAgrupadas[0].dataFrequencia,
+            dataFrequenciaFormatada: this.turmasAgrupadas[0].dataFrequenciaFormatada,
+            turmaDescricao: 'GERAL',
             turmaAnoLetivo: 0,
             turmaSemestreLetivo: 0,
             turmaIdadeInicialAluno: '',
@@ -189,27 +189,68 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   }
 
   async carregarFrequenciasTurma(codigoTurma: number, descricaoTurma: string, data: string) {
-    if (codigoTurma == 0) {
-      return;
-    }
     this.descricaoTuramaSelecionda = descricaoTurma;
-    try {
-      var ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data.split('T')[0]);
-      this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
-      this.frequenciasAusentesTurmaEData = ret.dados
-        .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
-        .sort((a: any, b: any) => {
-          // Ordenação por nome de forma ascendente (A-Z)
-          return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
-        });
+    this.frequenciasPresentesTurmaEData = [];
+    this.frequenciasAusentesTurmaEData = [];
+    this.frequenciasPresentesTurmaEDataPossueAlergia = [];
+    this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = [];
+    this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = [];
+    this.frequenciasPresentesTurmaEDataPossueAniversario = [];
+    if (codigoTurma == 0) {
+      try {
+        const ret: any = await this.frequenciaService.listarPorDataPromise(data.split('T')[0]);
+        this.frequenciasPresentesTurmaEData = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true)
+          .sort((a: any, b: any) => {
+            return a.dataFrequencia.localeCompare(b.dataFrequencia);
+          });
+        this.frequenciasAusentesTurmaEData = ret.dados
+          .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && this.ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada))
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+      } catch (err) {
+        console.error('Erro:', err);
+      }
+    }
+    if (codigoTurma > 0) {
+      try {
+        const ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data.split('T')[0]);
+        this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
+        this.frequenciasAusentesTurmaEData = ret.dados
+          .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
+          .sort((a: any, b: any) => {
+            // Ordenação por nome de forma ascendente (A-Z)
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
 
-      this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true);
-      this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true);
-      this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true);
-      this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && this.ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada));
-
-    } catch (err) {
-      console.error('Erro:', err);
+        this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true);
+        this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true);
+        this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true);
+        this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && this.ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada));
+      } catch (err) {
+        console.error('Erro:', err);
+      }
     }
   }
 

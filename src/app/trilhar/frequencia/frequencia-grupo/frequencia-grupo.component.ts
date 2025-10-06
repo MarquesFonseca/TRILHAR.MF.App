@@ -120,6 +120,9 @@ export class FrequenciaGrupoComponent extends BaseListComponent implements OnIni
         if (res?.dados) {
           this.totalItems = res.dados.totalItens;
           var matriculaOutput = res.dados.dados;
+          matriculaOutput = matriculaOutput.sort((a: any, b: any) =>
+            a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca)
+          );
           this.dataSource = new MatTableDataSource<any>(matriculaOutput);
         }
       });
