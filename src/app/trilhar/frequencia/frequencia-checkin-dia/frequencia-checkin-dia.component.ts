@@ -12,6 +12,8 @@ import { BaseListComponent } from '../../../shared/formulario/baseList';
 import { formatDataToFormatoAnoMesDia } from '../../../shared/funcoes-comuns/utils';
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import { FrequenciaService } from '../frequencia.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FrequenciaCheckinDiaDetalhesModalComponent } from '../frequencia-checkin-dia-detalhes-modal/frequencia-checkin-dia-detalhes-modal.component';
 
 @Component({
   selector: 'app-frequencia-checkin-dia',
@@ -55,6 +57,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     private fb: FormBuilder,
     private frequenciaService: FrequenciaService,
     private mensagemService: MensagemService,
+    private dialog: MatDialog,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
   ) {
@@ -236,22 +239,42 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     if (codigoTurma > 0) {
       try {
         const ret: any = await this.frequenciaService.listarPorTurmaEDataPromise(codigoTurma, data.split('T')[0]);
-        this.frequenciasPresentesTurmaEData = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true);
+        this.frequenciasPresentesTurmaEData = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true)
+          .sort((a: any, b: any) => {
+            return a.dataFrequencia.localeCompare(b.dataFrequencia);
+          });
         this.frequenciasAusentesTurmaEData = ret.dados
           .filter((x: any) => x.presenca == false && x.alunoAtivo == true)
           .sort((a: any, b: any) => {
-            // Ordenação por nome de forma ascendente (A-Z)
             return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
           });
 
-        this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true);
-        this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true);
-        this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true);
-        this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados.filter((x: any) => x.presenca == true && x.alunoAtivo == true && this.ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada));
+        this.frequenciasPresentesTurmaEDataPossueAlergia = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoAlergia == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoRestricaoAlimentar == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && x.alunoDeficienciaOuSituacaoAtipica == true)
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
+        this.frequenciasPresentesTurmaEDataPossueAniversario = ret.dados
+          .filter((x: any) => x.presenca == true && x.alunoAtivo == true && this.ehAniversarioNaData(x.alunoDataNascimento, this.dataSelecionada))
+          .sort((a: any, b: any) => {
+            return a.alunoNomeCrianca.localeCompare(b.alunoNomeCrianca);
+          });
       } catch (err) {
         console.error('Erro:', err);
       }
     }
+    this.abrirModalFrequencias();
   }
 
   override preencheFiltro(): void {
@@ -302,5 +325,22 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
       console.error('Erro ao verificar aniversário:', error);
       return false;
     }
+  }
+
+  abrirModalFrequencias() {
+    this.dialog.open(FrequenciaCheckinDiaDetalhesModalComponent, {
+      width: '80vw',
+      maxHeight: '90vh',
+      data: {
+        dataSelecionada: this.dataSelecionada,
+        descricaoTuramaSelecionda: this.descricaoTuramaSelecionda,
+        frequenciasPresentesTurmaEData: this.frequenciasPresentesTurmaEData,
+        frequenciasAusentesTurmaEData: this.frequenciasAusentesTurmaEData,
+        frequenciasPresentesTurmaEDataPossueAlergia: this.frequenciasPresentesTurmaEDataPossueAlergia,
+        frequenciasPresentesTurmaEDataPossueRestricaoAlimentar: this.frequenciasPresentesTurmaEDataPossueRestricaoAlimentar,
+        frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais: this.frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais,
+        frequenciasPresentesTurmaEDataPossueAniversario: this.frequenciasPresentesTurmaEDataPossueAniversario,
+      }
+    });
   }
 }
