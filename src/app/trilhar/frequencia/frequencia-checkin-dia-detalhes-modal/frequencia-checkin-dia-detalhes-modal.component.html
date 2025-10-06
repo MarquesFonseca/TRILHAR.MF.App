@@ -1,0 +1,309 @@
+<h5 mat-dialog-title>
+  {{ descricaoTuramaSelecionda }} - {{ dataSelecionada | date:'dd/MM/yyyy' }}
+</h5>
+<mat-dialog-content class="mat-typography">
+
+  <div style="font-size: 18px; font-weight: bold;">
+    TOTAL: {{ frequenciasPresentesTurmaEData.length + frequenciasAusentesTurmaEData.length }}
+  </div>
+
+  <mat-tab-group fitInkBarToContent>
+    <!-- Aba Presentes ---------------- -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="false">Presentes</span>
+        <!-- <mat-icon [matTooltip]="'Qtd. Presentes'" matTooltipPosition="above" style="color: #4CAF50;" [matBadge]="frequenciasPresentesTurmaEData.length" matBadgeOverlap="true" aria-hidden="false">how_to_reg</mat-icon> -->
+      </ng-template>
+      <span *ngIf="frequenciasPresentesTurmaEData.length == 0">
+        <h5 class="mb-0">
+          <!-- Nenhuma turma foi selecionada. -->
+        </h5>
+      </span>
+      <div class="events-table" *ngIf="frequenciasPresentesTurmaEData.length > 0">
+        <div class="table-responsive">
+          <table class="mat-table">
+            <!-- Cabeçalho da tabela -->
+            <thead class="mat-header">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" style="width: 10%;">Código</th>
+                <th class="mat-header-cell" style="width: 75%;">Nome</th>
+                <th class="mat-header-cell" style="width: 15%;">Check-in</th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela -->
+            <tbody>
+              <tr *ngFor="let item of frequenciasPresentesTurmaEData">
+                <td class="ellipsis">
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoCodigoCadastro}}
+                  </a>
+                </td>
+                <td class="ellipsis">
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoNomeCrianca}}
+                  </a>
+                </td>
+                <td class="ellipsis">
+                  <span>
+                    {{item.dataFrequencia | date:'HH:mm:ss'}}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="frequenciasPresentesTurmaEData.length === 0">
+                <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Aba Ausentes ---------------- -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="false">Ausentes</span>
+        <!-- <mat-icon [matTooltip]="'Qtd. Ausentes'" matTooltipPosition="above" style="color: #F44336;" [matBadge]="frequenciasAusentesTurmaEData.length" matBadgeOverlap="true" aria-hidden="false">person_remove</mat-icon> -->
+      </ng-template>
+      <span *ngIf="frequenciasAusentesTurmaEData.length == 0">
+        <h5 class="mb-0">
+          <!-- Nenhuma turma foi selecionada. -->
+        </h5>
+      </span>
+      <div class="events-table" *ngIf="frequenciasAusentesTurmaEData.length > 0">
+        <div class="table-responsive">
+          <table class="mat-table">
+            <!-- Cabeçalho da tabela -->
+            <thead class="mat-header">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" style="width: 10%;">Código</th>
+                <th class="mat-header-cell" style="width: 90%;">Nome</th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela -->
+            <tbody>
+              <tr *ngFor="let item of frequenciasAusentesTurmaEData">
+                <td class="ellipsis">
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoCodigoCadastro}}
+                  </a>
+                </td>
+                <td class="ellipsis">
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoNomeCrianca}}
+                  </a>
+                </td>
+              </tr>
+              <!-- Mensagem quando não há dados -->
+              <tr *ngIf="frequenciasAusentesTurmaEData.length === 0">
+                <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Aba Presentes Com Alergia ---------------- -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="false">Com Alergia</span>
+        <!-- <mat-icon  [matTooltip]="'Qtd. Com Alergia'" style="color: #F44336;" [matBadge]="frequenciasPresentesTurmaEDataPossueAlergia.length" matBadgeOverlap="true" aria-hidden="false">sick</mat-icon> -->
+      </ng-template>
+      <span *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length == 0">
+        <h5 class="mb-0">
+          <!-- Nenhuma turma foi selecionada. -->
+        </h5>
+      </span>
+      <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length > 0">
+        <div class="table-responsive">
+          <table class="mat-table">
+            <!-- Cabeçalho da tabela -->
+            <thead class="mat-header">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" style="width: 10%;">Código</th>
+                <th class="mat-header-cell" style="width: 50%;">Nome</th>
+                <th class="mat-header-cell" style="width: 40%;">Alergia</th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela -->
+            <tbody>
+              <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAlergia">
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoCodigoCadastro}}
+                  </a>
+                </td>
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoNomeCrianca}}
+                  </a>
+                </td>
+                <td>{{item.alunoDescricaoAlergia}}</td>
+              </tr>
+              <!-- Mensagem quando não há dados -->
+              <tr *ngIf="frequenciasPresentesTurmaEDataPossueAlergia.length === 0">
+                <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Aba Presentes Com Rest. Alimentar ---------------- -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="false">Com
+          Rest. Alim.</span>
+        <!-- <mat-icon [matTooltip]="'Qtd. Com Restrição Alimentar'"  style="color: #FF5722;" [matBadge]="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length" matBadgeOverlap="true" aria-hidden="false">restaurant</mat-icon> -->
+      </ng-template>
+      <span *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length == 0">
+        <h5 class="mb-0">
+          <!-- Nenhuma turma foi selecionada. -->
+        </h5>
+      </span>
+      <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length > 0">
+        <div class="table-responsive">
+          <table class="mat-table">
+            <!-- Cabeçalho da tabela -->
+            <thead class="mat-header">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" style="width: 10%;">Código</th>
+                <th class="mat-header-cell" style="width: 50%;">Nome</th>
+                <th class="mat-header-cell" style="width: 40%;">Rest. Alimentar</th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela -->
+            <tbody>
+              <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueRestricaoAlimentar">
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
+                  </a>
+                </td>
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoNomeCrianca}}
+                  </a>
+                </td>
+                <td>{{item.alunoDescricaoRestricaoAlimentar}}</td>
+              </tr>
+              <!-- Mensagem quando não há dados -->
+              <tr *ngIf="frequenciasPresentesTurmaEDataPossueRestricaoAlimentar.length === 0">
+                <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Aba Presentes Com Nec. Especiais ---------------- -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="false">Com
+          Sit. Atípica</span>
+        <!-- <mat-icon [matTooltip]="'Qtd. Com Sit. Atípica'" style="color: #3F51B5;" [matBadge]="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length" matBadgeOverlap="true" aria-hidden="false">accessible</mat-icon> -->
+      </ng-template>
+      <span *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length == 0">
+        <h5 class="mb-0">
+          <!-- Nenhuma turma foi selecionada. -->
+        </h5>
+      </span>
+      <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length > 0">
+        <div class="table-responsive">
+          <table class="mat-table">
+            <!-- Cabeçalho da tabela -->
+            <thead class="mat-header">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" style="width: 10%;">Código</th>
+                <th class="mat-header-cell" style="width: 50%;">Nome</th>
+                <th class="mat-header-cell" style="width: 40%;">Sit. Atípica</th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela -->
+            <tbody>
+              <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais">
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
+                  </a>
+                </td>
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoNomeCrianca}}
+                  </a>
+                </td>
+                <td>{{item.alunoDescricaoDeficiencia}}</td>
+              </tr>
+              <!-- Mensagem quando não há dados -->
+              <tr *ngIf="frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais.length === 0">
+                <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Aba Presentes Com Aniversário ---------------- -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length"
+          matBadgeOverlap="false">Aniversário</span>
+        <!-- <mat-icon [matTooltip]="'Qtd. Aniversariante'" style="color: #E91E63;" [matBadge]="frequenciasPresentesTurmaEDataPossueAniversario.length" matBadgeOverlap="true" aria-hidden="false">cake</mat-icon> -->
+      </ng-template>
+      <span *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length == 0">
+        <h5 class="mb-0">
+          <!-- Nenhuma turma foi selecionada. -->
+        </h5>
+      </span>
+      <div class="events-table" *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length > 0">
+        <div class="table-responsive">
+          <table class="mat-table">
+            <!-- Cabeçalho da tabela -->
+            <thead class="mat-header">
+              <tr class="mat-header-row">
+                <th class="mat-header-cell" style="width: 10%;">Código</th>
+                <th class="mat-header-cell" style="width: 80%;">Nome</th>
+                <th class="mat-header-cell" style="width: 10%;">Data Nasc.</th>
+              </tr>
+            </thead>
+            <!-- Corpo da tabela -->
+            <tbody>
+              <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAniversario">
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoCodigoCadastro}}
+                  </a>
+                </td>
+                <td>
+                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
+                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                    {{item.alunoNomeCrianca}}
+                  </a>
+                </td>
+                <td>{{item.alunoDataNascimento | date:'dd/MM/yyyy'}}</td>
+              </tr>
+              <!-- Mensagem quando não há dados -->
+              <tr *ngIf="frequenciasPresentesTurmaEDataPossueAniversario.length === 0">
+                <td colspan="4" class="text-center">Nenhuma turma encontrada para a data selecionada.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- ---------------- -->
+  </mat-tab-group>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Fechar</button>
+</mat-dialog-actions>

@@ -1,0 +1,70 @@
+/* ... quando exceder o tamanho do campo na grid, usada nos títulos ou descrições */
+::ng-deep .ellipsis {
+  white-space: nowrap;       /* Garante que o texto fique em uma única linha */
+  overflow: hidden;          /* Oculta o conteúdo excedente */
+  text-overflow: ellipsis;   /* Adiciona reticências no final do texto */
+}
+
+
+
+
+
+
+/* Adicione ao seu arquivo de estilos */
+::ng-deep .mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+::ng-deep .mat-table th {
+  text-align: left;
+  padding: 6px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #f5f5f5;
+}
+
+::ng-deep .mat-table td {
+  padding: 6px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+::ng-deep .mat-table tr:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+
+
+::ng-deep .search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+::ng-deep .search-input-wrapper {
+  flex: 1;
+}
+
+::ng-deep .search-button-wrapper {
+  flex-shrink: 0;
+}
+
+
+
+
+::ng-deep .link-turma {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  color: #3f51b5; // cor padrão Angular Material
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  mat-icon {
+    font-size: 16px;
+    margin-left: 4px;
+  }
+}
