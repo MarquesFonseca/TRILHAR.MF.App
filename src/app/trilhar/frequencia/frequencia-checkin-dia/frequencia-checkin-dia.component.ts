@@ -328,9 +328,14 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
   }
 
   abrirModalFrequencias(codigoTurmaSelecionada: number) {
+    // Detecta se está em mobile ou desktop
+    const isMobile = window.innerWidth <= 768;
+
     this.dialog.open(FrequenciaCheckinDiaDetalhesModalComponent, {
-      width: '80vw',
+      width: isMobile ? '98vw' : '90vw',       // mais largo no desktop
+      maxWidth: '100vw',
       maxHeight: '90vh',
+      panelClass: isMobile ? 'dialog-mobile' : 'dialog-desktop',
       data: {
         dataSelecionada: this.dataSelecionada,
         codigoTurmaSelecionada: codigoTurmaSelecionada,
@@ -344,4 +349,5 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
       }
     });
   }
+
 }
