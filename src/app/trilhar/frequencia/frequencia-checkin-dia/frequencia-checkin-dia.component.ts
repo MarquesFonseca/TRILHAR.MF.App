@@ -274,7 +274,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
         console.error('Erro:', err);
       }
     }
-    this.abrirModalFrequencias();
+    this.abrirModalFrequencias(codigoTurma);
   }
 
   override preencheFiltro(): void {
@@ -327,12 +327,13 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     }
   }
 
-  abrirModalFrequencias() {
+  abrirModalFrequencias(codigoTurmaSelecionada: number) {
     this.dialog.open(FrequenciaCheckinDiaDetalhesModalComponent, {
       width: '80vw',
       maxHeight: '90vh',
       data: {
         dataSelecionada: this.dataSelecionada,
+        codigoTurmaSelecionada: codigoTurmaSelecionada,
         descricaoTuramaSelecionda: this.descricaoTuramaSelecionda,
         frequenciasPresentesTurmaEData: this.frequenciasPresentesTurmaEData,
         frequenciasAusentesTurmaEData: this.frequenciasAusentesTurmaEData,

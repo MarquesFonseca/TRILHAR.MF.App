@@ -56,3 +56,10 @@
     margin-left: 4px;
   }
 }
+
+/* ... quando exceder o tamanho do campo na grid, usada nos títulos ou descrições */
+::ng-deep .ellipsis {
+  white-space: nowrap;       /* Garante que o texto fique em uma única linha */
+  overflow: hidden;          /* Oculta o conteúdo excedente */
+  text-overflow: ellipsis;   /* Adiciona reticências no final do texto */
+}

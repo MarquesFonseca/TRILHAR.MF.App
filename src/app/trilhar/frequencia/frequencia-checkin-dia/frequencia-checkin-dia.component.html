@@ -44,7 +44,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-7">
         <div class="events-table" *ngIf="turmasAgrupadas.length > 0">
           <div class="table-responsive">
             <table class="mat-table">
@@ -82,8 +82,8 @@
               </thead>
               <!-- Corpo da tabela -->
               <tbody>
-                <tr *ngFor="let item of turmasAgrupadas" style="font-size: 12px;">
-                  <td>
+                <tr *ngFor="let item of turmasAgrupadas">
+                  <td class="ellipsis">
                     <!-- <a mat-button (click)="carregarFrequenciasTurma(item.codigoTurma, item.turmaDescricaoFormatada, item.dataFrequencia)"
                           [matTooltip]="'Detalhar ' + item.turmaDescricao" matTooltipPosition="above">
                           {{item.turmaDescricao}}
