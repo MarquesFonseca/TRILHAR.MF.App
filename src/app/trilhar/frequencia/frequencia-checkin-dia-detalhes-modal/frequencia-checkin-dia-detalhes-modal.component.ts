@@ -52,11 +52,11 @@ export class FrequenciaCheckinDiaDetalhesModalComponent {
 
   retornaDescricaoTooltip(item: any): string {
     if (this.codigoTurmaSelecionada === 0) {
-      return `Detalhar ${item.alunoNomeCrianca} - ${item.turmaDescricao} - ${item.turmaAnoLetivo}/${item.turmaSemestreLetivo}`;
+      return `${item.alunoNomeCrianca} - ${item.turmaDescricao} - ${item.turmaAnoLetivo}/${item.turmaSemestreLetivo}`;
     }
 
     if (this.codigoTurmaSelecionada > 0) {
-      return `Detalhar ${item.alunoNomeCrianca}`;
+      return `${item.alunoNomeCrianca}`;
     }
 
     return '';
