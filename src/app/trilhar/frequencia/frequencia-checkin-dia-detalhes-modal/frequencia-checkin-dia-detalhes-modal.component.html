@@ -3,7 +3,7 @@
 </h5>
 <mat-dialog-content class="mat-typography">
 
-  <div style="font-size: 18px; font-weight: bold;">
+  <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px;">
     TOTAL: {{ frequenciasPresentesTurmaEData.length + frequenciasAusentesTurmaEData.length }}
   </div>
 
@@ -25,25 +25,27 @@
             <!-- Cabeçalho da tabela -->
             <thead class="mat-header">
               <tr class="mat-header-row">
-                <th class="mat-header-cell" style="width: 10%;">Código</th>
-                <th class="mat-header-cell" style="width: 75%;">Nome</th>
-                <th class="mat-header-cell" style="width: 15%;">Check-in</th>
+                <th class="mat-header-cell" style="width: 10%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Código</th>
+                <th class="mat-header-cell" style="width: 70%;">Nome</th>
+                <th class="mat-header-cell" style="width: 20%;">Check-in</th>
               </tr>
             </thead>
             <!-- Corpo da tabela -->
             <tbody>
               <tr *ngFor="let item of frequenciasPresentesTurmaEData">
-                <td class="ellipsis">
+                <td style="white-space: nowrap; vertical-align: middle;">
                   <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
-                    {{item.alunoCodigoCadastro}}
+                    matTooltip="{{retornaDescricaoTooltip(item)}}" matTooltipPosition="above"
+                    style="display: inline-flex; align-items: center; text-decoration: none; color: #3f51b5; cursor: pointer;">
+                    <mat-icon style="font-size: 20px; margin-right: 6px;">visibility</mat-icon>
+                    {{ item.alunoCodigoCadastro }}
                   </a>
                 </td>
                 <td class="ellipsis">
-                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                  <span>
                     {{item.alunoNomeCrianca}}
-                  </a>
+                    <!-- <pre>{{item | json}}</pre> -->
+                  </span>
                 </td>
                 <td class="ellipsis">
                   <span>
@@ -83,17 +85,18 @@
             <!-- Corpo da tabela -->
             <tbody>
               <tr *ngFor="let item of frequenciasAusentesTurmaEData">
-                <td class="ellipsis">
+                <td style="white-space: nowrap; vertical-align: middle;">
                   <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
-                    {{item.alunoCodigoCadastro}}
+                    matTooltip="{{retornaDescricaoTooltip(item)}}" matTooltipPosition="above"
+                    style="display: inline-flex; align-items: center; text-decoration: none; color: #3f51b5; cursor: pointer;">
+                    <mat-icon style="font-size: 20px; margin-right: 6px;">visibility</mat-icon>
+                    {{ item.alunoCodigoCadastro }}
                   </a>
                 </td>
                 <td class="ellipsis">
-                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                  <span>
                     {{item.alunoNomeCrianca}}
-                  </a>
+                  </span>
                 </td>
               </tr>
               <!-- Mensagem quando não há dados -->
@@ -130,17 +133,18 @@
             <!-- Corpo da tabela -->
             <tbody>
               <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAlergia">
-                <td>
+                <td style="white-space: nowrap; vertical-align: middle;">
                   <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
-                    {{item.alunoCodigoCadastro}}
+                    matTooltip="{{retornaDescricaoTooltip(item)}}" matTooltipPosition="above"
+                    style="display: inline-flex; align-items: center; text-decoration: none; color: #3f51b5; cursor: pointer;">
+                    <mat-icon style="font-size: 20px; margin-right: 6px;">visibility</mat-icon>
+                    {{ item.alunoCodigoCadastro }}
                   </a>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                <td class="ellipsis">
+                  <span>
                     {{item.alunoNomeCrianca}}
-                  </a>
+                  </span>
                 </td>
                 <td>{{item.alunoDescricaoAlergia}}</td>
               </tr>
@@ -179,17 +183,18 @@
             <!-- Corpo da tabela -->
             <tbody>
               <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueRestricaoAlimentar">
-                <td>
+                <td style="white-space: nowrap; vertical-align: middle;">
                   <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
-                    {{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
+                    matTooltip="{{retornaDescricaoTooltip(item)}}" matTooltipPosition="above"
+                    style="display: inline-flex; align-items: center; text-decoration: none; color: #3f51b5; cursor: pointer;">
+                    <mat-icon style="font-size: 20px; margin-right: 6px;">visibility</mat-icon>
+                    {{ item.alunoCodigoCadastro }}
                   </a>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                <td class="ellipsis">
+                  <span>
                     {{item.alunoNomeCrianca}}
-                  </a>
+                  </span>
                 </td>
                 <td>{{item.alunoDescricaoRestricaoAlimentar}}</td>
               </tr>
@@ -228,17 +233,18 @@
             <!-- Corpo da tabela -->
             <tbody>
               <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueNecessidadesEspeciais">
-                <td>
+                <td style="white-space: nowrap; vertical-align: middle;">
                   <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
-                    {{item.alunoCodigoCadastro}} <!--<i class="ri-arrow-right-s-line"></i> -->
+                    matTooltip="{{retornaDescricaoTooltip(item)}}" matTooltipPosition="above"
+                    style="display: inline-flex; align-items: center; text-decoration: none; color: #3f51b5; cursor: pointer;">
+                    <mat-icon style="font-size: 20px; margin-right: 6px;">visibility</mat-icon>
+                    {{ item.alunoCodigoCadastro }}
                   </a>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                <td class="ellipsis">
+                  <span>
                     {{item.alunoNomeCrianca}}
-                  </a>
+                  </span>
                 </td>
                 <td>{{item.alunoDescricaoDeficiencia}}</td>
               </tr>
@@ -277,17 +283,18 @@
             <!-- Corpo da tabela -->
             <tbody>
               <tr *ngFor="let item of frequenciasPresentesTurmaEDataPossueAniversario">
-                <td>
+                <td style="white-space: nowrap; vertical-align: middle;">
                   <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
-                    {{item.alunoCodigoCadastro}}
+                    matTooltip="{{retornaDescricaoTooltip(item)}}" matTooltipPosition="above"
+                    style="display: inline-flex; align-items: center; text-decoration: none; color: #3f51b5; cursor: pointer;">
+                    <mat-icon style="font-size: 20px; margin-right: 6px;">visibility</mat-icon>
+                    {{ item.alunoCodigoCadastro }}
                   </a>
                 </td>
-                <td>
-                  <a href="javascript:void(0)" (click)="abrirDetalhe(item.alunoCodigoCadastro)"
-                    [matTooltip]="'Detalhar ' + item.alunoNomeCrianca" matTooltipPosition="above" class="fw-medium">
+                <td class="ellipsis">
+                  <span>
                     {{item.alunoNomeCrianca}}
-                  </a>
+                  </span>
                 </td>
                 <td>{{item.alunoDataNascimento | date:'dd/MM/yyyy'}}</td>
               </tr>
