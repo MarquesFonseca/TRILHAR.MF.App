@@ -11,12 +11,12 @@
 
 
 /* Adicione ao seu arquivo de estilos */
-::ng-deep .mat-table {
+.mat-table {
+  table-layout: fixed;
   width: 100%;
-  border-collapse: collapse;
 }
 
-::ng-deep .mat-table th {
+.mat-table th {
   text-align: left;
   padding: 6px;
   font-weight: 500;
@@ -24,47 +24,15 @@
   background-color: #f5f5f5;
 }
 
-::ng-deep .mat-table td {
+.mat-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   padding: 6px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  //border: 1px solid red;
 }
 
-::ng-deep .mat-table tr:hover {
+.mat-table tr:hover {
   background-color: rgba(0, 0, 0, 0.04);
-}
-
-
-
-::ng-deep .search-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-::ng-deep .search-input-wrapper {
-  flex: 1;
-}
-
-::ng-deep .search-button-wrapper {
-  flex-shrink: 0;
-}
-
-
-
-
-::ng-deep .link-turma {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  color: #3f51b5; // cor padrão Angular Material
-  font-weight: 500;
-
-  &:hover {
-    text-decoration: underline;
-  }
-
-  mat-icon {
-    font-size: 16px;
-    margin-left: 4px;
-  }
 }
