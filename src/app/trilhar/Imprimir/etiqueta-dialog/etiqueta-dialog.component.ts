@@ -76,6 +76,7 @@ export class EtiquetaDialogComponent {
               border-right: none;
               box-sizing: border-box;
             }
+
             .codigo {
               font-size: 20px;
               font-weight: bold;
