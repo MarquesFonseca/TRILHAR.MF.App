@@ -26,7 +26,7 @@ export class EtiquetaDialogComponent {
     private dialogRef: MatDialogRef<EtiquetaDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { etiquetas: Etiqueta[] }
   ) {
-    this.etiquetas = data.etiquetas;
+    this.etiquetas = data.etiquetas.sort((a, b) => b.nome.localeCompare(a.nome));
   }
 
   fechar() {
@@ -71,7 +71,9 @@ export class EtiquetaDialogComponent {
               flex-direction: column;
               align-items: center;
               justify-content: center;
-              /* border: 1px solid #000; opcional: retire se a etiqueta já tiver borda */
+              border: 1px solid #ffffffff; /* opcional: retire se a etiqueta já tiver borda */
+              border-left: none;
+              border-right: none;
               box-sizing: border-box;
             }
             .codigo {
