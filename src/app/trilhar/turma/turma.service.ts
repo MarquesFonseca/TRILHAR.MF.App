@@ -24,6 +24,29 @@ export class TurmaService {
       .pipe(finalize(() => this.loadingService.hide()));
   }
 
+  listarPorId(Id: string): Observable<any> {
+    this.loadingService.show();
+    return this.http
+      .get(`${this.apiUrl}/${Id}`)
+      .pipe(finalize(() => this.loadingService.hide()));
+  }
+
+  async listarPorIdPromise(Id: string): Promise<any> {
+    this.loadingService.show(); // Exibe o indicador de carregamento
+    try {
+      const response = await firstValueFrom(
+        this.http.get<any>(`${this.apiUrl}/${Id}`)
+      );
+      return response; // Retorna a resposta da API
+    } catch (error: any) {
+      this.mensagemService.showError('Erro ao buscar por ID', error);
+      console.error('Erro ao buscar por ID:', error);
+      throw error; // Propaga o erro
+    } finally {
+      this.loadingService.hide(); // Oculta o indicador de carregamento
+    }
+  }
+
   ListarTurmasAtivas(): Observable<any> {
     this.loadingService.show();
     return this.http

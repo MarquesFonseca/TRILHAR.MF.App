@@ -106,11 +106,21 @@
           </div>
           <div class="mb-20" *ngIf="alunoAtual?.matricula && alunoAtual?.matricula.turmaDescricao">
             <h2>
-              <b>Sala:</b> {{ alunoAtual?.matricula.turmaDescricao }} - {{alunoAtual?.matricula.turmaAnoLetivo}}/{{alunoAtual?.matricula.turmaSemestreLetivo}}
+              <b>Sala:</b> {{ alunoAtual?.matricula.turmaDescricao }} -
+              {{alunoAtual?.matricula.turmaAnoLetivo}}/{{alunoAtual?.matricula.turmaSemestreLetivo}}
               <span class="badge"
                 [ngStyle]="{ backgroundColor: getCorSala(alunoAtual?.matricula.turmaDescricao), color: 'white', padding: '4px 8px', borderRadius: '6px', fontSize: '0.8rem' }">
                 {{ alunoAtual?.matricula.turmaDescricao.split(' ')[0] }}
               </span>
+            </h2>
+          </div>
+          <div class="mb-20"
+            *ngIf="this.turmasAgrupadasPorData.turmaLimiteMaximo !== undefined && this.turmasAgrupadasPorData.qtd !== undefined">
+            <h2 *ngIf="this.turmasAgrupadasPorData.turmaLimiteMaximo !== this.turmasAgrupadasPorData.qtd">
+              <b>Limite:</b> {{this.turmasAgrupadasPorData.turmaLimiteMaximo}} | Atual: {{this.turmasAgrupadasPorData.qtd}}
+            </h2>
+            <h2 *ngIf="this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd" style="color: red;">
+              <b>Limite:</b> {{this.turmasAgrupadasPorData.turmaLimiteMaximo}} | Atual: {{this.turmasAgrupadasPorData.qtd}}
             </h2>
           </div>
           <div class="mb-20" *ngIf="alunoAtual?.nomeMae">
