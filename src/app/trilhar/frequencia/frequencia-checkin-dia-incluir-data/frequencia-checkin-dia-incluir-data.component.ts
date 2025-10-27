@@ -13,6 +13,7 @@ import { CriancaService } from '../../crianca/crianca.service';
 import * as types from '../../crianca/crianca.types';
 import { FrequenciaService } from '../frequencia.service';
 import { FrequenciaInput } from '../frequencia.types';
+import { TurmaService } from '../../turma/turma.service';
 
 @Component({
   selector: 'app-frequencia-checkin-dia-incluir-data',
@@ -49,6 +50,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     private fb: FormBuilder,
     private criancaService: CriancaService,
     private frequenciaService: FrequenciaService,
+    private turmaService: TurmaService,
     private mensagemService: MensagemService,
     public override router: Router,
     public override activatedRoute: ActivatedRoute,
@@ -134,7 +136,6 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
   private carregaAlunoSelecionadoAutoComplete() {
     this.alunoAtual = null;
     this.turmasAgrupadasPorData = [];
-    const data = formatDataToFormatoAnoMesDia(this.formularioCheckin.get('data')?.value);
 
     if (!this.formularioCheckin.get('alunoSelecionado')?.value) {
       return;
@@ -150,9 +151,9 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
         this.alunoAtual = alunoOutput[0] || null;
         this.alunoAtual.idadeCrianca = `${new Date(this.alunoAtual.dataNascimento)?.toLocaleDateString('pt-BR')} - ${retornaIdadeFormatadaAnoMesDia(new Date(this.alunoAtual.dataNascimento))}`;
 
-        this.frequenciaService.listarPorAlunoETurmaEData(this.alunoAtual.codigo, this.alunoAtual.matricula.codigoTurma, data).subscribe({
-          next: (data) => {
-            const frequencias = data?.dados ?? [];
+        this.frequenciaService.listarPorAlunoETurmaEData(this.alunoAtual.codigo, this.alunoAtual.matricula.codigoTurma, formatDataToFormatoAnoMesDia(this.formularioCheckin.get('data')?.value)).subscribe({
+          next: (resFreqAlunoTurmaEData) => {
+            const frequencias = resFreqAlunoTurmaEData?.dados ?? [];
             const frequenciaComPresenca = frequencias.find((x: any) => x.presenca);
             if (frequencias.length > 0 && frequenciaComPresenca) {
               const [dataParte, horaParte] = frequenciaComPresenca.dataFrequencia.split('T');
@@ -164,12 +165,30 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
           }
         });
 
-        this.frequenciaService.listarTurmasAgrupadasPorData(data).subscribe({
-          next: (data) => {
-            const turmasAgrupadas = data?.dados ?? [];
-            this.turmasAgrupadasPorData = turmasAgrupadas.find((item: any) => item.codigoTurma === this.alunoAtual.matricula.codigoTurma);
-            if (this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd) {
-              this.mensagemService.showInfo(`Turma ${this.turmasAgrupadasPorData.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${this.turmasAgrupadasPorData.turmaLimiteMaximo} crianças.`);
+        this.frequenciaService.listarTurmasAgrupadasPorData(formatDataToFormatoAnoMesDia(this.formularioCheckin.get('data')?.value), false).subscribe({
+          next: (resTurmasAgrupadasPorData) => {
+            if (resTurmasAgrupadasPorData?.dados === null) {
+              this.turmaService.listarPorId(this.alunoAtual.matricula.codigoTurma).subscribe({
+                next: (resTurma) => {
+                  const turma = resTurma?.dados ?? [];
+                  this.turmasAgrupadasPorData = {
+                    codigoTurma: turma.codigo,
+                    turmaDescricaoFormatada: turma.descricaoAnoSemestreLetivo,
+                    turmaLimiteMaximo: turma.limiteMaximo,
+                    qtd: 0
+                  };
+                  if (this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd) {
+                    this.mensagemService.showInfo(`Turma ${this.turmasAgrupadasPorData.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${this.turmasAgrupadasPorData.turmaLimiteMaximo} crianças.`);
+                  }
+                }
+              });
+            }
+            if (!!resTurmasAgrupadasPorData?.dados) {
+              const turmasAgrupadas = resTurmasAgrupadasPorData?.dados ?? [];
+              this.turmasAgrupadasPorData = turmasAgrupadas.find((item: any) => item.codigoTurma === this.alunoAtual.matricula.codigoTurma);
+              if (this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd) {
+                this.mensagemService.showInfo(`Turma ${this.turmasAgrupadasPorData.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${this.turmasAgrupadasPorData.turmaLimiteMaximo} crianças.`);
+              }
             }
           }
         });
