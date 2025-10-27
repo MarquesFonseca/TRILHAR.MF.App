@@ -38,6 +38,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
   maxData: Date = new Date();
   dataSelecionada: Date = new Date();
   descricaoTuramaSelecionda: string = '';
+  turmasAgrupadasPorData: any = [];
   private subscriptions: Subscription = new Subscription();
 
   // alternado
@@ -132,6 +133,8 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
 
   private carregaAlunoSelecionadoAutoComplete() {
     this.alunoAtual = null;
+    this.turmasAgrupadasPorData = [];
+    const data = formatDataToFormatoAnoMesDia(this.formularioCheckin.get('data')?.value);
 
     if (!this.formularioCheckin.get('alunoSelecionado')?.value) {
       return;
@@ -147,7 +150,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
         this.alunoAtual = alunoOutput[0] || null;
         this.alunoAtual.idadeCrianca = `${new Date(this.alunoAtual.dataNascimento)?.toLocaleDateString('pt-BR')} - ${retornaIdadeFormatadaAnoMesDia(new Date(this.alunoAtual.dataNascimento))}`;
 
-        this.frequenciaService.listarPorAlunoETurmaEData(this.alunoAtual.codigo, this.alunoAtual.matricula.codigoTurma, formatDataToFormatoAnoMesDia(this.formularioCheckin.get('data')?.value)).subscribe({
+        this.frequenciaService.listarPorAlunoETurmaEData(this.alunoAtual.codigo, this.alunoAtual.matricula.codigoTurma, data).subscribe({
           next: (data) => {
             const frequencias = data?.dados ?? [];
             const frequenciaComPresenca = frequencias.find((x: any) => x.presenca);
@@ -157,6 +160,16 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
               this.alunoAtual.frequencia.dataFrequenciaParte = parseDataLocalToString(dataParte);
               this.alunoAtual.frequencia.horaFrequenciaParte = horaParte;
               this.mensagemService.showInfo(`Check-in já registrado na data ${this.alunoAtual.frequencia.dataFrequenciaParte} ${this.alunoAtual.frequencia.horaFrequenciaParte}`);
+            }
+          }
+        });
+
+        this.frequenciaService.listarTurmasAgrupadasPorData(data).subscribe({
+          next: (data) => {
+            const turmasAgrupadas = data?.dados ?? [];
+            this.turmasAgrupadasPorData = turmasAgrupadas.find((item: any) => item.codigoTurma === this.alunoAtual.matricula.codigoTurma);
+            if (this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd) {
+              this.mensagemService.showInfo(`Turma ${this.turmasAgrupadasPorData.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${this.turmasAgrupadasPorData.turmaLimiteMaximo} crianças.`);
             }
           }
         });
@@ -263,6 +276,11 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     if (aluno?.frequencia) {
       return true;
     }
+    if(this.turmasAgrupadasPorData.turmaLimiteMaximo !== undefined && this.turmasAgrupadasPorData.qtd !== undefined) {
+      if (this.turmasAgrupadasPorData.qtd === this.turmasAgrupadasPorData.turmaLimiteMaximo) {
+        return true;
+      }
+    }
 
     return null;
   }
@@ -292,12 +310,15 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     this.alunoAtual = null;
     this.formularioCheckin.get('alunoSelecionado')?.setValue(null);
     this.childAutoCompleteComponent.limpar();
+    this.turmasAgrupadasPorData = [];
   }
 
   ngOnDestroy(): void {
     this.descricaoTuramaSelecionda = '';
+    this.alunoAtual = null;
     this.formularioCheckin.reset();
     this.subscriptions.unsubscribe();
+    this.turmasAgrupadasPorData = [];
   }
 
   getCorSala(nome: string | undefined): string {
