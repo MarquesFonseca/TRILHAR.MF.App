@@ -6,17 +6,17 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-frequencia-checkin-dia-detalhes-modal',
+  selector: 'app-frequencia-checkin-dia-resultado-detalhes-modal',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
   ],
-  templateUrl: './frequencia-checkin-dia-detalhes-modal.component.html',
-  styleUrl: './frequencia-checkin-dia-detalhes-modal.component.scss'
+  templateUrl: './frequencia-checkin-dia-resultado-detalhes-modal.component.html',
+  styleUrl: './frequencia-checkin-dia-resultado-detalhes-modal.component.scss'
 })
-export class FrequenciaCheckinDiaDetalhesModalComponent {
+export class FrequenciaCheckinDiaResultadoDetalhesModalComponent {
   dataSelecionada: Date;
   codigoTurmaSelecionada: number;
   descricaoTuramaSelecionda: string;
@@ -29,7 +29,7 @@ export class FrequenciaCheckinDiaDetalhesModalComponent {
 
   constructor(
     private router: Router,
-    public dialogRef: MatDialogRef<FrequenciaCheckinDiaDetalhesModalComponent>,
+    public dialogRef: MatDialogRef<FrequenciaCheckinDiaResultadoDetalhesModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.dataSelecionada = data.dataSelecionada;

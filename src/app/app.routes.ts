@@ -210,7 +210,7 @@ import { MatriculaDashboardComponent } from './trilhar/matricula/matricula-dashb
 
 //Frequencias
 import { FrequenciaDashboardComponent } from './trilhar/frequencia/frequencia-dashboard/frequencia-dashboard.component';
-import { FrequenciaCheckinDiaComponent } from './trilhar/frequencia/frequencia-checkin-dia/frequencia-checkin-dia.component';
+import { FrequenciaCheckinDiaResultadoComponent } from './trilhar/frequencia/frequencia-checkin-dia-resultado/frequencia-checkin-dia-resultado.component';
 import { FrequenciaGrupoComponent } from './trilhar/frequencia/frequencia-grupo/frequencia-grupo.component';
 import { FrequenciaCheckinDiaIncluirComponent } from './trilhar/frequencia/frequencia-checkin-dia-incluir/frequencia-checkin-dia-incluir.component';
 import { FrequenciaCheckinDiaIncluirDataComponent } from './trilhar/frequencia/frequencia-checkin-dia-incluir-data/frequencia-checkin-dia-incluir-data.component';
@@ -261,7 +261,7 @@ export const routes: Routes = [
         children: [
           {path: 'dashboard', component: FrequenciaDashboardComponent, data: { rota: "dashboard", titulo: "Dashboard", breadcrumb: "Dashboard", } },
           {path: 'grupo', component: FrequenciaGrupoComponent, data: { rota: "grupo", titulo: "Resultado frequência por grupo", breadcrumb: "frequências por grupo", },},
-          {path: 'checkin-dia', component: FrequenciaCheckinDiaComponent, data: { rota: "checkin-dia", titulo: "Resultado Check-in no dia", breadcrumb: "Checkin dia", },},
+          {path: 'checkin-dia', component: FrequenciaCheckinDiaResultadoComponent, data: { rota: "checkin-dia", titulo: "Resultado Check-in no dia", breadcrumb: "Checkin dia", },},
 
           {path: 'checkin-dia/incluir', component: FrequenciaCheckinDiaIncluirComponent, data: { rota: "incluir", titulo: "Check-in no dia", breadcrumb: "Incluir", },},
           {path: 'checkin-dia/incluir/:data', component: FrequenciaCheckinDiaIncluirDataComponent, data: { rota: "incluir", titulo: "Check-in no dia", breadcrumb: "Incluir", },},
