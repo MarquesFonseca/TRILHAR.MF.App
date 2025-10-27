@@ -13,10 +13,10 @@ import { formatDataToFormatoAnoMesDia } from '../../../shared/funcoes-comuns/uti
 import * as validar from '../../../shared/funcoes-comuns/validators/validator';
 import { FrequenciaService } from '../frequencia.service';
 import { MatDialog } from '@angular/material/dialog';
-import { FrequenciaCheckinDiaDetalhesModalComponent } from '../frequencia-checkin-dia-detalhes-modal/frequencia-checkin-dia-detalhes-modal.component';
+import { FrequenciaCheckinDiaResultadoDetalhesModalComponent } from '../frequencia-checkin-dia-resultado-detalhes-modal/frequencia-checkin-dia-resultado-detalhes-modal.component';
 
 @Component({
-  selector: 'app-frequencia-checkin-dia',
+  selector: 'app-frequencia-checkin-dia-resultado',
   standalone: true,
   imports: [
     CommonModule,
@@ -25,10 +25,10 @@ import { FrequenciaCheckinDiaDetalhesModalComponent } from '../frequencia-checki
     MaterialModule,
     CalendarioComponent,
   ],
-  templateUrl: './frequencia-checkin-dia.component.html',
-  styleUrl: './frequencia-checkin-dia.component.scss'
+  templateUrl: './frequencia-checkin-dia-resultado.component.html',
+  styleUrl: './frequencia-checkin-dia-resultado.component.scss'
 })
-export class FrequenciaCheckinDiaComponent extends BaseListComponent implements OnInit, OnDestroy {
+export class FrequenciaCheckinDiaResultadoComponent extends BaseListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(CalendarioComponent) childCalendarioComponent!: CalendarioComponent;
 
@@ -331,7 +331,7 @@ export class FrequenciaCheckinDiaComponent extends BaseListComponent implements 
     // Detecta se está em mobile ou desktop
     const isMobile = window.innerWidth <= 768;
 
-    this.dialog.open(FrequenciaCheckinDiaDetalhesModalComponent, {
+    this.dialog.open(FrequenciaCheckinDiaResultadoDetalhesModalComponent, {
       width: isMobile ? '98vw' : '90vw',       // mais largo no desktop
       maxWidth: '100vw',
       maxHeight: '90vh',
