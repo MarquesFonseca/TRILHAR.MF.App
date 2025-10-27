@@ -166,7 +166,7 @@ export class FrequenciaService {
   *   }
   * });
   */
-  listarTurmasAgrupadasPorData(data: string): Observable<any> {
+  listarTurmasAgrupadasPorData(data: string, exibirMensagemRegistroNaoEncontrado: boolean = true): Observable<any> {
     this.loadingService.show();
 
     return this.http
@@ -174,13 +174,15 @@ export class FrequenciaService {
       .pipe(
         finalize(() => this.loadingService.hide()),
         catchError((error: any) => {
-          if (error.status === 404) {
+          if (error.status === 404 && exibirMensagemRegistroNaoEncontrado) {
             const mensagem = error.error?.detail || 'Registro não encontrado.';
             this.mensagemService.showError(mensagem, error);
-          } else if (error.status === 400) {
+          }
+          if (error.status === 400) {
             const erros = error.error?.erros || ['Erro de validação.'];
             this.mensagemService.showError(erros.join('\n'), error);
-          } else {
+          }
+          if (error.status !== 404 && error.status !== 400) {
             this.mensagemService.showError('Erro inesperado.', error);
           }
 
