@@ -26,23 +26,28 @@
   [class.rtl-enabled]="themeService.isRTLEnabled()">
 
   <mat-card-content>
-    <div class="row">
-      <div class="col-md-6">
-        <form class="search-box w-100" [formGroup]="formulario" (ngSubmit)="onBuscarFrequencias()">
-          <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6 form-group">
+    <form [formGroup]="formulario" (ngSubmit)="onBuscarFrequencias()">
+      <div class="row align-items-end">
+        <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 form-group">
+          <div class="mb-25">
             <app-calendario ngSkipHydration [formGroup]="formulario" [field]="'data'" [label]="'Selecione uma data'"
               [maxDate]="maxData" (itemSelecionado)="onDataSelecionada($event)">
             </app-calendario>
           </div>
-          <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-6 form-group d-flex">
-            <button mat-flat-button color="accent" class="search-btn">
+        </div>
+
+        <!-- Coluna do botão -->
+        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 form-group">
+          <div class="mb-25">
+            <button mat-flat-button color="accent" class="search-btn w-100">
               <mat-icon>search</mat-icon>
               Buscar
             </button>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
+
     <div class="row">
       <div class="col-md-7">
         <div class="events-table" *ngIf="turmasAgrupadas.length > 0">
