@@ -81,12 +81,12 @@
                         </mat-expansion-panel-header>
                         <ul class="sidebar-sub-menu">
                           <li class="sidemenu-item">
-                              <a routerLink="/criancas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              <a routerLink="/criancas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                                   Listar
                               </a>
                           </li>
                           <li class="sidemenu-item">
-                              <a routerLink="/criancas/incluir" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              <a routerLink="/criancas/incluir" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                                   Novo
                               </a>
                           </li>
@@ -103,17 +103,17 @@
                       </mat-expansion-panel-header>
                       <ul class="sidebar-sub-menu">
                           <li class="sidemenu-item">
-                              <a routerLink="/turmas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              <a routerLink="/turmas" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                                   Listar
                               </a>
                           </li>
                           <!-- <li class="sidemenu-item">
-                              <a routerLink="/turmas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                              <a routerLink="/turmas/#" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                                   Novo
                               </a>
                           </li> -->
                           <li *ngIf="!isProducao" class="sidemenu-item">
-                            <a routerLink="/turmas/limite" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                            <a routerLink="/turmas/limite" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                                 Ajustar limites
                             </a>
                         </li>
@@ -130,7 +130,7 @@
                       </mat-expansion-panel-header>
                       <ul class="sidebar-sub-menu">
                         <li class="sidemenu-item" *ngIf="!isProducao">
-                          <a routerLink="/matriculas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                          <a routerLink="/matriculas/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                               Dashboard
                           </a>
                         </li>
@@ -147,22 +147,22 @@
                       </mat-expansion-panel-header>
                       <ul class="sidebar-sub-menu">
                         <li class="sidemenu-item" *ngIf="!isProducao">
-                          <a routerLink="/frequencias/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                          <a routerLink="/frequencias/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                               Dashboard
                           </a>
                         </li>
                         <li class="sidemenu-item">
-                          <a routerLink="/frequencias/checkin-dia" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                          <a routerLink="/frequencias/checkin-dia" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                             Resultado check-in no dia
                           </a>
                         </li>
                         <li class="sidemenu-item">
-                          <a routerLink="/frequencias/checkin-dia/incluir" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                          <a routerLink="/frequencias/checkin-dia/incluir" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                             Efetuar check-in
                           </a>
                         </li>
                         <li class="sidemenu-item">
-                          <a routerLink="/frequencias/grupo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link">
+                          <a routerLink="/frequencias/grupo" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="sidemenu-link" (click)="closeMenu()">
                             Por Grupo
                           </a>
                         </li>
