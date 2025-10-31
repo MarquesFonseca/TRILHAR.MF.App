@@ -42,6 +42,13 @@ export class SidebarComponent {
         this.toggleService.toggle();
     }
 
+    // Fechar menu ao clicar em um link
+    closeMenu() {
+        if (this.isSidebarToggled) {
+            this.toggleService.toggle();
+        }
+    }
+
     // Mat Expansion
     panelOpenState = false;
 
