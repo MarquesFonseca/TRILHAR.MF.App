@@ -1,26 +1,24 @@
-import { CommonModule,  ViewportScroller } from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { Observable, map } from 'rxjs';
-import { BaseFormComponent } from '../../../shared/formulario/baseForms';
 import { MaterialModule } from '../../../material.module';
-import { CriancaService } from '../crianca.service';
+import { BootWhatsService, MensagemWhatsApp } from '../../../services/bootwhats.service';
+import { MensagemService } from '../../../services/mensagem.service';
 import { AutoCompleteComponent } from '../../../shared/auto-complete/auto-complete.component';
 import { CalendarioComponent, DataOutPut } from '../../../shared/calendario/calendario.component';
+import { BaseFormComponent } from '../../../shared/formulario/baseForms';
 import { MensagemErroComponent } from '../../../shared/funcoes-comuns/validators/mensagem-erro/mensagem-erro.component';
-import { MensagemService } from '../../../services/mensagem.service';
-import { MatriculaService } from '../../matricula/matricula.service';
-import { TurmaService } from '../../turma/turma.service';
-import * as utils from '../../../shared/funcoes-comuns/utils';
-import * as validar from '../../../shared/funcoes-comuns/validators/validator';
-import * as criancasTypes from '../crianca.types';
-import * as turmaTypes from '../../turma/turma.types';
 import { FrequenciaService } from '../../frequencia/frequencia.service';
 import { FrequenciaInput } from '../../frequencia/frequencia.types';
-import { BootWhatsService, MensagemWhatsApp } from '../../../services/bootwhats.service';
+import { MatriculaService } from '../../matricula/matricula.service';
+import { TurmaService } from '../../turma/turma.service';
+import { CriancaService } from '../crianca.service';
 import QRCode from 'qrcode';
+import * as validar from '../../../shared/funcoes-comuns/validators/validator';
+import * as utils from '../../../shared/funcoes-comuns/utils';
+import * as criancasTypes from '../crianca.types';
 //import { ToggleStatusComponent } from '../../../shared/toggle-status/toggle-status.component';
 
 @Component({
@@ -71,7 +69,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
     public override activatedRoute: ActivatedRoute,
   ) {
     super(router, activatedRoute);
-    if(!this.isProducao) console.clear();
+    //if(!this.isProducao) console.clear();
   }
 
   override ngOnInit() {
@@ -568,7 +566,11 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
         },
       ];
 
-      await this.bootWhatsService.enviarMensagensPromise(mensagens);
+      try {
+        await this.bootWhatsService.enviarMensagensPromise(mensagens);
+      } catch (error) {
+        this.mensagemService.showError('Erro ao enviar mensagem WhatsApp', error);
+      }
     }
   }
 
