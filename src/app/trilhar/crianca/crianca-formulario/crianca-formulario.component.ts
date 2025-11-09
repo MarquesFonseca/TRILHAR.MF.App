@@ -446,7 +446,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
               }
             }
 
-            if (Boolean(input.ativo)) {
+            if (Boolean(input.ativo) && input.telefone) {
               if (await this.mensagemService.confirm('Atenção', 'Deseja enviar os dados pelo WhatsApp para uma possível confirmação?')) {
                 await this.enviarWhatsApp('INCLUSAO', aluno, turmaSelecionada);
               }
@@ -471,7 +471,7 @@ export class CriancaFormularioComponent extends BaseFormComponent implements OnI
 
           await this.gerenciarMatricula(codigoAluno, matriculaAtual, turmaSelecionada);
 
-          if(Boolean(input.ativo)) {
+          if(Boolean(input.ativo) && input.telefone) {
             if (await this.mensagemService.confirm('Atenção', 'Deseja enviar os dados pelo WhatsApp para uma possível confirmação?')) {
               await this.enviarWhatsApp('ALTERACAO', input, turmaSelecionada);
             }
