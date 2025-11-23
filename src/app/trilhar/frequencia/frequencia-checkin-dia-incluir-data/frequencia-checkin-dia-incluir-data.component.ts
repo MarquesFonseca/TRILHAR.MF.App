@@ -177,7 +177,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
                     turmaLimiteMaximo: turma.limiteMaximo,
                     qtd: 0
                   };
-                  if (this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd) {
+                  if (this.turmasAgrupadasPorData.qtd >= this.turmasAgrupadasPorData.turmaLimiteMaximo) {
                     this.mensagemService.showInfo(`Turma ${this.turmasAgrupadasPorData.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${this.turmasAgrupadasPorData.turmaLimiteMaximo} crianças.`);
                   }
                 }
@@ -186,7 +186,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
             if (!!resTurmasAgrupadasPorData?.dados) {
               const turmasAgrupadas = resTurmasAgrupadasPorData?.dados ?? [];
               this.turmasAgrupadasPorData = turmasAgrupadas.find((item: any) => item.codigoTurma === this.alunoAtual.matricula.codigoTurma);
-              if (this.turmasAgrupadasPorData.turmaLimiteMaximo === this.turmasAgrupadasPorData.qtd) {
+              if (this.turmasAgrupadasPorData.qtd >= this.turmasAgrupadasPorData.turmaLimiteMaximo) {
                 this.mensagemService.showInfo(`Turma ${this.turmasAgrupadasPorData.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${this.turmasAgrupadasPorData.turmaLimiteMaximo} crianças.`);
               }
             }
@@ -233,7 +233,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
     //verifica se a turma atingiu o limite máximo de crianças na data selecionada
     const listarTurmasAgrupadasPorData = await this.frequenciaService.listarTurmasAgrupadasPorDataPromise(formatDataToFormatoAnoMesDia(data));
     const turmasAgrupadas = listarTurmasAgrupadasPorData?.dados ?? [];
-    const turmaLotada = turmasAgrupadas.find((x: any) => x.codigoTurma === turma.codigoTurma && x.qtd === x.turmaLimiteMaximo);
+    const turmaLotada = turmasAgrupadas.find((x: any) => x.codigoTurma === turma.codigoTurma && x.qtd >= x.turmaLimiteMaximo);
     if (turmasAgrupadas.length > 0 && turmaLotada) {
       this.mensagemService.showInfo(`Turma ${turmaLotada.turmaDescricaoFormatada} está com a capacidade máxima atingida de ${turmaLotada.turmaLimiteMaximo} crianças.`);
       return;
@@ -296,7 +296,7 @@ export class FrequenciaCheckinDiaIncluirDataComponent extends BaseListComponent 
       return true;
     }
     if(this.turmasAgrupadasPorData.turmaLimiteMaximo !== undefined && this.turmasAgrupadasPorData.qtd !== undefined) {
-      if (this.turmasAgrupadasPorData.qtd === this.turmasAgrupadasPorData.turmaLimiteMaximo) {
+      if (this.turmasAgrupadasPorData.qtd >= this.turmasAgrupadasPorData.turmaLimiteMaximo) {
         return true;
       }
     }
